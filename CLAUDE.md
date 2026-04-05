@@ -423,6 +423,52 @@ The platform uses a dopamine-driven engagement system to keep students coming ba
 - `components/GamificationToast.tsx` — sliding toast notifications
 - `app/globals.css` — confetti-fall, goal-fill, fire-pulse keyframes
 
+## GitHub & Contribution Workflow
+
+### Organization
+
+- **Org:** `grey8-io` on GitHub (free plan)
+- **Primary account:** `grey8dotio-afk` (grey8dotio@gmail.com) — admin of org, owner of both repos
+- **Public repo:** `grey8-io/learn-ai-with-grey8` — AGPL-3.0, GitHub Pages enabled
+- **Private repo:** `grey8-io/grey8` — proprietary Grey8 Data Platform
+
+### Branch Protection (`main`)
+
+- All changes require a PR with 1 approving review
+- Stale reviews auto-dismissed on new pushes
+- CODEOWNERS: `@grey8dotio-afk` auto-assigned as reviewer on all PRs
+- Force pushes and branch deletion blocked
+- `enforce_admins=false` — org admins can bypass when needed (e.g., initial setup pushes)
+
+### Contribution Model
+
+Contributors use the **Fork + PR** workflow — they never get direct write access to the repo:
+1. Fork the repo to their own account
+2. Create a branch, make changes, push to their fork
+3. Open a PR to `grey8-io/learn-ai-with-grey8:main`
+4. PR template auto-fills with checklist (type, testing, `ace sync`, docs)
+5. CODEOWNERS triggers review request to `@grey8dotio-afk`
+6. Maintainer reviews, requests changes or approves, then merges
+
+### Issue Templates
+
+- **Bug report** — structured with environment details (OS, RAM, model, browser)
+- **Feature request** — problem/solution/alternatives format
+- **Content contribution** — phase/lesson targeting for curriculum PRs
+
+### Key Files
+
+- `.github/CODEOWNERS` — assigns `@grey8dotio-afk` as reviewer
+- `.github/PULL_REQUEST_TEMPLATE.md` — PR checklist
+- `.github/ISSUE_TEMPLATE/` — bug, feature, content templates
+
+### Lead Generation (GitHub-ToS-Compliant)
+
+- Repo is fully public and free — no email gates, no login requirements
+- README has a Community section with LinkedIn link for voluntary connection
+- Future: grey8.io landing page with signup form for course updates
+- GitHub ToS prohibits scraping user data or sending unsolicited emails to stargazers/forkers
+
 ## Do NOT
 
 - **Don't manually edit `curriculum/manifest.json`** — run `ace sync` instead
