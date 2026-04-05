@@ -42,7 +42,7 @@ Most AI tutorials teach theory or require expensive cloud API keys. This bootcam
 ## Quick Start
 
 ```bash
-git clone https://github.com/user/learn-ai-with-grey8.git
+git clone https://github.com/grey8-io/learn-ai-with-grey8.git
 cd learn-ai-with-grey8
 bash scripts/setup.sh    # One-time setup: installs all dependencies, pulls AI model
 bash scripts/start.sh    # Starts all services (Ollama, Tutor API, Web UI)
@@ -126,6 +126,11 @@ npx docsify-cli serve docs --port 4000   # Serve docs locally
 ```
 
 > **Tip:** If you have `make` installed (standard on macOS/Linux; on Windows: `choco install make`), you can use shortcuts like `make dev`, `make test`, `make lint`. Run `make help` for all targets.
+
+## Community
+
+- **Star this repo** to bookmark it and help others discover it
+- **Follow [Nagaraju Mudunuri](https://www.linkedin.com/in/nagaraju-mudunuri-42a05b25/) on LinkedIn** for AI career tips and course updates
 
 ## Contributing
 
