@@ -1,0 +1,5 @@
+[
+  "The Ollama API lives at http://localhost:11434/api/generate — use httpx.post() to call it.",
+  "The request body needs three keys: \"model\" (use the model parameter), \"prompt\" (use the prompt parameter), and \"stream\" set to False. Pass them via the json= keyword argument.",
+  "After getting the response, call response.json() to parse it, then return data[\"response\"] to extract the model's text."
+]

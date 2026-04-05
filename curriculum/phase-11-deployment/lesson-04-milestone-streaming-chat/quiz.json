@@ -1,0 +1,112 @@
+[
+  {
+    "question": "What does SSE stand for?",
+    "options": [
+      "Server-Side Execution",
+      "Server-Sent Events",
+      "Secure Socket Endpoint",
+      "Stream State Exchange"
+    ],
+    "correct": 1,
+    "explanation": "SSE stands for Server-Sent Events, a standard that allows a server to push data to a client over HTTP. It uses the Content-Type 'text/event-stream' and sends events in a simple text format with 'data:' prefixed lines."
+  },
+  {
+    "question": "Why is streaming important for chat applications?",
+    "options": [
+      "It reduces the total number of tokens the LLM generates",
+      "It allows the user to see tokens as they arrive, reducing perceived wait time",
+      "It compresses the response payload to use less bandwidth",
+      "It enables the server to handle only one request at a time"
+    ],
+    "correct": 1,
+    "explanation": "Streaming lets users see the response being generated word by word, just like in ChatGPT or Claude. Although the total generation time is the same, users perceive the response as much faster because they see progress immediately instead of waiting for the entire response."
+  },
+  {
+    "question": "What is the difference between setting stream=True and stream=False in an Ollama API request?",
+    "options": [
+      "stream=True returns the full response at once; stream=False returns it token by token",
+      "stream=True encrypts the response; stream=False sends it in plain text",
+      "stream=True returns tokens one at a time as they are generated; stream=False waits for the complete response",
+      "stream=True uses WebSockets; stream=False uses HTTP"
+    ],
+    "correct": 2,
+    "explanation": "With stream=True, Ollama sends each token as a separate JSON line as soon as it is generated. With stream=False, Ollama waits until the entire response is complete before sending it back. Streaming is essential for real-time chat UIs."
+  },
+  {
+    "question": "What does EventSourceResponse do in a FastAPI endpoint?",
+    "options": [
+      "It converts a Python generator into an SSE stream with proper Content-Type and event formatting",
+      "It creates a WebSocket connection between the client and server",
+      "It caches the response so subsequent requests are faster",
+      "It validates the request body against a Pydantic model"
+    ],
+    "correct": 0,
+    "explanation": "EventSourceResponse from the sse-starlette package takes a Python generator and converts each yielded dict into a properly formatted SSE event. It sets the Content-Type to 'text/event-stream' and formats each item as 'data: ...' followed by double newlines, which the browser's EventSource API or fetch() can read."
+  },
+  {
+    "question": "How does JavaScript read a streaming response from a fetch() call?",
+    "options": [
+      "By calling response.json() which automatically handles streaming",
+      "By using response.body.getReader() to read chunks from the ReadableStream",
+      "By setting a callback with response.onmessage() for each chunk",
+      "By polling the same URL repeatedly until the response is complete"
+    ],
+    "correct": 1,
+    "explanation": "The fetch() API returns a Response object whose body is a ReadableStream. By calling response.body.getReader(), you get a reader that lets you consume chunks of data as they arrive. Each chunk is decoded with TextDecoder and parsed for SSE 'data:' lines containing the tokens."
+  },
+  {
+    "question": "Why does the stream_chat() function use requests.post() with stream=True?",
+    "options": [
+      "To automatically retry failed requests",
+      "To receive the HTTP response incrementally line by line instead of buffering the entire body",
+      "To send the request body as a stream to Ollama",
+      "To enable HTTPS encryption for the request"
+    ],
+    "correct": 1,
+    "explanation": "Setting stream=True in requests.post() tells the requests library not to download the entire response body at once. Instead, it allows you to iterate over the response line by line using response.iter_lines(), which is essential for processing streaming output from Ollama as tokens arrive."
+  },
+  {
+    "question": "What format does the stream_chat() generator yield for EventSourceResponse to consume?",
+    "options": [
+      "Plain strings containing the token text",
+      "Dictionaries with a 'data' key containing the token text",
+      "Tuples of (event_type, token_text)",
+      "JSON-encoded strings with a 'token' field"
+    ],
+    "correct": 1,
+    "explanation": "EventSourceResponse expects the generator to yield dictionaries with a 'data' key, like {'data': token}. It then formats this into the SSE wire format as 'data: token_text' followed by double newlines. This convention is defined by the sse-starlette library."
+  },
+  {
+    "question": "What is the role of the 'done' field in Ollama's streaming response?",
+    "options": [
+      "It indicates whether the model has started processing",
+      "It signals that the model has finished generating and no more tokens will follow",
+      "It shows whether the response was cached",
+      "It indicates whether the request was authenticated"
+    ],
+    "correct": 1,
+    "explanation": "Each JSON line from Ollama's streaming response includes a 'done' field. When done is False, the message.content field contains the next token. When done is True, the response is complete and the generator should stop iterating."
+  },
+  {
+    "question": "How does the browser-side JavaScript identify token data within the raw SSE stream?",
+    "options": [
+      "It parses the entire stream as a single JSON object",
+      "It splits the stream by newlines and looks for lines starting with 'data:'",
+      "It uses a WebSocket message event handler",
+      "It reads a Content-Length header to know how many tokens to expect"
+    ],
+    "correct": 1,
+    "explanation": "The SSE protocol sends events as text lines prefixed with 'data:'. The JavaScript code decodes each chunk, splits by newlines, filters for lines starting with 'data:', and extracts the token text after the prefix. Each token is then appended to the assistant's message div in the UI."
+  },
+  {
+    "question": "What command can you use to test the streaming /chat endpoint from the terminal before building the HTML frontend?",
+    "options": [
+      "wget --stream http://localhost:8000/chat",
+      "curl -N -X POST http://localhost:8000/chat -H 'Content-Type: application/json' -d '{\"message\": \"Hello\"}'",
+      "python -m http.server 8000",
+      "telnet localhost 8000"
+    ],
+    "correct": 1,
+    "explanation": "The curl command with the -N flag (which disables output buffering) lets you see SSE events arrive in real time in your terminal. This is the recommended way to test and debug the streaming endpoint before building the HTML/JavaScript frontend."
+  }
+]

@@ -1,0 +1,112 @@
+[
+  {
+    "question": "What is the main advantage of using multiple agents instead of one?",
+    "options": [
+      "Multiple agents are always faster",
+      "Each agent can specialize in a role, leading to better results on complex tasks",
+      "Multiple agents use less memory",
+      "Multiple agents don't need LLMs"
+    ],
+    "correct": 1,
+    "explanation": "Just like a team of specialists outperforms a single generalist on complex tasks, multiple agents with focused roles (planner, executor, reviewer) produce better results. Each agent has a clear context and set of responsibilities."
+  },
+  {
+    "question": "In a sequential pipeline, how do agents communicate?",
+    "options": [
+      "They all read from a shared database simultaneously",
+      "Each agent's output becomes the next agent's input, in order",
+      "They communicate through a chat room",
+      "They don't communicate at all"
+    ],
+    "correct": 1,
+    "explanation": "In a sequential pipeline, agents run one after another. The first agent processes the task and produces output. That output becomes the input for the second agent, and so on. Each agent builds on the previous agent's work."
+  },
+  {
+    "question": "What is the 'debate' pattern in multi-agent systems?",
+    "options": [
+      "Agents compete to finish a task first",
+      "Agents take turns responding to each other's outputs over multiple rounds",
+      "Agents vote on the best answer",
+      "Agents each work on independent tasks"
+    ],
+    "correct": 1,
+    "explanation": "In the debate pattern, agents take turns responding to the same question while seeing each other's previous responses. Each agent can agree, disagree, or add nuance. Over multiple rounds, this produces a more thorough analysis than any single agent would."
+  },
+  {
+    "question": "How does task routing work in a multi-agent orchestrator?",
+    "options": [
+      "Tasks are randomly assigned to agents",
+      "The orchestrator matches task keywords to agent capabilities and assigns accordingly",
+      "All agents receive every task",
+      "Users manually select which agent to use"
+    ],
+    "correct": 1,
+    "explanation": "Task routing examines the task description and matches keywords against each agent's declared capabilities. A task about 'reviewing code' would be routed to an agent with 'review' in its capabilities. This ensures tasks go to the most appropriate specialist."
+  },
+  {
+    "question": "Why should you always log messages between agents?",
+    "options": [
+      "To increase the token count",
+      "For debugging, auditing, and understanding how agents reached their conclusions",
+      "Because agents require message logs to function",
+      "To make the system run faster"
+    ],
+    "correct": 1,
+    "explanation": "Message logs are essential for debugging multi-agent systems. When something goes wrong, you need to trace the conversation between agents to find where the error occurred. Logs also help with auditing and improving agent prompts over time."
+  },
+  {
+    "question": "What is the 'routing' orchestration pattern?",
+    "options": [
+      "All agents process every task in parallel and the fastest response wins",
+      "A central orchestrator examines the task and sends it to the most appropriate specialized agent",
+      "Agents are connected in a ring and pass messages in a circle",
+      "Tasks are split into equal parts and distributed to all agents"
+    ],
+    "correct": 1,
+    "explanation": "In the routing pattern, a central orchestrator analyzes incoming tasks and directs each one to the agent best suited to handle it. For example, a customer support system might route billing questions to a billing agent and technical questions to a technical agent."
+  },
+  {
+    "question": "Why does using separate agents help with context window limitations?",
+    "options": [
+      "Each agent uses a different LLM with a larger context window",
+      "Each agent has a focused context with only its role-specific instructions, tools, and history",
+      "Multiple agents share a single expanded context window",
+      "Context windows are not a real limitation for agents"
+    ],
+    "correct": 1,
+    "explanation": "A single agent trying to plan, execute, test, and review must fit all instructions, tools, history, and reasoning into one context window. With multiple agents, each has a focused context containing only what is relevant to its specific role, making better use of the available context."
+  },
+  {
+    "question": "What are common strategies for resolving conflicts when agents disagree?",
+    "options": [
+      "Always discard all outputs and start over",
+      "Majority vote, authority (designated decision-maker), escalation, or synthesis",
+      "The agent that responds fastest always wins",
+      "Conflicts cannot occur in well-designed multi-agent systems"
+    ],
+    "correct": 1,
+    "explanation": "When agents disagree, you can use majority vote (go with the most common opinion), authority (one agent has final say), escalation (involve a human), or synthesis (a final agent reads all perspectives and produces a combined output). The right strategy depends on the use case."
+  },
+  {
+    "question": "What fields does a message typically contain in a multi-agent message-passing system?",
+    "options": [
+      "Only the content text and nothing else",
+      "From (sender), To (recipient), Content (text), and Type (task, result, feedback, etc.)",
+      "A unique ID and a timestamp only",
+      "The agent's system prompt and model configuration"
+    ],
+    "correct": 1,
+    "explanation": "Messages in multi-agent systems include metadata about who sent the message, who should receive it, the actual content, and the type of message (e.g., task assignment, result, feedback). This structured format enables proper routing, logging, and debugging."
+  },
+  {
+    "question": "Why is it recommended to start with just two agents before adding more?",
+    "options": [
+      "Most programming languages limit you to two concurrent processes",
+      "Starting simple (e.g., executor + reviewer) lets you validate the approach before adding complexity",
+      "Two agents always produce better results than three or more",
+      "LLM APIs only support two simultaneous connections"
+    ],
+    "correct": 1,
+    "explanation": "Starting with a minimal setup like an executor and a reviewer lets you validate the multi-agent architecture, debug communication issues, and measure improvement over a single agent. Adding more agents increases complexity, so you should only add them when they provide clear, measurable value."
+  }
+]

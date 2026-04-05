@@ -1,0 +1,5 @@
+[
+  "For extract_json, use re.search(r'\\{.*\\}', text, re.DOTALL) to find the JSON object. The re.DOTALL flag makes . match newlines too. Wrap json.loads() in a try/except to handle malformed JSON.",
+  "For extract_markdown_sections, loop through text.split('\\n'). Check if a line starts with '#'. Use line.lstrip('#').strip() to get the heading text. Collect content lines in a list and join them with '\\n' then .strip() when you reach the next heading.",
+  "For validate_llm_json, first call extract_json(text). If it returns None, all required_fields are missing. Otherwise, use a list comprehension: missing = [f for f in required_fields if f not in data] to find what's missing."
+]

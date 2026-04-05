@@ -1,0 +1,5 @@
+[
+  "For LatencyTracker: self.pending stores start times with time.time(). In end(), compute duration_ms = (time.time() - self.pending[name]) * 1000. Append to self.operations[name] (create the list if it doesn't exist). Delete from self.pending.",
+  "For get_stats: collect durations into a sorted list. Compute percentiles with sorted_data[min(int(len * p / 100), len - 1)]. For get_slow_operations: loop through self.operations, compute avg = sum(durations) / len(durations), filter by threshold, sort by avg_ms descending.",
+  "For measure: use @functools.wraps(fn), record start = time.time() before calling fn, end after. Set wrapper.last_duration_ms = (end - start) * 1000. For StreamBuffer: self.buffer += chunk; if len >= min_chars, save and reset. For estimate_time: return (input_length // 4) / model_speed_tokens_per_sec."
+]

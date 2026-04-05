@@ -1,0 +1,78 @@
+# ACE Generation Spec — Phase 5: Prompt Engineering
+# Run: ace generate --spec specs/phase-05.yml
+
+phase: "05"
+phase_slug: "phase-05-prompt-engineering"
+
+lessons:
+  - id: lesson-01
+    slug: "lesson-01-role-prompting"
+    title: "Role Prompting & System Messages"
+    target_audience: "developers learning to control LLM behavior through prompts"
+    prerequisites:
+      - "Phase 4 completed (Your First AI App)"
+    objectives:
+      - "Craft effective system prompts that shape LLM behavior"
+      - "Assign roles and personas to get higher-quality responses"
+      - "Validate prompts for token limits and structural completeness"
+    exercises:
+      - title: "Prompt Engineering Utilities"
+        description: >
+          Build create_system_prompt to combine role, expertise, tone, and
+          constraints into formatted prompts. Implement create_few_shot_prompt
+          with input/output example pairs, and validate_prompt to check for
+          empty prompts and token limit violations.
+        difficulty: medium
+        type: coding
+        objectives:
+          - "Compose system prompts from structured components"
+          - "Build few-shot prompts with example pairs"
+          - "Validate prompt length using token estimation"
+
+  - id: lesson-02
+    slug: "lesson-02-structured-outputs"
+    title: "Structured Outputs"
+    target_audience: "developers who need reliable structured data from LLMs"
+    prerequisites:
+      - "Role Prompting & System Messages (Phase 5, Lesson 1)"
+    objectives:
+      - "Extract JSON and structured data from LLM text responses"
+      - "Design prompts that reliably produce structured output formats"
+      - "Validate and handle malformed LLM responses gracefully"
+    exercises:
+      - title: "Output Parsers"
+        description: >
+          Implement extract_json to find and parse JSON objects from LLM text
+          using regex with re.DOTALL. Build extract_markdown_sections to split
+          text by headings. Create validate_llm_json to check extracted JSON
+          for required fields.
+        difficulty: medium
+        type: coding
+        objectives:
+          - "Extract JSON from mixed text using regex"
+          - "Parse markdown into structured sections by heading"
+          - "Validate extracted data against required field schemas"
+
+  - id: lesson-03
+    slug: "lesson-03-few-shot-patterns"
+    title: "Few-Shot Patterns & Chain of Thought"
+    target_audience: "developers applying advanced prompting techniques for reasoning tasks"
+    prerequisites:
+      - "Structured Outputs (Phase 5, Lesson 2)"
+    objectives:
+      - "Build few-shot prompts with input/output examples for consistent results"
+      - "Apply chain-of-thought prompting for complex reasoning tasks"
+      - "Extract final answers from chain-of-thought responses"
+    exercises:
+      - title: "Advanced Prompt Patterns"
+        description: >
+          Build build_chain_of_thought_prompt to wrap questions with step-by-step
+          reasoning instructions. Implement extract_final_answer to find answers
+          after markers like 'therefore' or 'final answer:'. Create
+          build_self_consistency_prompts to generate n varied reasoning prompts.
+        difficulty: medium
+        type: coding
+        objectives:
+          - "Construct chain-of-thought prompts with reasoning instructions"
+          - "Parse reasoning traces to extract final answers"
+          - "Generate multiple prompt variants for self-consistency"

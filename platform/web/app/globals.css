@@ -1,0 +1,129 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --background: 248 250 252;
+  --foreground: 15 23 42;
+  --primary: 99 102 241;
+  --primary-foreground: 255 255 255;
+  --muted: 241 245 249;
+  --muted-foreground: 100 116 139;
+  --border: 226 232 240;
+  --card: 255 255 255;
+  --card-foreground: 15 23 42;
+  --accent: 99 102 241;
+  --accent-foreground: 255 255 255;
+  --success: 34 197 94;
+  --warning: 234 179 8;
+  --destructive: 239 68 68;
+}
+
+.dark {
+  --background: 2 6 23;
+  --foreground: 248 250 252;
+  --primary: 129 140 248;
+  --primary-foreground: 2 6 23;
+  --muted: 30 41 59;
+  --muted-foreground: 148 163 184;
+  --border: 51 65 85;
+  --card: 15 23 42;
+  --card-foreground: 248 250 252;
+  --accent: 129 140 248;
+  --accent-foreground: 2 6 23;
+  --success: 34 197 94;
+  --warning: 234 179 8;
+  --destructive: 239 68 68;
+}
+
+@layer base {
+  body {
+    @apply bg-surface-900 text-slate-100 antialiased;
+  }
+
+  * {
+    @apply border-slate-700/50;
+  }
+}
+
+@layer components {
+  .card {
+    @apply rounded-xl border border-slate-700/50 bg-surface-800 p-6 shadow-lg;
+  }
+
+  .btn-primary {
+    @apply inline-flex items-center justify-center rounded-lg bg-primary-600 px-4 py-2.5
+           text-sm font-semibold text-white shadow-sm transition-all
+           hover:bg-primary-500 focus-visible:outline focus-visible:outline-2
+           focus-visible:outline-offset-2 focus-visible:outline-primary-500
+           disabled:opacity-50 disabled:cursor-not-allowed;
+  }
+
+  .btn-secondary {
+    @apply inline-flex items-center justify-center rounded-lg border border-slate-600
+           bg-slate-800 px-4 py-2.5 text-sm font-semibold text-slate-200
+           shadow-sm transition-all hover:bg-slate-700
+           focus-visible:outline focus-visible:outline-2
+           focus-visible:outline-offset-2 focus-visible:outline-slate-500;
+  }
+
+  .input {
+    @apply block w-full rounded-lg border border-slate-600 bg-slate-800 px-3 py-2
+           text-sm text-slate-100 placeholder-slate-400
+           focus:border-primary-500 focus:outline-none focus:ring-1 focus:ring-primary-500;
+  }
+}
+
+/* Scrollbar styling */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: rgb(15 23 42);
+}
+
+::-webkit-scrollbar-thumb {
+  background: rgb(51 65 85);
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: rgb(71 85 105);
+}
+
+/* Confetti animation */
+@keyframes confetti-fall {
+  0% {
+    transform: translateY(0) translateX(0) rotate(0deg);
+    opacity: 1;
+  }
+  100% {
+    transform: translateY(100vh) translateX(var(--drift, 20px)) rotate(720deg);
+    opacity: 0;
+  }
+}
+
+.animate-confetti-fall {
+  animation: confetti-fall 2s ease-in forwards;
+}
+
+/* Daily goal ring animation */
+@keyframes goal-fill {
+  from { stroke-dashoffset: 283; }
+}
+
+.animate-goal-fill {
+  animation: goal-fill 1s ease-out forwards;
+}
+
+/* Streak fire pulse */
+@keyframes fire-pulse {
+  0%, 100% { transform: scale(1); }
+  50% { transform: scale(1.15); }
+}
+
+.animate-fire-pulse {
+  animation: fire-pulse 1.5s ease-in-out infinite;
+}

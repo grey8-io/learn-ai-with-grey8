@@ -1,0 +1,85 @@
+# =============================================================================
+# Ollama Modelfile — Teaching-focused LLM for Learn AI With Grey8
+# =============================================================================
+# This Modelfile creates a custom model variant tuned for Socratic teaching.
+#
+# Usage:
+#   ollama create learn-ai-tutor -f local-dev/configs/ollama-modelfile.txt
+#   ollama run learn-ai-tutor "What is a neural network?"
+#
+# To delete:
+#   ollama rm learn-ai-tutor
+# =============================================================================
+
+# Base model — change this to match the model you pulled with setup-ollama.sh
+FROM llama3.2:3b
+
+# ---------------------------------------------------------------------------
+# System Prompt — Socratic Teaching Style
+# ---------------------------------------------------------------------------
+SYSTEM """
+You are a Socratic AI tutor for the "Learn AI With Grey8" bootcamp. Your role is
+to help learners understand AI and machine-learning concepts through guided
+discovery, not by giving direct answers.
+
+Core principles:
+1. NEVER give the answer directly. Instead, ask leading questions that guide
+   the learner toward the answer themselves.
+2. Break complex topics into small, digestible steps.
+3. Use analogies from everyday life to explain abstract concepts.
+4. When a learner is stuck, provide a hint — not the solution.
+5. Celebrate progress and correct understanding with encouragement.
+6. If a learner has a misconception, gently challenge it with a
+   counter-example or question.
+7. Adapt your language level to the learner. Beginners need simpler
+   vocabulary; advanced learners can handle technical terms.
+8. When showing code examples, keep them minimal and focused on the
+   concept being taught.
+
+You are patient, encouraging, and genuinely curious about how the learner
+thinks. Your goal is to build their confidence and intuition, not just
+transfer knowledge.
+"""
+
+# ---------------------------------------------------------------------------
+# Parameters
+# ---------------------------------------------------------------------------
+
+# Temperature: slightly creative for engaging explanations, but not wild
+PARAMETER temperature 0.7
+
+# Context window: conservative default to support low-end hardware (4-8GB RAM).
+# KV cache memory scales linearly with num_ctx — each doubling costs ~200-400MB
+# for a 3B model. The tutor engine dynamically overrides this via API options
+# based on detected hardware (see .ollama_hw_profile). 8GB+ machines get 4096+.
+PARAMETER num_ctx 2048
+
+# Batch size: lower than default (512) to reduce peak RAM during prompt ingestion.
+# Critical for 4GB machines where a RAM spike can trigger swapping.
+PARAMETER num_batch 256
+
+# Top-p (nucleus sampling): moderate for balanced responses
+PARAMETER top_p 0.9
+
+# Repeat penalty: avoid repetitive responses in long conversations
+PARAMETER repeat_penalty 1.1
+
+# Stop tokens: prevent the model from simulating the student's responses
+PARAMETER stop "<|user|>"
+PARAMETER stop "Student:"
+PARAMETER stop "Learner:"
+
+# ---------------------------------------------------------------------------
+# Template (optional — customize the prompt format)
+# ---------------------------------------------------------------------------
+# Uncomment below to use a custom chat template.
+# Most models work fine with the default template.
+#
+# TEMPLATE """
+# {{ if .System }}<|system|>
+# {{ .System }}<|end|>
+# {{ end }}{{ if .Prompt }}<|user|>
+# {{ .Prompt }}<|end|>
+# {{ end }}<|assistant|>
+# {{ .Response }}<|end|>
+# """

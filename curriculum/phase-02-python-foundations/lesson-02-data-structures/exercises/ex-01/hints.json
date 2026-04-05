@@ -1,0 +1,5 @@
+[
+  "Each contact is a dictionary with 'name' and 'email' keys. The contacts list stores these dicts. Use .append() to add and a for loop to search.",
+  "For find_contact, loop through the list and compare contact['name'].lower() to name.lower(). For list_contacts, try a list comprehension with an f-string.",
+  "add_contact: contacts.append({'name': name, 'email': email}). find_contact: loop and compare .lower(). list_contacts: [f'{c[\"name\"]} <{c[\"email\"]}>' for c in contacts]. remove_contact: use enumerate() to get the index, then contacts.pop(i)."
+]

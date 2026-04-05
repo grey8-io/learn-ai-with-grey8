@@ -1,0 +1,27 @@
+Generate a quiz for the following lesson:
+
+# Lesson: {title}
+
+## Learning Objectives
+{objectives}
+
+---
+
+Instructions:
+- Generate 5 multiple-choice questions.
+- Each question should have 4 options with exactly one correct answer.
+- Include a mix of difficulty levels (2 easy, 2 medium, 1 hard).
+- Questions should test understanding, not just memorisation.
+- Output ONLY valid JSON (no markdown fences, no extra text).
+- The JSON must be an array of objects with this exact schema:
+
+[
+  {{
+    "question": "Your question here?",
+    "options": ["Option A", "Option B", "Option C", "Option D"],
+    "correct": 2,
+    "explanation": "Brief explanation of why the correct answer is right."
+  }}
+]
+
+The "correct" field is the 0-based index of the right answer in the "options" array.

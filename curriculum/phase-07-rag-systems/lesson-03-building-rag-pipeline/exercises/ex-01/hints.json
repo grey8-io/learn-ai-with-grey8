@@ -1,0 +1,5 @@
+[
+  "The DocumentQA class stores embedding_fn, generate_fn, and self.store (an empty list). load_documents reads files with open() and returns [{\"path\": path, \"content\": text}]. Use os.path.exists to skip missing files.",
+  "process_documents loops through documents, splits content into chunks with [content[i:i+chunk_size] for i in range(0, len(content), chunk_size)], embeds each chunk, and appends {\"embedding\": emb, \"text\": chunk, \"source\": doc[\"path\"]} to self.store.",
+  "_retrieve: embed the query, compute cosine_similarity against every item in self.store, sort by score descending, return top_k as [{\"text\": ..., \"source\": ..., \"score\": ...}]. answer() calls _retrieve, joins texts with '\\n\\n', builds the prompt, generates, and returns {\"answer\": ..., \"sources\": [...], \"confidence\": avg_score}."
+]

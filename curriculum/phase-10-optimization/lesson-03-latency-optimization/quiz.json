@@ -1,0 +1,112 @@
+[
+  {
+    "question": "What is the biggest source of latency in most AI applications?",
+    "options": [
+      "Network transfer between client and server",
+      "Parsing the user's input",
+      "Model inference (generating the response)",
+      "Formatting the output as JSON"
+    ],
+    "correct": 2,
+    "explanation": "Model inference typically takes 500ms to 15+ seconds, dwarfing all other stages combined. Network transfer is usually 10-100ms, and preprocessing/postprocessing are even faster."
+  },
+  {
+    "question": "Why is p95 latency more useful than average latency?",
+    "options": [
+      "p95 is always a smaller number",
+      "p95 shows what 95% of users actually experience, while averages hide outliers",
+      "Average latency is too difficult to calculate",
+      "p95 only measures the fastest requests"
+    ],
+    "correct": 1,
+    "explanation": "If 99 requests take 100ms and one takes 10 seconds, the average is 199ms -- which nobody actually experiences. p95 at 100ms tells you that the vast majority of users get fast responses, while the outlier is captured separately."
+  },
+  {
+    "question": "How does streaming reduce perceived latency even though total time is the same?",
+    "options": [
+      "Streaming compresses the response to make it smaller",
+      "Users see the first tokens immediately, giving the feeling of instant response",
+      "Streaming uses a faster network protocol",
+      "Streaming skips the model inference step"
+    ],
+    "correct": 1,
+    "explanation": "Without streaming, users stare at a blank screen for 5 seconds. With streaming, they see the first word in ~200ms and watch the response build up. The total generation time is the same, but the wait-before-any-output drops dramatically."
+  },
+  {
+    "question": "What does model quantization (e.g., INT4) trade off?",
+    "options": [
+      "Storage space for more network bandwidth",
+      "A small amount of output quality for significantly faster inference",
+      "Input accuracy for output accuracy",
+      "Model size for training time"
+    ],
+    "correct": 1,
+    "explanation": "Quantization reduces the numerical precision of model weights (e.g., from 32-bit to 4-bit). This makes the model 4-8x smaller and faster, with only a small drop in output quality (typically 90-97% of the original)."
+  },
+  {
+    "question": "What is the purpose of a StreamBuffer with a min_chars threshold?",
+    "options": [
+      "To encrypt the streaming data",
+      "To smooth out jittery token-by-token output into larger, readable chunks",
+      "To compress the output before sending",
+      "To count the total number of characters generated"
+    ],
+    "correct": 1,
+    "explanation": "Raw LLM streaming can produce single characters or have gaps. A buffer accumulates small chunks and only emits when there's enough text (e.g., 10+ characters), creating a smoother reading experience for the user."
+  },
+  {
+    "question": "What does asyncio.gather() accomplish when used with multiple LLM-related tasks?",
+    "options": [
+      "It runs tasks sequentially but in a random order",
+      "It runs multiple independent async tasks in parallel, finishing in the time of the slowest one",
+      "It cancels all tasks if any single one fails",
+      "It batches tasks into a single LLM API call"
+    ],
+    "correct": 1,
+    "explanation": "asyncio.gather() runs multiple coroutines concurrently. If three independent tasks each take 1 second, running them with gather takes ~1 second total (limited by the slowest) instead of 3 seconds sequentially. This is ideal for parallel operations like fetching context from multiple sources."
+  },
+  {
+    "question": "What does the 'q4' in a model name like 'llama3:7b-q4_0' indicate?",
+    "options": [
+      "The model has 4 billion parameters",
+      "The model uses 4-bit quantization for reduced memory and faster inference",
+      "The model was trained on 4 GPUs",
+      "The model supports 4 languages"
+    ],
+    "correct": 1,
+    "explanation": "The 'q4' suffix indicates 4-bit quantization, meaning the model weights are stored using only 4 bits instead of the original 32 or 16 bits. This reduces memory usage to about 12.5% of the full-precision model and speeds up inference significantly."
+  },
+  {
+    "question": "What is the key advantage of running models locally with Ollama compared to using a remote API?",
+    "options": [
+      "Local models are always higher quality",
+      "Local inference has no network latency and keeps data private",
+      "Local models scale to unlimited users automatically",
+      "Local models are free of any hardware costs"
+    ],
+    "correct": 1,
+    "explanation": "Local inference eliminates network round-trip latency and ensures data never leaves your machine, which is critical for privacy-sensitive applications. The tradeoff is that you are limited by your local hardware for model size and concurrent capacity."
+  },
+  {
+    "question": "Why does the StreamBuffer's flush() method exist separately from the add() method?",
+    "options": [
+      "flush() handles errors that add() cannot",
+      "flush() returns any remaining buffered content that hasn't reached the min_chars threshold",
+      "flush() resets the buffer size to zero characters",
+      "flush() sends the buffer contents to the LLM for further processing"
+    ],
+    "correct": 1,
+    "explanation": "The add() method only emits text when the buffer reaches the min_chars threshold. At the end of a stream, there may be leftover text shorter than min_chars. The flush() method returns this remaining content so no text is lost when the stream ends."
+  },
+  {
+    "question": "At approximately 30 tokens per second, how long would it take to generate a 300-token response?",
+    "options": [
+      "1 second",
+      "3 seconds",
+      "10 seconds",
+      "30 seconds"
+    ],
+    "correct": 2,
+    "explanation": "At 30 tokens per second, generating 300 tokens takes 300 / 30 = 10 seconds. This kind of estimation helps set user expectations and is useful for deciding whether to show a loading indicator or use streaming to improve perceived responsiveness."
+  }
+]

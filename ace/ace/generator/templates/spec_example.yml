@@ -1,0 +1,50 @@
+# Example YAML spec for ACE content generation.
+#
+# Usage:
+#   ace generate --spec specs/phase-02-sample.yml
+#
+# The generated file structure will match the curriculum layout:
+#   phase-02-python-foundations/
+#     lesson-01-variables-functions/
+#       content.md
+#       quiz.json
+#       exercises/
+#         ex-01/
+#           starter/main.py
+#           solution/main.py
+#           tests/test_exercise.py
+#           rubric.md
+#           hints.json
+
+phase: "02"
+phase_slug: "python-foundations"
+
+lessons:
+  - id: lesson-01
+    slug: "variables-functions"
+    title: "Python Variables & Functions"
+    target_audience: "beginners with no prior Python experience"
+    prerequisites:
+      - "Basic computer literacy"
+      - "Phase 1 completed (environment setup)"
+    objectives:
+      - "Understand what variables are and how to assign them"
+      - "Know Python's basic data types (int, float, str, bool)"
+      - "Define and call functions with parameters and return values"
+      - "Use f-strings for basic string formatting"
+    exercises:
+      - title: "Variable Swap"
+        description: "Write a function that swaps two variables without a temp variable."
+        difficulty: beginner
+        type: coding
+        objectives:
+          - "Understand variable assignment"
+          - "Learn tuple unpacking"
+      - title: "Greeting Generator"
+        description: "Write a function that takes a name and returns a personalised greeting using f-strings."
+        difficulty: beginner
+        type: coding
+        objectives:
+          - "Define functions with parameters"
+          - "Use f-strings"
+          - "Return values from functions"

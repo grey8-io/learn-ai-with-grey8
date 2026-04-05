@@ -1,0 +1,5 @@
+[
+  "You need three classes: Tool (stores name, description, function), AgentState (messages=[], tool_results=[], iteration=0), and SimpleAgent (stores tools, generate_fn, max_iterations). Start with Tool and AgentState — they are simple data holders.",
+  "For parse_action, use re.search(r'ACTION:\\s*(\\w+)\\((.+?)\\)', response). If there's a match, return {\"tool\": match.group(1), \"args\": match.group(2)}. If not, return None. For execute_tool, loop through self.tools and compare tool.name to tool_name.",
+  "In run(): create AgentState, add query as user message. Loop up to max_iterations: build prompt by joining message contents, call generate_fn, add response as assistant message, parse_action. If None, return answer. If action, execute_tool, add result as tool message, increment iteration. After loop, return max iterations message."
+]

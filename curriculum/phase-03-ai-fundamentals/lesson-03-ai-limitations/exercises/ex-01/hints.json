@@ -1,0 +1,5 @@
+[
+  "Loop through each claim, then for each claim loop through known_facts.items(). Compare strings using .lower() for case-insensitive matching. Use 'in' to check if one string contains another.",
+  "First check if the fact value matches the claim (verified). Then check if the topic words appear in the claim but the fact doesn't match (contradicted). If neither, it's unverified. Use topic.replace('_', ' ') to convert topic keys to words.",
+  "for claim in claims: claim_lower = claim.lower(). For each (topic, fact): if fact.lower() in claim_lower: verified. elif topic.replace('_',' ') in claim_lower: contradicted. If no match after all facts: unverified."
+]

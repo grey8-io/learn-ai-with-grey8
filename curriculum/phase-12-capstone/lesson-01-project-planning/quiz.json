@@ -1,0 +1,112 @@
+[
+  {
+    "question": "What does MVP stand for in project planning?",
+    "options": [
+      "Most Valuable Player",
+      "Minimum Viable Product -- the smallest version that works and demonstrates value",
+      "Maximum Version Possible",
+      "Main Visual Prototype"
+    ],
+    "correct": 1,
+    "explanation": "MVP (Minimum Viable Product) is the smallest version of your project that works and provides value. For AI projects, this means accepting input, calling a model, returning results, and handling basic errors -- nothing more."
+  },
+  {
+    "question": "Why should you write your README before writing code?",
+    "options": [
+      "GitHub requires a README to create a repository",
+      "It forces you to clearly articulate what the project does, ensuring you understand it before building",
+      "READMEs take a long time to write and should be done first",
+      "Code cannot be committed without a README"
+    ],
+    "correct": 1,
+    "explanation": "Writing a README first forces you to clearly define what your project does, why it exists, and how it works. If you can't explain it in a README, you don't understand it well enough to build it. The README becomes your guide during development."
+  },
+  {
+    "question": "What is the difference between functional and non-functional requirements?",
+    "options": [
+      "Functional requirements work, non-functional requirements don't",
+      "Functional requirements describe what the system does, non-functional describe how it behaves (performance, reliability)",
+      "Functional requirements are for functions, non-functional are for classes",
+      "There is no difference -- they are the same thing"
+    ],
+    "correct": 1,
+    "explanation": "Functional requirements describe what the system does ('users can upload PDFs'). Non-functional requirements describe how it behaves ('responses under 5 seconds', 'handles 10 concurrent users'). Both are essential for a complete project plan."
+  },
+  {
+    "question": "For a self-hosted AI app using Ollama, which interface is fastest to build for an MVP?",
+    "options": [
+      "A full React frontend with REST API",
+      "A CLI (command-line interface)",
+      "A mobile app",
+      "A desktop application with Electron"
+    ],
+    "correct": 1,
+    "explanation": "A CLI is the fastest interface to build because it requires no frontend framework, no HTML/CSS, and no complex routing. You can interact directly with your Python code through the terminal. Once the core works, you can add a Streamlit or FastAPI interface later."
+  },
+  {
+    "question": "How should you prioritize project requirements?",
+    "options": [
+      "Build everything at once",
+      "Categorize as must-have (MVP), should-have (V2), and nice-to-have (future), then build in that order",
+      "Start with the hardest features first",
+      "Let users decide after launch"
+    ],
+    "correct": 1,
+    "explanation": "Prioritizing requirements as must-have, should-have, and nice-to-have ensures you build the most important features first. Must-have items form your MVP. Should-have items go in V2. Nice-to-have items are for the future. This prevents scope creep and keeps you focused."
+  },
+  {
+    "question": "How should you estimate the complexity of an AI project before committing to it?",
+    "options": [
+      "Always assume every project takes the same amount of time",
+      "Count the number of files in the starter code",
+      "Assess requirements count, number of interfaces, external service dependencies, and be honest about your available time",
+      "Complexity does not matter as long as you are motivated"
+    ],
+    "correct": 2,
+    "explanation": "Project complexity ranges from small (1-2 weekends, few requirements, single interface) to large (4+ weekends, many requirements, multiple services, deployment). Being realistic about your time is critical -- a finished small project is more valuable than an abandoned large one."
+  },
+  {
+    "question": "In the iterative MVP approach, what should the FIRST version of an AI project include?",
+    "options": [
+      "A polished web UI, user authentication, and deployment pipeline",
+      "Accept user input, call an LLM or model, return a useful result, and handle basic errors",
+      "Full RAG integration with vector database and cloud hosting",
+      "A complete test suite with 100% code coverage"
+    ],
+    "correct": 1,
+    "explanation": "The first version (MVP) should do four things: accept user input, call an LLM or use a model, return a useful result, and handle basic errors. No fancy UI, no authentication, no deployment. Get the core working first, then iterate through V2, V3, and beyond."
+  },
+  {
+    "question": "Which data storage option is most appropriate for an AI project that uses RAG (Retrieval-Augmented Generation)?",
+    "options": [
+      "Plain text files only",
+      "A relational database like MySQL",
+      "A vector database like ChromaDB or FAISS",
+      "Storing everything in environment variables"
+    ],
+    "correct": 2,
+    "explanation": "RAG projects need to store and retrieve document embeddings by semantic similarity, which requires a vector database like ChromaDB or FAISS. Relational databases and plain files are not designed for efficient vector similarity search. PostgreSQL with pgvector is an option but dedicated vector DBs are the standard choice."
+  },
+  {
+    "question": "What is the most common reason personal AI projects fail?",
+    "options": [
+      "The LLM model is too slow",
+      "Python is not a good language for AI",
+      "No plan -- leading to scope creep, missing pieces, and eventual abandonment",
+      "The developer does not have a powerful enough GPU"
+    ],
+    "correct": 2,
+    "explanation": "The most common reason personal projects fail is having no plan. Without a plan, developers start building unnecessary features, get overwhelmed by scope, skip critical pieces like error handling, and end up with a project that is hard to explain or showcase."
+  },
+  {
+    "question": "What is a recommended clean project structure for an AI application?",
+    "options": [
+      "Put all code in a single main.py file with no directories",
+      "Separate source code (src/), tests (tests/), data (data/), and docs (docs/) with a Dockerfile and .env.example at the root",
+      "Only have a README and a Jupyter notebook",
+      "Mirror the structure of the LLM framework you are using exactly"
+    ],
+    "correct": 1,
+    "explanation": "A clean project structure separates concerns: source code in src/ (main.py, llm.py, prompts.py, utils.py), tests in tests/, data files in data/, documentation in docs/, with a Dockerfile, README.md, requirements.txt, and .env.example at the project root. This makes the code maintainable and understandable."
+  }
+]

@@ -1,0 +1,5 @@
+[
+  "For create_system_prompt, use an f-string with \\n to put each component on its own line. The format is: 'You are a {role}.\\nYou specialize in {expertise}.\\nTone: {tone}.\\nConstraints: {constraints}.'",
+  "For create_few_shot_prompt, start with 'Task: {task_description}\\n\\nExamples:\\n', then loop through examples adding 'Input: {ex[\"input\"]}\\nOutput: {ex[\"output\"]}\\n\\n' for each. End with 'Now perform the task:\\nInput: {query}\\nOutput:'.",
+  "For validate_prompt: issues = []; estimated_tokens = len(prompt) // 4; if not prompt.strip(): issues.append('Prompt is empty'); if estimated_tokens > max_tokens: issues.append(f'Prompt exceeds token limit ({estimated_tokens} > {max_tokens})'); return {'valid': len(issues) == 0, 'issues': issues, 'estimated_tokens': estimated_tokens}."
+]

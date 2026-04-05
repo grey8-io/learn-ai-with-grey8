@@ -1,0 +1,52 @@
+# ACE Generation Spec — Phase 4: Your First AI App
+# Run: ace generate --spec specs/phase-04.yml
+
+phase: "04"
+phase_slug: "phase-04-first-ai-app"
+
+lessons:
+  - id: lesson-01
+    slug: "lesson-01-calling-llm-apis"
+    title: "Calling LLM APIs"
+    target_audience: "developers ready to build their first AI-powered application"
+    prerequisites:
+      - "Phase 3 completed (AI Fundamentals)"
+    objectives:
+      - "Call the Ollama chat API with system and user messages"
+      - "Build a reusable Python class for LLM communication"
+      - "Handle multi-turn conversations by managing message history"
+    exercises:
+      - title: "OllamaChat Client"
+        description: >
+          Build an OllamaChat class with __init__, send, and send_with_history
+          methods. The send method constructs messages lists with optional system
+          prompts and POSTs to the Ollama chat API. send_with_history maintains
+          conversation context across multiple turns.
+        difficulty: medium
+        type: coding
+        objectives:
+          - "Structure chat API requests with system and user message roles"
+          - "Make HTTP POST requests to the Ollama chat endpoint"
+          - "Maintain and pass conversation history for multi-turn chat"
+
+  - id: lesson-02
+    slug: "lesson-02-cli-assistant"
+    title: "Building a CLI AI Assistant"
+    target_audience: "developers building interactive AI tools"
+    prerequisites:
+      - "Calling LLM APIs (Phase 4, Lesson 1)"
+    objectives:
+      - "Design system prompts that give an AI assistant personality and constraints"
+      - "Manage conversation history for multi-turn interactions"
+      - "Save and load conversations to and from JSON files"
+    exercises:
+      - title: "CLI Assistant Utilities"
+        description: >
+          Implement create_system_prompt to build personality-infused system
+          messages with f-strings, and format_history to render conversation
+          messages as readable text (skipping system messages).
+        difficulty: medium
+        type: coding
+        objectives:
+          - "Craft system prompts with name and personality parameters"
+          - "Format message history by filtering and joining role-based entries"

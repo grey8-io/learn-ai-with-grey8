@@ -1,0 +1,168 @@
+# =============================================================================
+# Learn AI With Grey8 — Docker Compose
+# =============================================================================
+# Brings up the full local stack: Ollama (LLM), Tutor API, Web UI, Supabase.
+#
+# Quick start:
+#   cp .env.example .env        # fill in secrets
+#   docker compose -f docker/docker-compose.yml up -d
+#
+# GPU support (NVIDIA):
+#   To enable GPU acceleration for Ollama, uncomment the deploy block below
+#   or create a docker-compose.override.yml with the GPU reservation.
+# =============================================================================
+
+services:
+  # ---------------------------------------------------------------------------
+  # Ollama — local LLM inference server
+  # ---------------------------------------------------------------------------
+  ollama:
+    image: ollama/ollama:latest
+    container_name: learn-ai-ollama
+    ports:
+      - "11434:11434"
+    volumes:
+      - ollama_models:/root/.ollama
+    restart: unless-stopped
+    # To enable NVIDIA GPU acceleration, uncomment the block below:
+    # deploy:
+    #   resources:
+    #     reservations:
+    #       devices:
+    #         - driver: nvidia
+    #           count: all
+    #           capabilities: [gpu]
+
+  # ---------------------------------------------------------------------------
+  # Tutor — FastAPI backend (Socratic AI tutor)
+  # ---------------------------------------------------------------------------
+  tutor:
+    build:
+      context: ..
+      dockerfile: docker/tutor.Dockerfile
+    container_name: learn-ai-tutor
+    ports:
+      - "8000:8000"
+    depends_on:
+      - ollama
+      - supabase-db
+    env_file:
+      - ../.env
+    environment:
+      OLLAMA_BASE_URL: http://ollama:11434
+      DATABASE_URL: postgresql://postgres:postgres@supabase-db:5432/postgres
+    volumes:
+      - ../curriculum:/app/curriculum:ro
+    restart: unless-stopped
+
+  # ---------------------------------------------------------------------------
+  # Web — Next.js frontend
+  # ---------------------------------------------------------------------------
+  web:
+    build:
+      context: ..
+      dockerfile: docker/web.Dockerfile
+    container_name: learn-ai-web
+    ports:
+      - "3000:3000"
+    depends_on:
+      - tutor
+    env_file:
+      - ../.env
+    environment:
+      NEXT_PUBLIC_TUTOR_API_URL: http://tutor:8000
+      NEXT_PUBLIC_SUPABASE_URL: http://supabase-rest:3001
+    restart: unless-stopped
+
+  # ---------------------------------------------------------------------------
+  # Supabase — Postgres database
+  # ---------------------------------------------------------------------------
+  supabase-db:
+    image: supabase/postgres:15.1.1.78
+    container_name: learn-ai-supabase-db
+    ports:
+      - "54322:5432"
+    environment:
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: postgres
+    volumes:
+      - supabase_data:/var/lib/postgresql/data
+      - ../platform/supabase/migrations:/docker-entrypoint-initdb.d:ro
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  # ---------------------------------------------------------------------------
+  # Supabase — GoTrue (Auth)
+  # ---------------------------------------------------------------------------
+  supabase-auth:
+    image: supabase/gotrue:v2.143.0
+    container_name: learn-ai-supabase-auth
+    ports:
+      - "9999:9999"
+    depends_on:
+      supabase-db:
+        condition: service_healthy
+    environment:
+      GOTRUE_API_HOST: 0.0.0.0
+      GOTRUE_API_PORT: 9999
+      API_EXTERNAL_URL: http://localhost:9999
+      GOTRUE_DB_DRIVER: postgres
+      GOTRUE_DB_DATABASE_URL: postgresql://postgres:postgres@supabase-db:5432/postgres?sslmode=disable
+      GOTRUE_SITE_URL: http://localhost:3000
+      GOTRUE_JWT_SECRET: super-secret-jwt-token-for-local-dev-only
+      GOTRUE_JWT_EXP: 3600
+      GOTRUE_DISABLE_SIGNUP: "false"
+      GOTRUE_EXTERNAL_EMAIL_ENABLED: "true"
+      GOTRUE_MAILER_AUTOCONFIRM: "true"
+    restart: unless-stopped
+
+  # ---------------------------------------------------------------------------
+  # Supabase — PostgREST (REST API)
+  # ---------------------------------------------------------------------------
+  supabase-rest:
+    image: postgrest/postgrest:v12.0.2
+    container_name: learn-ai-supabase-rest
+    ports:
+      - "3001:3000"
+    depends_on:
+      supabase-db:
+        condition: service_healthy
+    environment:
+      PGRST_DB_URI: postgresql://postgres:postgres@supabase-db:5432/postgres
+      PGRST_DB_SCHEMAS: public
+      PGRST_DB_ANON_ROLE: anon
+      PGRST_JWT_SECRET: super-secret-jwt-token-for-local-dev-only
+    restart: unless-stopped
+
+  # ---------------------------------------------------------------------------
+  # Supabase — Studio (admin UI, debug profile only)
+  # ---------------------------------------------------------------------------
+  supabase-studio:
+    image: supabase/studio:20240101-ce42139
+    container_name: learn-ai-supabase-studio
+    profiles:
+      - debug
+    ports:
+      - "54323:3000"
+    depends_on:
+      supabase-db:
+        condition: service_healthy
+    environment:
+      STUDIO_PG_META_URL: http://supabase-rest:3000
+      SUPABASE_URL: http://localhost:3001
+      SUPABASE_REST_URL: http://supabase-rest:3000
+      POSTGRES_PASSWORD: postgres
+    restart: unless-stopped
+
+# =============================================================================
+# Volumes
+# =============================================================================
+volumes:
+  ollama_models:
+    driver: local
+  supabase_data:
+    driver: local

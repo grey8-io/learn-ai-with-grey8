@@ -1,0 +1,81 @@
+# ACE Generation Spec — Phase 12: Capstone Projects
+# Run: ace generate --spec specs/phase-12.yml
+
+phase: "12"
+phase_slug: "phase-12-capstone"
+
+lessons:
+  - id: lesson-01
+    slug: "lesson-01-project-planning"
+    title: "Project Planning & Architecture"
+    target_audience: "developers planning their capstone AI project"
+    prerequisites:
+      - "Phase 11 completed (Deployment & Monitoring)"
+    objectives:
+      - "Create structured project plans with requirements and milestones"
+      - "Generate README templates and directory structures for AI projects"
+      - "Select appropriate capstone projects based on interests and skill level"
+    exercises:
+      - title: "Project Planner"
+        description: >
+          Build a ProjectPlan class storing name, description, tech_stack,
+          requirements, and milestones. Implement generate_readme to produce
+          a markdown string with project name, description, tech stack, and
+          placeholder sections. Create select_project to match interest keywords
+          against project tags and filter by skill level.
+        difficulty: medium
+        type: coding
+        objectives:
+          - "Structure project plans with metadata and milestones"
+          - "Generate README templates from project data"
+          - "Match projects to interests and skill levels"
+
+  - id: lesson-02
+    slug: "lesson-02-building-and-testing"
+    title: "Building & Testing AI Applications"
+    target_audience: "developers testing and validating AI application quality"
+    prerequisites:
+      - "Project Planning & Architecture (Phase 12, Lesson 1)"
+    objectives:
+      - "Build test harnesses that validate LLM outputs against criteria"
+      - "Mock LLM responses for deterministic and fast testing"
+      - "Evaluate response quality using keyword overlap and length metrics"
+    exercises:
+      - title: "AI Test Harness"
+        description: >
+          Implement mock_llm that returns a closure cycling through predefined
+          responses using a mutable index. Build test_prompt to call generate_fn
+          and check responses against expected/unexpected keywords and max_length.
+          Create evaluate_quality to compute exact_match, keyword_overlap via
+          set intersection, and length_ratio metrics.
+        difficulty: hard
+        type: coding
+        objectives:
+          - "Create mock LLM functions for deterministic testing"
+          - "Validate LLM outputs against keyword criteria"
+          - "Compute quality metrics for response evaluation"
+
+  - id: lesson-03
+    slug: "lesson-03-deployment-showcase"
+    title: "Deployment & Showcase"
+    target_audience: "developers presenting and deploying their completed projects"
+    prerequisites:
+      - "Building & Testing AI Applications (Phase 12, Lesson 2)"
+    objectives:
+      - "Generate demo scripts and architecture diagrams for project showcases"
+      - "Create deployment checklists tailored to the project's tech stack"
+      - "Build portfolio entries with proper licensing and changelogs"
+    exercises:
+      - title: "Project Showcase Builder"
+        description: >
+          Build a ProjectShowcase class that stores project metadata. Implement
+          generate_demo_script to build markdown from step dicts. Create
+          generate_deployment_checklist with base items plus tech_stack-specific
+          additions. Build generate_license using if/elif for license types
+          with f-strings for year and author.
+        difficulty: medium
+        type: coding
+        objectives:
+          - "Generate demo scripts from structured step data"
+          - "Build tech-stack-aware deployment checklists"
+          - "Generate license files from templates"

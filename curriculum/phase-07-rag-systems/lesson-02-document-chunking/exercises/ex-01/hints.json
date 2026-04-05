@@ -1,0 +1,5 @@
+[
+  "For chunk_by_size, use a while loop: start at 0, take text[start:start+chunk_size], then advance by (chunk_size - overlap). For chunk_by_sentences, first split with re.split(r'(?<=[.!?])\\s+', text), then group with a stepping loop.",
+  "For chunk_by_paragraphs, split on '\\n\\n', then accumulate paragraphs: keep a current chunk string, and for each new paragraph check if current + '\\n\\n' + paragraph exceeds max_chunk_size. If it does, save current and start fresh.",
+  "For chunk_markdown, use re.split(r'(?=^#{1,6}\\s)', text, flags=re.MULTILINE) to split on headings. If a section is too long, extract the heading (first line), split the body by paragraphs, and prepend the heading to each sub-chunk."
+]

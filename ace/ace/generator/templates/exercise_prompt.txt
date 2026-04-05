@@ -1,0 +1,38 @@
+Generate exercise files for the following:
+
+# Lesson: {lesson_title}
+# Exercise: {exercise_title}
+
+## Description
+{description}
+
+## Difficulty: {difficulty}
+
+## Learning Objectives
+{objectives}
+
+## Exercise Type: {exercise_type}
+
+---
+
+Generate the following sections using EXACTLY these headers:
+
+## STARTER
+Write a Python starter file with TODO comments where the student needs to fill in code.
+Include helpful docstrings and type hints.
+
+## SOLUTION
+Write the complete solution with all TODOs filled in.
+Include comments explaining the approach.
+
+## TESTS
+Write pytest test cases that verify the solution works correctly.
+Include at least 3 test cases covering normal, edge, and error cases.
+
+## HINTS
+Write 3-5 progressive hints, from vague to specific.
+Format as a numbered Markdown list.
+
+## RUBRIC
+Write a grading rubric with criteria and point values.
+Format as a Markdown table with columns: Criterion, Points, Description.

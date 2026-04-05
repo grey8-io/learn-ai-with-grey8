@@ -1,0 +1,112 @@
+[
+  {
+    "question": "What is the main advantage of FastAPI over Flask for AI backends?",
+    "options": [
+      "FastAPI has more third-party plugins",
+      "FastAPI supports async natively, which is critical for slow AI/LLM calls",
+      "FastAPI is written in C and runs faster",
+      "FastAPI doesn't require Python"
+    ],
+    "correct": 1,
+    "explanation": "AI calls (like sending prompts to an LLM) are IO-bound and slow. FastAPI's native async support means your server can handle other requests while waiting for model responses, instead of blocking."
+  },
+  {
+    "question": "What does a Pydantic BaseModel do in FastAPI?",
+    "options": [
+      "It connects to a database",
+      "It defines and validates the shape of request/response data automatically",
+      "It trains a machine learning model",
+      "It generates HTML templates"
+    ],
+    "correct": 1,
+    "explanation": "Pydantic models define the exact fields, types, and defaults for your data. FastAPI uses them to automatically parse JSON, validate inputs, and return clear errors for invalid requests."
+  },
+  {
+    "question": "How do you access the auto-generated API documentation in FastAPI?",
+    "options": [
+      "Run a separate documentation generator command",
+      "Visit /docs or /redoc in your browser while the app is running",
+      "Install a third-party documentation plugin",
+      "Write docstrings and export them to HTML"
+    ],
+    "correct": 1,
+    "explanation": "FastAPI automatically generates interactive documentation at /docs (Swagger UI) and /redoc (ReDoc) based on your type hints and Pydantic models. No extra setup needed."
+  },
+  {
+    "question": "What HTTP status code does FastAPI return when request validation fails?",
+    "options": [
+      "400 Bad Request",
+      "401 Unauthorized",
+      "422 Unprocessable Entity",
+      "500 Internal Server Error"
+    ],
+    "correct": 2,
+    "explanation": "FastAPI returns 422 Unprocessable Entity when the request body doesn't match the Pydantic model. The response includes details about which fields failed validation and why."
+  },
+  {
+    "question": "Why is the app factory pattern (create_app function) useful for testing?",
+    "options": [
+      "It makes the app run faster in production",
+      "It lets you create fresh app instances for each test, avoiding shared state",
+      "It's required by the FastAPI framework",
+      "It automatically generates test cases"
+    ],
+    "correct": 1,
+    "explanation": "The app factory pattern lets you create isolated app instances. In testing, you pass the app to TestClient to send in-memory HTTP requests without running a real server, and each test suite gets a clean app."
+  },
+  {
+    "question": "What is the difference between a path parameter and a query parameter in FastAPI?",
+    "options": [
+      "Path parameters are encrypted, query parameters are not",
+      "Path parameters are part of the URL path (e.g., /models/{id}), while query parameters are appended after ? (e.g., ?verbose=true)",
+      "Path parameters are only for POST requests, query parameters are only for GET requests",
+      "There is no difference — they are interchangeable"
+    ],
+    "correct": 1,
+    "explanation": "Path parameters are embedded in the URL structure (e.g., /models/gpt-4 where gpt-4 is the path parameter). Query parameters are key-value pairs appended after a question mark (e.g., /models/gpt-4?verbose=true). FastAPI infers which is which from the route definition and function signature."
+  },
+  {
+    "question": "How does FastAPI's TestClient work?",
+    "options": [
+      "It starts a real HTTP server on a random port and sends requests to it",
+      "It sends in-memory HTTP requests to the app without starting a real server",
+      "It only tests Pydantic models, not actual endpoints",
+      "It requires a running database connection to function"
+    ],
+    "correct": 1,
+    "explanation": "FastAPI's TestClient (from Starlette) sends real HTTP requests to your app in-memory. No server is started, no port is opened. This makes tests fast and isolated, and you can assert on status codes, response bodies, and headers just like real HTTP calls."
+  },
+  {
+    "question": "What happens when you type-hint a POST endpoint parameter as a Pydantic model?",
+    "options": [
+      "FastAPI ignores the type hint and treats the parameter as a raw string",
+      "FastAPI automatically parses the JSON request body into that model and validates it",
+      "The parameter becomes a query parameter",
+      "FastAPI requires you to manually call model.parse() on the request body"
+    ],
+    "correct": 1,
+    "explanation": "When a function parameter is typed as a Pydantic model, FastAPI automatically reads the request body as JSON, validates every field against the model's type hints, applies defaults for optional fields, and passes the validated model instance to your function. Invalid input triggers a 422 error."
+  },
+  {
+    "question": "What is a batch processing endpoint and why is it useful for AI APIs?",
+    "options": [
+      "An endpoint that processes requests in a queue overnight",
+      "An endpoint that accepts multiple inputs in a single request, reducing HTTP overhead for bulk operations",
+      "An endpoint that only works with batch files (.bat)",
+      "An endpoint that automatically splits large models into smaller batches"
+    ],
+    "correct": 1,
+    "explanation": "Batch endpoints accept multiple inputs (e.g., a list of texts) in a single HTTP request and return all results at once. This is common in AI APIs because it reduces the overhead of making hundreds of separate HTTP calls and allows the backend to optimize processing."
+  },
+  {
+    "question": "What underlying framework powers FastAPI's high performance?",
+    "options": [
+      "Django's ORM and template engine",
+      "Flask's Werkzeug WSGI toolkit",
+      "Starlette (ASGI) with uvicorn as the server",
+      "Node.js with Express middleware"
+    ],
+    "correct": 2,
+    "explanation": "FastAPI is built on top of Starlette, an ASGI framework, and is typically served by uvicorn, an ASGI server. ASGI (Asynchronous Server Gateway Interface) natively supports async/await, which is what gives FastAPI its performance advantage over WSGI-based frameworks like Flask."
+  }
+]

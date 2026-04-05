@@ -1,0 +1,112 @@
+[
+  {
+    "question": "Why is testing AI applications harder than testing traditional software?",
+    "options": [
+      "AI code is always more complex",
+      "LLM outputs are non-deterministic, making exact output comparisons unreliable",
+      "Python doesn't have good testing tools",
+      "AI applications don't need testing"
+    ],
+    "correct": 1,
+    "explanation": "LLMs produce different outputs for the same input across runs. This makes traditional exact-match testing impractical. Instead, you test for properties (keywords, format, length) and use mocks for deterministic testing of your application logic."
+  },
+  {
+    "question": "What is the purpose of mocking LLM responses in tests?",
+    "options": [
+      "To make the LLM run faster",
+      "To replace the real LLM with predetermined responses, enabling fast and deterministic tests",
+      "To train the model on test data",
+      "To bypass API authentication"
+    ],
+    "correct": 1,
+    "explanation": "Mocking replaces the real LLM with a function that returns predetermined responses. This makes tests fast (no network calls), free (no API costs), and deterministic (same response every time). You can then test your application's logic reliably."
+  },
+  {
+    "question": "Which tests should run on every code push in CI?",
+    "options": [
+      "Only integration tests with real LLMs",
+      "Unit tests and mock LLM tests (fast and free)",
+      "Only manual testing",
+      "Evaluation suites with hundreds of prompts"
+    ],
+    "correct": 1,
+    "explanation": "Unit tests and mock LLM tests are fast and free, making them ideal for CI on every push. Integration tests with real LLMs are slow and costly, so they should run less frequently (nightly or on-demand). Evaluation suites are periodic (weekly or on releases)."
+  },
+  {
+    "question": "What is keyword overlap as an evaluation metric?",
+    "options": [
+      "The number of characters in common between two strings",
+      "The fraction of words from the reference answer that appear in the response",
+      "Whether both texts start with the same word",
+      "The total number of keywords in both texts"
+    ],
+    "correct": 1,
+    "explanation": "Keyword overlap measures what fraction of the reference answer's words appear in the response. For example, if the reference has 10 unique words and 7 of them appear in the response, the keyword overlap is 0.7. It's a practical metric for AI responses since exact matches are rare."
+  },
+  {
+    "question": "What should you focus on when reviewing AI application code?",
+    "options": [
+      "Only code formatting and style",
+      "Prompt injection risks, error handling, token efficiency, and mock test coverage",
+      "Only the LLM model choice",
+      "How many comments the code has"
+    ],
+    "correct": 1,
+    "explanation": "AI code review should focus on prompt injection risks (can users manipulate prompts?), error handling (what happens when the LLM fails?), token efficiency (are prompts too long?), and whether the LLM interaction is tested with mocks."
+  },
+  {
+    "question": "In the AI testing pyramid, which layer should have the MOST tests?",
+    "options": [
+      "Evaluation tests at the top, since they measure real quality",
+      "Integration tests with real LLMs, since they are the most realistic",
+      "Unit tests at the base, because they are fastest, most reliable, and cheapest to run",
+      "All layers should have exactly the same number of tests"
+    ],
+    "correct": 2,
+    "explanation": "The testing pyramid has unit tests at the base -- you should have the most tests here because they are fast, deterministic, and free. Moving up, mock LLM tests, integration tests, and evaluation tests each have fewer tests. The bottom layers run frequently; the top layers run periodically."
+  },
+  {
+    "question": "When testing AI responses, which approach should you use instead of exact string matching?",
+    "options": [
+      "Skip testing AI responses entirely since they are unpredictable",
+      "Test for properties like keyword presence, format compliance, length bounds, and absence of forbidden content",
+      "Run the test 100 times and take the most common result",
+      "Compare character-by-character with a reference answer"
+    ],
+    "correct": 1,
+    "explanation": "Since LLM outputs are non-deterministic, you test for properties rather than exact values. Check that expected keywords appear, JSON parses correctly, response length is within bounds, and no forbidden content is present. This gives reliable pass/fail results without requiring identical outputs."
+  },
+  {
+    "question": "What is an integration test in the context of AI applications?",
+    "options": [
+      "A test that only checks import statements work correctly",
+      "A test that calls the real LLM and verifies the response meets criteria like containing expected information and being within length limits",
+      "A test that mocks everything including the file system",
+      "A test that checks the UI renders correctly"
+    ],
+    "correct": 1,
+    "explanation": "Integration tests for AI apps call the real LLM and verify the response meets broad criteria (contains expected info, reasonable length) rather than exact matching. They are slow and potentially costly, so they run less frequently -- in CI nightly builds or on-demand, not on every code save."
+  },
+  {
+    "question": "How often should evaluation test suites be run for AI applications?",
+    "options": [
+      "On every code save",
+      "On every git commit",
+      "Periodically -- weekly or on release branches -- to detect quality regression over time",
+      "Only once before the initial launch"
+    ],
+    "correct": 2,
+    "explanation": "Evaluation suites run a batch of prompts and score responses against reference answers to track quality over time. They are slow and resource-intensive, so they run periodically (weekly or on release branches) rather than on every push. Their purpose is to detect quality regression across model or code changes."
+  },
+  {
+    "question": "What is the best practice for documenting prompts in AI application code?",
+    "options": [
+      "Never document prompts -- they are self-explanatory",
+      "Only document prompts in a separate spreadsheet outside the codebase",
+      "Document prompts inline, explaining why they are structured a certain way and what output format they expect",
+      "Encrypt all prompts so competitors cannot copy them"
+    ],
+    "correct": 2,
+    "explanation": "Prompt documentation should explain why a prompt is structured a particular way and what output it expects. This is part of good code documentation practice -- code comments explain 'why', docstrings describe public functions, and prompt documentation captures the reasoning behind prompt design decisions."
+  }
+]

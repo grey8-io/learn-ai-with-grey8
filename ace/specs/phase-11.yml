@@ -1,0 +1,81 @@
+# ACE Generation Spec — Phase 11: Deployment & Monitoring
+# Run: ace generate --spec specs/phase-11.yml
+
+phase: "11"
+phase_slug: "phase-11-deployment"
+
+lessons:
+  - id: lesson-01
+    slug: "lesson-01-docker-basics"
+    title: "Docker Basics for AI Apps"
+    target_audience: "developers containerizing AI applications for deployment"
+    prerequisites:
+      - "Phase 10 completed (Optimization & Cost Control)"
+    objectives:
+      - "Generate Dockerfiles for different AI application types"
+      - "Create Docker Compose configurations for multi-service setups"
+      - "Validate Dockerfiles for common issues and best practices"
+    exercises:
+      - title: "Docker Config Generator"
+        description: >
+          Build functions to generate Dockerfiles as joined string lists with
+          app_type-specific CMD instructions. Implement generate_compose to
+          build a services dict and output via yaml.dump with sort_keys=False.
+          Create validate_dockerfile to check for FROM, EXPOSE, and
+          CMD/ENTRYPOINT directives.
+        difficulty: medium
+        type: coding
+        objectives:
+          - "Generate Dockerfiles programmatically from templates"
+          - "Create Docker Compose YAML configurations"
+          - "Validate Dockerfiles for required directives"
+
+  - id: lesson-02
+    slug: "lesson-02-cloud-deployment"
+    title: "Cloud Deployment"
+    target_audience: "developers deploying AI services to production servers"
+    prerequisites:
+      - "Docker Basics for AI Apps (Phase 11, Lesson 1)"
+    objectives:
+      - "Generate nginx reverse proxy and systemd service configurations"
+      - "Estimate server resource requirements for AI model hosting"
+      - "Create health check scripts and deployment environment files"
+    exercises:
+      - title: "Deployment Config Generator"
+        description: >
+          Build a DeploymentConfig class that generates nginx reverse proxy
+          configs, systemd service files, .env files, and health check scripts
+          from its properties using f-strings. Implement estimate_server_requirements
+          to compute RAM, CPU, GPU, and disk needs based on model size and
+          concurrency settings.
+        difficulty: hard
+        type: coding
+        objectives:
+          - "Generate nginx and systemd configurations from templates"
+          - "Estimate server resource requirements for AI workloads"
+          - "Create deployment environment and health check files"
+
+  - id: lesson-03
+    slug: "lesson-03-monitoring"
+    title: "Monitoring & Observability"
+    target_audience: "developers building observability into AI services"
+    prerequisites:
+      - "Cloud Deployment (Phase 11, Lesson 2)"
+    objectives:
+      - "Record and analyze AI service metrics with time-window filtering"
+      - "Implement structured JSON logging for AI operations"
+      - "Build alerting rules that trigger on metric thresholds"
+    exercises:
+      - title: "AI Monitoring System"
+        description: >
+          Build AIMetrics to store records with timestamps and compute summaries
+          filtered by time window. Implement StructuredLogger that outputs JSON
+          lines with timestamp, service, level, message, and context fields.
+          Create get_alerts to check current metrics against threshold rules
+          with operator comparisons (>, <, >=, <=).
+        difficulty: hard
+        type: coding
+        objectives:
+          - "Record and query time-series metrics"
+          - "Output structured JSON log entries"
+          - "Evaluate alerting rules against live metrics"

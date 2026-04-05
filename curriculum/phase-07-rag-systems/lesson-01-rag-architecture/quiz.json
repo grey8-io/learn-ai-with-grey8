@@ -1,0 +1,79 @@
+[
+  {
+    "question": "What are the three main steps in a RAG pipeline?",
+    "options": [
+      "Train, Validate, Deploy",
+      "Retrieve, Augment, Generate",
+      "Embed, Store, Search",
+      "Parse, Transform, Load"
+    ],
+    "correct": 1,
+    "explanation": "RAG stands for Retrieval-Augmented Generation. The three steps are: (1) Retrieve relevant documents from a knowledge base, (2) Augment the prompt by adding those documents as context, (3) Generate an answer using the LLM with that augmented prompt."
+  },
+  {
+    "question": "What problem does RAG primarily solve for LLMs?",
+    "options": [
+      "Making models run faster",
+      "Reducing the size of models",
+      "Grounding answers in real, up-to-date information to reduce hallucinations",
+      "Training models with less data"
+    ],
+    "correct": 2,
+    "explanation": "LLMs can hallucinate — generating confident but incorrect answers. RAG solves this by retrieving actual documents and using them as context, so the model's answer is grounded in real data rather than relying solely on what it memorized during training."
+  },
+  {
+    "question": "When is RAG a better choice than fine-tuning?",
+    "options": [
+      "When you need a specific writing style",
+      "When your data changes frequently and you need source citations",
+      "When you want to reduce model size",
+      "When you need faster inference speed"
+    ],
+    "correct": 1,
+    "explanation": "RAG is ideal when your data changes frequently because you can update the knowledge base without retraining. It also naturally supports source citations since you know which documents the answer came from. Fine-tuning is better for style and format control."
+  },
+  {
+    "question": "What role does the vector store play in a RAG system?",
+    "options": [
+      "It generates the final answer",
+      "It stores and searches document embeddings for similarity matching",
+      "It splits documents into chunks",
+      "It formats the prompt for the LLM"
+    ],
+    "correct": 1,
+    "explanation": "The vector store is a database optimized for similarity search. It stores document embeddings (numerical vectors) and can quickly find the most similar vectors to a query embedding. This is how the retriever finds relevant documents."
+  },
+  {
+    "question": "Why is the prompt builder important in a RAG pipeline?",
+    "options": [
+      "It embeds the documents into vectors",
+      "It trains the LLM on new data",
+      "It combines retrieved context with the user's question into a structured prompt",
+      "It stores documents in the database"
+    ],
+    "correct": 2,
+    "explanation": "The prompt builder takes the retrieved documents and the user's question and formats them into a clear prompt. This is the 'augment' step — it structures the context so the LLM can use it effectively when generating an answer."
+  },
+  {
+    "question": "What role does the chunker play in a RAG system's architecture?",
+    "options": [
+      "It generates the final answer from the LLM",
+      "It splits large documents into smaller passages that fit the model's context window and improve retrieval precision",
+      "It converts text into embedding vectors",
+      "It manages user authentication and access control"
+    ],
+    "correct": 1,
+    "explanation": "The chunker is responsible for splitting large documents into smaller pieces before embedding and storage. Without chunking, entire documents would need to fit in the context window, and embeddings would be too general. Smaller chunks produce more specific embeddings, leading to more precise retrieval."
+  },
+  {
+    "question": "Which advantage does RAG provide that fine-tuning does not naturally support?",
+    "options": [
+      "Faster inference speed at runtime",
+      "Better control over writing style and tone",
+      "Source citations showing which documents the answer came from",
+      "Smaller model file sizes"
+    ],
+    "correct": 2,
+    "explanation": "RAG naturally supports source citations because you know exactly which documents were retrieved and used as context. Fine-tuning bakes knowledge into model weights, so there is no way to trace an answer back to a specific source document. This transparency is critical for enterprise and legal use cases."
+  }
+]

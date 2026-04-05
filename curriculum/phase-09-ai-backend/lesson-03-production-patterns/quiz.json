@@ -1,0 +1,112 @@
+[
+  {
+    "question": "Why is rate limiting essential for AI backends?",
+    "options": [
+      "It makes the AI generate better responses",
+      "It prevents individual users from exhausting expensive LLM resources",
+      "It's required by all cloud hosting providers",
+      "It improves the accuracy of model predictions"
+    ],
+    "correct": 1,
+    "explanation": "LLM calls are expensive in both compute and API costs. Without rate limiting, a single user or bot could burn through your entire budget or overwhelm your infrastructure."
+  },
+  {
+    "question": "What is TTL in the context of caching?",
+    "options": [
+      "Total Token Length -- the maximum prompt size",
+      "Time To Live -- how long a cached entry remains valid",
+      "Token Transfer Layer -- the protocol for sending data",
+      "Test Timeout Limit -- how long tests can run"
+    ],
+    "correct": 1,
+    "explanation": "TTL (Time To Live) defines how long a cached entry stays valid. After the TTL expires, the entry is considered stale and should be refreshed from the actual source."
+  },
+  {
+    "question": "Why should cache keys be deterministic hashes?",
+    "options": [
+      "Hashes are shorter and save memory",
+      "The same prompt and model should always map to the same cache entry",
+      "Hashes are encrypted and more secure",
+      "Hashes run faster than string comparison"
+    ],
+    "correct": 1,
+    "explanation": "A deterministic hash ensures that identical inputs always produce the same cache key. This means 'What is Python?' with model 'llama3' always hits the same cache entry, regardless of when or where the request was made."
+  },
+  {
+    "question": "What should sanitize_input do with control characters like \\x00?",
+    "options": [
+      "Convert them to spaces",
+      "Remove them entirely while keeping newlines and tabs",
+      "Leave them as-is since the LLM can handle them",
+      "Replace them with their hex codes"
+    ],
+    "correct": 1,
+    "explanation": "Control characters (except newlines and tabs) can break logging, database storage, and downstream processing. Removing them prevents subtle bugs while preserving the meaningful content."
+  },
+  {
+    "question": "What is the benefit of a standardized error response format?",
+    "options": [
+      "It makes errors happen less frequently",
+      "Clients can reliably parse error details using a consistent structure",
+      "It automatically fixes the error and retries",
+      "It's required by the HTTP specification"
+    ],
+    "correct": 1,
+    "explanation": "When every error response has the same structure (message, type, status_code), client applications can write reliable error handling code. Without standardization, clients have to guess the format of each error."
+  },
+  {
+    "question": "How does the sliding window rate limiter work?",
+    "options": [
+      "It counts total requests since the server started and resets daily",
+      "It tracks timestamps of recent requests and only counts those within the current time window",
+      "It blocks all requests after the first one and releases them at fixed intervals",
+      "It randomly drops requests when the server is under load"
+    ],
+    "correct": 1,
+    "explanation": "A sliding window rate limiter stores timestamps of recent requests per client. When a new request arrives, it removes timestamps older than the window (e.g., 60 seconds) and checks if the count of remaining timestamps exceeds the limit. The window slides forward with time."
+  },
+  {
+    "question": "What is CORS and why do AI backends need it?",
+    "options": [
+      "CORS is a database protocol for storing cached responses",
+      "CORS (Cross-Origin Resource Sharing) allows a web frontend on one domain to make requests to a backend on a different domain or port",
+      "CORS is a compression algorithm that reduces response sizes",
+      "CORS is an authentication standard required by all REST APIs"
+    ],
+    "correct": 1,
+    "explanation": "Browsers block requests to different origins (domain/port) by default for security. Since the Next.js frontend (port 3000) and FastAPI backend (port 8000) run on different ports, CORS middleware must be configured to allow cross-origin requests."
+  },
+  {
+    "question": "What is the difference between a /health endpoint and a /ready endpoint?",
+    "options": [
+      "They are the same thing with different names",
+      "/health confirms the server process is running; /ready confirms it can actually serve requests (e.g., LLM is reachable)",
+      "/health is for development only; /ready is for production only",
+      "/health checks CPU usage; /ready checks memory usage"
+    ],
+    "correct": 1,
+    "explanation": "A /health endpoint simply confirms the server is alive and responding. A /ready endpoint goes further by checking that all dependencies (LLM connection, database, cache) are available. A server can be healthy but not ready if an upstream service is down."
+  },
+  {
+    "question": "Why should you use environment variables instead of hardcoding configuration values?",
+    "options": [
+      "Environment variables are faster to read than config files",
+      "They let you change behavior between environments (dev, staging, production) without modifying code",
+      "Hardcoded values cause syntax errors in Python",
+      "Environment variables are automatically encrypted by the operating system"
+    ],
+    "correct": 1,
+    "explanation": "Environment variables separate configuration from code. You can use different API URLs, rate limits, and cache TTLs in development, staging, and production without changing any source code. This is a core principle of the twelve-factor app methodology."
+  },
+  {
+    "question": "Why does the input sanitizer enforce a maximum length on user input?",
+    "options": [
+      "Shorter inputs produce better AI responses",
+      "To prevent memory exhaustion from extremely large inputs that could crash the server",
+      "LLMs cannot process inputs longer than 100 characters",
+      "Maximum length is a legal requirement for data privacy"
+    ],
+    "correct": 1,
+    "explanation": "Without length limits, a malicious user could send megabytes of text, consuming excessive memory and potentially crashing the server or causing very expensive LLM calls. Enforcing a maximum length (e.g., 10,000 characters) is a basic defense against denial-of-service attacks."
+  }
+]

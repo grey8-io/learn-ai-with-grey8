@@ -1,0 +1,112 @@
+[
+  {
+    "question": "Why is serverless (like AWS Lambda) generally a poor choice for LLM inference?",
+    "options": [
+      "Serverless platforms don't support Python",
+      "Cold starts and memory limits make it impractical for large model inference",
+      "Serverless is too expensive for any application",
+      "LLMs can only run on Windows servers"
+    ],
+    "correct": 1,
+    "explanation": "Serverless platforms have cold start delays (10-30 seconds) and memory limits that make them unsuitable for loading and running large language models. LLM inference needs persistent processes with significant RAM or GPU memory."
+  },
+  {
+    "question": "What is the purpose of a reverse proxy like Nginx in front of your AI application?",
+    "options": [
+      "It makes your Python code run faster",
+      "It handles SSL, load balancing, and protects your application from direct internet exposure",
+      "It replaces the need for Docker",
+      "It automatically scales your application based on traffic"
+    ],
+    "correct": 1,
+    "explanation": "A reverse proxy like Nginx sits between the internet and your application. It handles SSL termination, distributes requests across instances, serves static files efficiently, and adds security by not exposing your Python process directly."
+  },
+  {
+    "question": "What does 'Restart=always' mean in a systemd service file?",
+    "options": [
+      "The server reboots every time the service stops",
+      "The service is automatically restarted if it crashes or exits",
+      "The configuration is reloaded on every request",
+      "The service restarts once per day for maintenance"
+    ],
+    "correct": 1,
+    "explanation": "Restart=always tells systemd to automatically restart the service whenever it exits, whether due to a crash, an error, or any other reason. Combined with RestartSec=5, it waits 5 seconds before restarting to avoid rapid restart loops."
+  },
+  {
+    "question": "Why should you never commit .env files to your Git repository?",
+    "options": [
+      ".env files are too large for Git",
+      "They often contain secrets like API keys that should not be in version control",
+      "Git cannot track files with dots in the name",
+      ".env files change too frequently for version control"
+    ],
+    "correct": 1,
+    "explanation": ".env files typically contain sensitive information like API keys, database passwords, and tokens. Committing them to Git means anyone with repository access (or anyone who finds a leaked repo) can see your secrets."
+  },
+  {
+    "question": "What is the simplest zero-downtime deployment strategy for a self-hosted application?",
+    "options": [
+      "Turn off the server, update, turn it back on",
+      "Start the new version on a different port, verify it's healthy, then switch the proxy to point to the new port",
+      "Deploy directly to production and hope for the best",
+      "Use two separate domains and ask users to switch"
+    ],
+    "correct": 1,
+    "explanation": "The simplest approach is to start the new version alongside the old one (on a different port), run health checks to verify it works, then update the Nginx proxy to point to the new port and gracefully stop the old version. Users never see downtime."
+  },
+  {
+    "question": "What should a good health check endpoint verify for an AI application?",
+    "options": [
+      "Only that the HTTP server process is running",
+      "That the application is running, the database is reachable, and the model server (Ollama) is accessible",
+      "That all users are currently authenticated",
+      "That the latest model version has been downloaded"
+    ],
+    "correct": 1,
+    "explanation": "A good health check verifies all critical dependencies: the app process is alive, database connections work, and the model server (Ollama) is reachable. This lets load balancers and monitoring systems detect partial failures, not just complete crashes."
+  },
+  {
+    "question": "What is the difference between blue-green and canary deployment strategies?",
+    "options": [
+      "Blue-green uses two servers while canary uses one",
+      "Blue-green switches all traffic at once; canary gradually routes a small percentage of traffic to the new version first",
+      "Blue-green is for databases only; canary is for applications only",
+      "There is no meaningful difference between the two"
+    ],
+    "correct": 1,
+    "explanation": "Blue-green deployment runs the old and new versions side by side, then switches all traffic at once. Canary deployment routes a small percentage (e.g., 5%) of traffic to the new version first, monitors for issues, and gradually increases the percentage. Canary is safer for catching subtle bugs."
+  },
+  {
+    "question": "Why is a VPS a good choice for self-hosted Ollama-based AI applications?",
+    "options": [
+      "VPS providers include free LLM API credits",
+      "A VPS provides full control, GPU access, and predictable monthly costs",
+      "VPS servers are always faster than cloud platforms",
+      "VPS is the only option that supports Docker"
+    ],
+    "correct": 1,
+    "explanation": "A VPS gives you a full Linux server with SSH access where you can install Docker, Ollama, and your models. GPU-equipped VPS options are available at predictable monthly rates, giving you full control over the environment without the complexity and variable costs of managed cloud platforms."
+  },
+  {
+    "question": "What does the 'After=network.target' directive mean in a systemd service file?",
+    "options": [
+      "The service can only be accessed over the network",
+      "The service should start only after networking is available",
+      "The service will shut down if the network goes down",
+      "The service listens on all network interfaces"
+    ],
+    "correct": 1,
+    "explanation": "After=network.target tells systemd to wait until the networking subsystem is ready before starting your service. This is important for AI applications that need to connect to model servers, databases, or external APIs on startup."
+  },
+  {
+    "question": "What is the recommended approach for managing secrets in a simple self-hosted deployment?",
+    "options": [
+      "Hardcode them in the Dockerfile for convenience",
+      "Store them in environment variables in a .env file readable only by the application user",
+      "Commit them to a private Git repository",
+      "Email them to the server administrator"
+    ],
+    "correct": 1,
+    "explanation": "For simple self-hosted deployments, environment variables in a .env file with restricted file permissions (readable only by the app user) provide a solid starting point. The .env file should never be committed to version control. For more complex setups, a dedicated secrets manager like HashiCorp Vault is recommended."
+  }
+]

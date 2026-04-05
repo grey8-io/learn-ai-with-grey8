@@ -1,0 +1,5 @@
+[
+  "Convert the description to lowercase with .lower(), then check if any keywords from each category appear in the text using 'keyword in text'.",
+  "Create three lists of keywords — one for each ML type. Loop through each list and check if any keyword is found in the lowercase description. Return the matching type.",
+  "supervised_keywords = ['predict', 'classify', 'label', 'diagnose', 'spam']. Loop: for kw in supervised_keywords: if kw in text: return 'supervised'. Repeat for unsupervised and reinforcement. Default: return 'unknown'."
+]

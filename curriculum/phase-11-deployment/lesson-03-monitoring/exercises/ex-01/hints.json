@@ -1,0 +1,5 @@
+[
+  "For AIMetrics.get_summary, filter records where record['timestamp'] >= time.time() - (time_window_minutes * 60). Sort the latencies list and compute p95 with: latencies[min(int(len(latencies) * 0.95), len(latencies) - 1)]. Error rate is count of status_code >= 400 divided by total.",
+  "For StructuredLogger.log, build a dict with: timestamp from datetime.now(timezone.utc).isoformat(), service from self.service_name, level, message, and **context (unpack keyword args). Return json.dumps(entry). For log_llm_call, set level to 'info' if success else 'error'.",
+  "For create_dashboard_data, use collections.Counter on record['endpoint'] for all records. Call counter.most_common(3) to get top endpoints. Get the summary from metrics.get_summary() and build the dashboard dict from its values."
+]

@@ -1,0 +1,79 @@
+# ACE Generation Spec — Phase 9: AI Backend Development
+# Run: ace generate --spec specs/phase-09.yml
+
+phase: "09"
+phase_slug: "phase-09-ai-backend"
+
+lessons:
+  - id: lesson-01
+    slug: "lesson-01-fastapi-basics"
+    title: "FastAPI Basics"
+    target_audience: "developers building web APIs for AI services"
+    prerequisites:
+      - "Phase 8 completed (AI Agents)"
+    objectives:
+      - "Create a FastAPI application with multiple endpoints"
+      - "Define request and response models with Pydantic validation"
+      - "Test API endpoints using FastAPI's TestClient"
+    exercises:
+      - title: "AI-Ready API"
+        description: >
+          Build a create_app() factory that returns a FastAPI instance with
+          Pydantic request/response models. Implement GET and POST endpoints
+          including a /predict endpoint that computes confidence from text
+          length, and a /batch endpoint that processes multiple texts in a
+          list comprehension.
+        difficulty: medium
+        type: coding
+        objectives:
+          - "Define Pydantic models with type hints for validation"
+          - "Create GET and POST endpoints with proper decorators"
+          - "Implement batch processing endpoints"
+
+  - id: lesson-02
+    slug: "lesson-02-async-ai-services"
+    title: "Async AI Services"
+    target_audience: "developers building high-performance AI backends"
+    prerequisites:
+      - "FastAPI Basics (Phase 9, Lesson 1)"
+    objectives:
+      - "Build async HTTP clients for LLM API communication"
+      - "Implement concurrent batch processing with semaphore limiting"
+      - "Create retry logic with exponential backoff for resilient services"
+    exercises:
+      - title: "Async LLM Client"
+        description: >
+          Build an AsyncLLMClient using httpx.AsyncClient for async Ollama
+          API calls. Implement batch_generate with asyncio.Semaphore to limit
+          concurrent requests. Create retry_with_backoff that loops max_retries
+          times with exponential delay (base_delay * 2^attempt) on failures.
+        difficulty: hard
+        type: coding
+        objectives:
+          - "Make async HTTP requests with httpx.AsyncClient"
+          - "Limit concurrency with asyncio.Semaphore"
+          - "Implement exponential backoff retry logic"
+
+  - id: lesson-03
+    slug: "lesson-03-production-patterns"
+    title: "Production Patterns"
+    target_audience: "developers hardening AI services for production use"
+    prerequisites:
+      - "Async AI Services (Phase 9, Lesson 2)"
+    objectives:
+      - "Implement rate limiting to protect AI services from overload"
+      - "Build a TTL-based response cache to reduce redundant LLM calls"
+      - "Sanitize user input and create standardized error responses"
+    exercises:
+      - title: "Production Middleware"
+        description: >
+          Build a RateLimiter that stores timestamps per client_id and cleans
+          expired entries before checking limits. Implement ResponseCache using
+          SHA-256 key hashing with TTL-based expiry. Create sanitize_input to
+          strip control characters and enforce max_length limits.
+        difficulty: hard
+        type: coding
+        objectives:
+          - "Track and enforce per-client rate limits with time windows"
+          - "Cache responses with SHA-256 keys and TTL expiry"
+          - "Sanitize and validate user input"

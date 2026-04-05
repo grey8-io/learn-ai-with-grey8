@@ -1,0 +1,5 @@
+[
+  "For generate_dockerfile, build a list of strings (one per Dockerfile line) and join them with '\\n'. Start with FROM, then WORKDIR, COPY requirements, RUN pip install, COPY ., EXPOSE, and finally CMD. Use an if/else on app_type to choose between uvicorn and streamlit commands.",
+  "For generate_compose, create a dict like {'version': '3.8', 'services': {}}. For each service, check if image_or_build starts with '.' or '/' to decide between 'build' and 'image' keys. Use yaml.dump(compose, default_flow_style=False, sort_keys=False) to produce the YAML string.",
+  "For validate_dockerfile, convert the content to uppercase with .upper() and check for 'FROM ', 'EXPOSE ', 'CMD ', and 'ENTRYPOINT ' substrings. Build an issues list and return {'valid': len(issues) == 0, 'issues': issues}. Handle the empty case first with content.strip()."
+]

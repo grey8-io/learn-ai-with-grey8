@@ -1,0 +1,23 @@
+Generate a comprehensive lesson in Markdown for the following:
+
+# Lesson: {title}
+
+## Learning Objectives
+{objectives}
+
+## Target Audience
+{target_audience}
+
+## Prerequisites
+{prerequisites}
+
+---
+
+Instructions:
+- Start with a brief introduction that motivates **why** this topic matters.
+- Explain each concept step-by-step with clear examples.
+- Use code blocks with syntax highlighting where appropriate.
+- Include "Try it yourself" prompts after each major concept.
+- End with a summary of key takeaways.
+- Keep the tone friendly, encouraging, and practical.
+- Aim for 800-1200 words.

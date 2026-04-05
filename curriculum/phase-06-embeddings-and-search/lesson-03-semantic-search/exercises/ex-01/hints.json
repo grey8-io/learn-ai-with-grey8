@@ -1,0 +1,5 @@
+[
+  "In __init__, store self.embedding_fn = embedding_fn and self._store = {}. In index_documents, loop through documents: vector = self.embedding_fn(doc['text']), then self._store[doc['id']] = {'vector': vector, 'text': doc['text'], 'metadata': doc.get('metadata', {})}.",
+  "For search(): query_vector = self.embedding_fn(query). Loop through self._store.items(), compute cosine_similarity(query_vector, doc['vector']). Build results list, sort by score descending, return [:top_k]. For keyword_search: query_terms = set(query.lower().split()), count matches per doc, score = matches / len(query_terms).",
+  "For hybrid_search: get semantic_results = self.search(query, top_k=len(self._store)) and keyword_results = self.keyword_search(query, documents). Build combined dict: for semantic: combined[id] = alpha * score. For keyword: combined[id] = combined.get(id, 0) + (1-alpha) * score. Sort and return."
+]

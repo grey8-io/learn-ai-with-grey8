@@ -1,0 +1,112 @@
+[
+  {
+    "question": "Why is async programming important for AI backends?",
+    "options": [
+      "It makes the code shorter",
+      "LLM calls are IO-bound and slow, so async lets the server handle other requests while waiting",
+      "It eliminates the need for error handling",
+      "It makes models generate faster responses"
+    ],
+    "correct": 1,
+    "explanation": "LLM API calls often take seconds to complete. With async, the server doesn't block during this wait time -- it can process other incoming requests, dramatically improving throughput."
+  },
+  {
+    "question": "What does asyncio.Semaphore(3) do?",
+    "options": [
+      "Creates 3 copies of a function",
+      "Limits concurrent execution to at most 3 tasks at a time",
+      "Retries a function 3 times",
+      "Splits work into 3 equal batches"
+    ],
+    "correct": 1,
+    "explanation": "A semaphore with a value of 3 allows at most 3 coroutines to enter the critical section simultaneously. Others wait until one finishes. This prevents overwhelming an API with too many concurrent requests."
+  },
+  {
+    "question": "What is the SSE (Server-Sent Events) format for streaming data?",
+    "options": [
+      "Each chunk is sent as a JSON array element",
+      "Each chunk is prefixed with 'data: ' and followed by two newlines",
+      "Chunks are separated by commas",
+      "Each chunk is base64 encoded"
+    ],
+    "correct": 1,
+    "explanation": "SSE uses a simple text format: each message starts with 'data: ' followed by the content and two newline characters (\\n\\n). This is how streaming responses work in ChatGPT-style interfaces."
+  },
+  {
+    "question": "What is exponential backoff in retry logic?",
+    "options": [
+      "Retrying immediately as fast as possible",
+      "Waiting a fixed 1 second between each retry",
+      "Doubling the wait time between each retry attempt (1s, 2s, 4s, ...)",
+      "Reducing the number of retries exponentially"
+    ],
+    "correct": 2,
+    "explanation": "Exponential backoff doubles the delay between retries. This gives overloaded servers time to recover. A base delay of 1 second becomes 1s, 2s, 4s, 8s, etc. It's a standard pattern for handling transient API failures."
+  },
+  {
+    "question": "Why use httpx.AsyncClient instead of the requests library?",
+    "options": [
+      "httpx is faster at parsing JSON",
+      "requests doesn't support HTTP POST",
+      "httpx supports async/await, while requests blocks the event loop",
+      "httpx is the only library that can call LLM APIs"
+    ],
+    "correct": 2,
+    "explanation": "The requests library is synchronous -- calling requests.post() blocks the entire event loop until the response arrives. httpx.AsyncClient supports await, allowing other coroutines to run while waiting for the HTTP response."
+  },
+  {
+    "question": "What does asyncio.gather() do when given multiple coroutines?",
+    "options": [
+      "It runs each coroutine one after another in sequence",
+      "It runs all coroutines concurrently and returns all results when they complete",
+      "It picks the fastest coroutine and cancels the rest",
+      "It merges all coroutines into a single function"
+    ],
+    "correct": 1,
+    "explanation": "asyncio.gather() schedules all given coroutines to run concurrently. If each LLM call takes 5 seconds and you have 10 prompts, synchronous processing takes 50 seconds, but gather runs them all at the same time and finishes in about 5 seconds."
+  },
+  {
+    "question": "What is the difference between a regular function and a coroutine in Python?",
+    "options": [
+      "A coroutine is defined with 'async def' and must be awaited to actually execute",
+      "A coroutine runs on a separate CPU core automatically",
+      "A coroutine is just a function with a different name",
+      "A coroutine cannot return values"
+    ],
+    "correct": 0,
+    "explanation": "A coroutine is defined with 'async def' and calling it returns a coroutine object, not the result. You must use 'await' to actually execute it and get the return value. Without await, the coroutine code never runs."
+  },
+  {
+    "question": "What are FastAPI BackgroundTasks used for?",
+    "options": [
+      "Running the LLM model in a background thread for faster inference",
+      "Performing work after the response has been sent to the client, like logging or analytics",
+      "Scheduling daily maintenance tasks for the server",
+      "Running database migrations in the background"
+    ],
+    "correct": 1,
+    "explanation": "BackgroundTasks let you schedule work that happens after the HTTP response is sent. Common uses include logging usage, updating analytics, or sending notifications. The user gets their response immediately without waiting for these secondary tasks."
+  },
+  {
+    "question": "Why is 'async with' used with httpx.AsyncClient?",
+    "options": [
+      "It is required by Python syntax for all async functions",
+      "It ensures the HTTP connection is properly closed when done, even if an error occurs",
+      "It makes the HTTP request faster by using compression",
+      "It enables automatic retry logic on failed requests"
+    ],
+    "correct": 1,
+    "explanation": "'async with' is an async context manager that guarantees cleanup. For httpx.AsyncClient, it ensures HTTP connections are properly closed when the block exits, even if an exception occurs. Without it, you risk connection leaks that could exhaust system resources."
+  },
+  {
+    "question": "How does streaming benefit users when generating long LLM responses?",
+    "options": [
+      "It reduces the total amount of data transferred over the network",
+      "It lets users see tokens appear in real-time instead of waiting for the entire response to finish",
+      "It automatically improves the quality of the generated text",
+      "It eliminates the need for error handling on the client side"
+    ],
+    "correct": 1,
+    "explanation": "Streaming sends tokens to the client as they are generated, so users see the response build up word by word in real-time (like ChatGPT). Without streaming, users stare at a loading spinner for seconds until the entire response is generated and sent at once."
+  }
+]

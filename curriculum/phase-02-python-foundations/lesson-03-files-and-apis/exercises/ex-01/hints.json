@@ -1,0 +1,5 @@
+[
+  "For fetch_and_save, use httpx.get(url, timeout=10) and then response.json() to get the data. For load_json, wrap your file reading in a try/except block.",
+  "After getting the response, call response.raise_for_status() before parsing JSON. To save, use json.dump(data, f, indent=2) inside a with open(filepath, 'w') block.",
+  "fetch_and_save: response = httpx.get(url, timeout=10); response.raise_for_status(); data = response.json(); then json.dump(data, f, indent=2). load_json: try open and json.load, except FileNotFoundError return None."
+]

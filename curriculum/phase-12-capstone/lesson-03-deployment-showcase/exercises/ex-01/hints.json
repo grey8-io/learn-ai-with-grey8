@@ -1,0 +1,5 @@
+[
+  "For generate_demo_script, build a list of lines starting with f'# Demo: {self.project_name}'. Loop through steps with enumerate(steps, 1) and add f'## Step {i}: {step[\"step\"]}', a code block with the command, and f'**Expected:** {step[\"expected_output\"]}'. Join with '\\n'.",
+  "For generate_deployment_checklist, start with a base list of checklist items. Then check if 'docker' is in [t.lower() for t in self.tech_stack] to add Docker items, and check for 'fastapi' or 'streamlit' to add web items. Prefix the list with '# Deployment Checklist\\n\\n' and join items with '\\n'.",
+  "For generate_license, use if/elif on license_type. For MIT, return the standard MIT text with f-strings for year and author. For Apache-2.0, return the short Apache notice. Use datetime.now().year if year is None. Raise ValueError for unknown types."
+]

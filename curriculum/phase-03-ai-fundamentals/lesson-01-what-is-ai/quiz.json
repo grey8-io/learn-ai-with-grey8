@@ -1,0 +1,57 @@
+[
+  {
+    "question": "What is the relationship between AI, ML, and Deep Learning?",
+    "options": [
+      "They are all the same thing",
+      "AI is a subset of ML, which is a subset of Deep Learning",
+      "Deep Learning is a subset of ML, which is a subset of AI",
+      "They are three unrelated fields"
+    ],
+    "correct": 2,
+    "explanation": "AI is the broadest field. Machine Learning is a specific approach within AI. Deep Learning is a specific technique within Machine Learning that uses multi-layered neural networks."
+  },
+  {
+    "question": "A company wants to group its customers into segments based on purchasing behavior, without predefined categories. What type of ML is this?",
+    "options": [
+      "Supervised learning",
+      "Unsupervised learning",
+      "Reinforcement learning",
+      "Transfer learning"
+    ],
+    "correct": 1,
+    "explanation": "This is unsupervised learning because there are no predefined labels — the algorithm discovers the natural groupings in the data on its own."
+  },
+  {
+    "question": "Training an AI to play a video game by rewarding it for high scores is an example of what?",
+    "options": [
+      "Supervised learning",
+      "Unsupervised learning",
+      "Reinforcement learning",
+      "Deep learning"
+    ],
+    "correct": 2,
+    "explanation": "Reinforcement learning involves an agent taking actions in an environment and learning from rewards and penalties. Game-playing is a classic reinforcement learning application."
+  },
+  {
+    "question": "What makes supervised learning 'supervised'?",
+    "options": [
+      "A human watches the model train in real time",
+      "The training data includes correct answers (labels) for the model to learn from",
+      "The model is limited in what it can learn",
+      "The model requires constant human feedback during deployment"
+    ],
+    "correct": 1,
+    "explanation": "In supervised learning, the training data comes with labels (correct answers). The model learns to map inputs to these known outputs, like a student studying with an answer key."
+  },
+  {
+    "question": "Which of the following is NOT a typical step in the machine learning process?",
+    "options": [
+      "Collecting and preparing data",
+      "Training the model on examples",
+      "Manually writing rules for every possible scenario",
+      "Evaluating the model on unseen test data"
+    ],
+    "correct": 2,
+    "explanation": "The whole point of ML is that the model learns rules from data instead of having them manually written. Manual rule-writing is the traditional programming approach that ML replaces."
+  }
+]

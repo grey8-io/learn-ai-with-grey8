@@ -1,0 +1,74 @@
+[
+  {
+    "question": "What is 'chunking' in the context of a RAG pipeline?",
+    "options": [
+      "Compressing files to save disk space",
+      "Splitting large documents into smaller pieces for storage and retrieval",
+      "Encrypting documents before sending them to the LLM",
+      "Converting text into binary format for the vector database"
+    ],
+    "correct": 1
+  },
+  {
+    "question": "Why do we chunk documents before storing them in a vector database?",
+    "options": [
+      "Vector databases cannot store documents longer than 100 characters",
+      "Chunking makes the documents load faster from disk",
+      "Smaller chunks improve retrieval precision and fit within embedding model context limits",
+      "Chunking is required by the Ollama API"
+    ],
+    "correct": 2
+  },
+  {
+    "question": "How do you retrieve the most relevant documents from a ChromaDB collection?",
+    "options": [
+      "collection.get(query=\"my question\")",
+      "collection.search(text=\"my question\", limit=3)",
+      "collection.query(query_texts=[\"my question\"], n_results=3)",
+      "collection.find(question=\"my question\", top_k=3)"
+    ],
+    "correct": 2
+  },
+  {
+    "question": "What does RAG stand for?",
+    "options": [
+      "Rapid Answer Generation",
+      "Retrieval-Augmented Generation",
+      "Recursive Automated Grading",
+      "Response and Guidance"
+    ],
+    "correct": 1
+  },
+  {
+    "question": "Why does RAG produce better answers for knowledge-specific questions than a plain LLM?",
+    "options": [
+      "RAG uses a larger language model than a plain LLM",
+      "RAG provides relevant source documents as context, grounding the answer in actual data instead of relying on the model's training alone",
+      "RAG disables the model's creativity so it cannot hallucinate",
+      "RAG connects to the internet to verify facts in real time"
+    ],
+    "correct": 1
+  },
+  {
+    "question": "Why should chunk IDs follow a pattern like 'filename.md_chunk_0' in ChromaDB?",
+    "options": [
+      "ChromaDB requires IDs to contain the file extension",
+      "It ensures uniqueness across files and chunks, and makes debugging easier by identifying the source",
+      "ChromaDB alphabetically sorts chunks by ID for retrieval",
+      "It allows ChromaDB to reconstruct the original file from chunks"
+    ],
+    "correct": 1,
+    "explanation": "ChromaDB requires unique IDs for every document. Using a pattern that combines the filename and chunk index guarantees uniqueness (no two chunks share an ID) and makes it easy to trace a chunk back to its source file and position during debugging."
+  },
+  {
+    "question": "Why should a RAG prompt instruct the LLM to answer based only on the provided context?",
+    "options": [
+      "It makes the LLM respond faster by limiting computation",
+      "It reduces the token count of the response to save costs",
+      "It prevents hallucination by grounding the answer in retrieved documents rather than the model's training data",
+      "It is a requirement of the Ollama API"
+    ],
+    "correct": 2,
+    "explanation": "Without explicit instructions, the LLM might generate answers from its training data rather than the provided context, leading to hallucinated or inaccurate information. Telling it to answer only from the context ensures the response is grounded in your actual documents, which is the whole point of RAG."
+  }
+]

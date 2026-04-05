@@ -1,0 +1,79 @@
+[
+  {
+    "question": "What is cosine similarity used for in a RAG system?",
+    "options": [
+      "Generating text from prompts",
+      "Measuring how similar two text embeddings are for retrieval",
+      "Splitting documents into chunks",
+      "Loading files from disk"
+    ],
+    "correct": 1,
+    "explanation": "Cosine similarity measures the angle between two vectors, producing a value from -1 to 1. In RAG, it is used to compare the query embedding against stored chunk embeddings to find the most relevant passages for retrieval."
+  },
+  {
+    "question": "Why does the vector store need to hold both the embedding and the original text?",
+    "options": [
+      "Embeddings can be converted back to text",
+      "The embedding is used for search, but the original text is needed for the prompt context",
+      "The text is used for search and embeddings are decorative",
+      "It is a database requirement"
+    ],
+    "correct": 1,
+    "explanation": "Embeddings are numerical vectors used for similarity search — they tell you which chunks are relevant. But you need the original text to include in the prompt as context for the LLM. The store holds both so you can search by embedding and retrieve by text."
+  },
+  {
+    "question": "What does the confidence score in a RAG answer represent?",
+    "options": [
+      "The LLM's self-reported certainty",
+      "The average similarity score of retrieved chunks to the query",
+      "The number of documents in the store",
+      "The length of the generated answer"
+    ],
+    "correct": 1,
+    "explanation": "The confidence score is the average cosine similarity between the query and the retrieved chunks. High similarity means the system found closely matching context, suggesting the answer is well-grounded. Low similarity suggests the answer may be unreliable."
+  },
+  {
+    "question": "What is the purpose of the evaluate_answer method?",
+    "options": [
+      "To train the model on correct answers",
+      "To check if expected keywords appear in the generated answer",
+      "To embed the answer into a vector",
+      "To store the answer in the database"
+    ],
+    "correct": 1,
+    "explanation": "evaluate_answer performs a simple automated check by looking for expected keywords in the generated answer. This is a basic but practical way to test RAG quality — if the answer should mention 'Python' and 'language' but doesn't, something went wrong in retrieval or generation."
+  },
+  {
+    "question": "In what order do the steps of a complete RAG pipeline execute?",
+    "options": [
+      "Generate, Retrieve, Embed, Chunk",
+      "Chunk, Load, Generate, Retrieve",
+      "Load, Chunk, Embed, Store, Retrieve, Generate",
+      "Store, Retrieve, Load, Chunk"
+    ],
+    "correct": 2,
+    "explanation": "A complete RAG pipeline first loads documents, then chunks them into smaller pieces, embeds each chunk into a vector, stores the embeddings, retrieves relevant chunks at query time, and finally generates an answer using the retrieved context."
+  },
+  {
+    "question": "What are the three key dimensions for evaluating RAG answer quality?",
+    "options": [
+      "Speed, memory usage, and cost",
+      "Faithfulness, relevance, and completeness",
+      "Precision, recall, and F1-score",
+      "Accuracy, latency, and throughput"
+    ],
+    "correct": 1,
+    "explanation": "RAG answers are evaluated on faithfulness (is the answer supported by the retrieved documents?), relevance (are the retrieved documents actually relevant to the question?), and completeness (does the answer address all parts of the question?). These three dimensions capture different failure modes of a RAG system."
+  },
+  {
+    "question": "How can similarity scores of retrieved chunks be used to estimate answer confidence?",
+    "options": [
+      "By counting the total number of chunks in the vector store",
+      "By averaging the cosine similarity scores of the top-k retrieved chunks — higher averages suggest more reliable answers",
+      "By measuring how long the LLM takes to generate the answer",
+      "By checking if the answer contains more words than the question"
+    ],
+    "correct": 1,
+    "explanation": "Computing the average similarity score of retrieved chunks gives a confidence estimate. High similarity scores mean the system found closely matching context, so the answer is likely well-grounded. Low scores indicate the knowledge base may not contain relevant information, and the answer might be unreliable."
+  }
+]

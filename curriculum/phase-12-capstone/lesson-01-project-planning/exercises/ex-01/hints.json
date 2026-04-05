@@ -1,0 +1,5 @@
+[
+  "For ProjectPlan.__init__, store all three arguments as self attributes. Default tech_stack with: self.tech_stack = tech_stack or []. Initialize self.requirements = [] and self.milestones = []. For add_requirement, append {'requirement': requirement, 'priority': priority}.",
+  "For generate_readme, build a list of lines: start with f'# {self.name}', add self.description, then '## Tech Stack' with f'- {tech}' for each tech. Add '## Setup' with placeholder steps and '## Features' with '- Coming soon'. Join with '\\n'.",
+  "For select_project, create a level_filter dict mapping skill_level to allowed levels (beginner gets ['beginner'], intermediate gets ['beginner', 'intermediate'], advanced gets all). For each project in allowed levels, count how many of its tags appear in interests. Sort by score descending, take top 3, return dicts with name, level, and reason (list which tags matched)."
+]

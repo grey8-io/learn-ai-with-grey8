@@ -1,0 +1,79 @@
+[
+  {
+    "question": "What is the most important phrase to include when asking an LLM for JSON output?",
+    "options": [
+      "Please and thank you",
+      "Return ONLY valid JSON, no additional text",
+      "Use the latest JSON standard",
+      "Format it nicely with indentation"
+    ],
+    "correct": 1,
+    "explanation": "Without explicitly telling the model to return ONLY JSON, it will often wrap the JSON in explanatory text like 'Here is the result:' which breaks automated parsing."
+  },
+  {
+    "question": "Why should you use re.DOTALL when extracting JSON with regex?",
+    "options": [
+      "It makes the regex faster",
+      "It allows the . character to match newline characters, handling multiline JSON",
+      "It converts the result to a string",
+      "It's required by Python's json module"
+    ],
+    "correct": 1,
+    "explanation": "By default, the . in regex doesn't match newlines. Since JSON objects often span multiple lines, re.DOTALL ensures the pattern {.*} matches the entire JSON block including any newlines inside it."
+  },
+  {
+    "question": "What should you do when json.loads() fails on LLM output?",
+    "options": [
+      "Crash the program so the user knows something went wrong",
+      "Retry the API call indefinitely until it works",
+      "Handle the error gracefully -- return None or a default, log the failure",
+      "Switch to a different programming language"
+    ],
+    "correct": 2,
+    "explanation": "LLM output is inherently unpredictable. Always wrap JSON parsing in try/except, return a sensible default (like None), and log failures so you can improve your prompts over time."
+  },
+  {
+    "question": "What are the three key elements of a good JSON-requesting prompt?",
+    "options": [
+      "Model name, API key, and endpoint URL",
+      "Task description, schema/field description, and an example of expected output",
+      "Temperature, top_p, and max_tokens",
+      "Input text, system prompt, and conversation history"
+    ],
+    "correct": 1,
+    "explanation": "A reliable JSON-requesting prompt includes: (1) what task to perform, (2) what fields and types the JSON should have, and (3) an example of the expected output format. This gives the model clear guidance."
+  },
+  {
+    "question": "Why should you validate required fields even after successfully parsing JSON?",
+    "options": [
+      "JSON parsing is unreliable in Python",
+      "The model might return valid JSON but with wrong or missing fields",
+      "Required field validation makes the code slower, which is good",
+      "Python dictionaries don't support field access"
+    ],
+    "correct": 1,
+    "explanation": "An LLM might return perfectly valid JSON that's missing fields you need. For example, you ask for {name, price, rating} but the model returns {name, price}. Validating required fields catches this before it causes downstream errors."
+  },
+  {
+    "question": "Which technique for getting structured output from an LLM is most reliable?",
+    "options": [
+      "Simply asking 'Return JSON' without further guidance",
+      "Providing a schema definition with field names and types",
+      "Showing a concrete input/output example (few-shot) so the model copies the pattern",
+      "Setting the temperature to 0 and hoping for the best"
+    ],
+    "correct": 2,
+    "explanation": "Showing a concrete example is the most reliable approach because the model can directly copy the pattern. The reliability increases from asking nicely, to providing a schema, to showing an example. Few-shot examples give the model an unambiguous template to follow."
+  },
+  {
+    "question": "How can you extract structured markdown sections from an LLM response programmatically?",
+    "options": [
+      "Use json.loads() on the markdown text",
+      "Split the text on heading markers (e.g., lines starting with '#') and map each heading to its content",
+      "Use a regular expression to find all JSON objects in the markdown",
+      "Markdown cannot be parsed programmatically"
+    ],
+    "correct": 1,
+    "explanation": "To parse markdown sections, you iterate through lines, detect headings (lines starting with '#'), and collect the content under each heading into a dictionary. This gives you structured access like sections['Summary'] or sections['Issues Found']."
+  }
+]

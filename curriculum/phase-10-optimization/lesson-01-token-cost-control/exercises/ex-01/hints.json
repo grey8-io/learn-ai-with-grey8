@@ -1,0 +1,5 @@
+[
+  "estimate_tokens is simple: return len(text) // 4. For CostTracker.__init__, store the two prices and initialize self.records = []. For track(), use estimate_tokens() on both input and output, calculate cost as (input_tokens/1000 * price_input) + (output_tokens/1000 * price_output), then append a dict.",
+  "For get_usage_report(): total_requests = len(self.records); sum up input_tokens, output_tokens, and cost from all records; avg = total_cost / total_requests if total_requests > 0 else 0.0. For get_model_breakdown(): loop through records, group by model name into a dict.",
+  "For optimize_prompt: use re.sub(r'\\s+', ' ', prompt).strip() to collapse whitespace. Then loop through filler phrases and use .replace(filler, '') to remove them. Truncate with cleaned[:max_tokens * 4]. For select_model: use max(available_models, key=lambda m: available_models[m]['speed']) for 'low', similar for 'high' with 'quality', and speed+quality for 'medium'."
+]

@@ -1,0 +1,112 @@
+[
+  {
+    "question": "What makes a good tool description for an AI agent?",
+    "options": [
+      "A single word like 'calculator'",
+      "A clear explanation of what the tool does, what input it expects, and what it returns",
+      "The source code of the tool function",
+      "A description written in a programming language"
+    ],
+    "correct": 1,
+    "explanation": "The LLM decides which tool to use based on text descriptions. A good description clearly explains the tool's purpose, expected input format, and output format. Without this clarity, the model may misuse the tool or choose the wrong one."
+  },
+  {
+    "question": "Why should tool functions never raise unhandled exceptions?",
+    "options": [
+      "Exceptions make the code run faster",
+      "An unhandled exception crashes the entire agent loop instead of letting the agent recover",
+      "Python does not support exceptions in agent systems",
+      "Exceptions are only for web applications"
+    ],
+    "correct": 1,
+    "explanation": "If a tool raises an unhandled exception, the agent loop crashes and the user gets no answer. Instead, tools should catch exceptions and return descriptive error messages. The agent can then reason about the error and try an alternative approach."
+  },
+  {
+    "question": "Why is using eval() directly on user input dangerous?",
+    "options": [
+      "eval() is too slow for production",
+      "eval() can execute arbitrary Python code, including file deletion or system commands",
+      "eval() only works with integers",
+      "eval() requires an internet connection"
+    ],
+    "correct": 1,
+    "explanation": "eval() executes any valid Python expression, not just math. An attacker could pass '__import__(\"os\").system(\"rm -rf /\")' as a math expression. Always validate or sanitize input before using eval, or use safer alternatives like ast.literal_eval."
+  },
+  {
+    "question": "What is the purpose of format_tools_for_prompt()?",
+    "options": [
+      "To save tools to a database",
+      "To format all available tools as text that can be included in an LLM prompt",
+      "To execute all tools at once",
+      "To validate tool parameters"
+    ],
+    "correct": 1,
+    "explanation": "The LLM needs to know what tools are available. format_tools_for_prompt creates a human-readable list of tools with their names and descriptions that gets included in the prompt. This is how the agent learns what actions it can take."
+  },
+  {
+    "question": "Why should each tool have a single responsibility?",
+    "options": [
+      "To make the code longer",
+      "Because LLMs can only call one tool at a time",
+      "So the LLM can clearly match tasks to the right tool and tool descriptions stay simple",
+      "Because Python functions can only do one thing"
+    ],
+    "correct": 2,
+    "explanation": "When each tool does one thing well, the LLM can easily determine which tool to use based on the description. A multi-purpose tool with a vague description confuses the model. Single responsibility also makes tools easier to test and debug."
+  },
+  {
+    "question": "What is the character whitelist approach for safe eval?",
+    "options": [
+      "Only allowing function calls from a list of approved functions",
+      "Checking that the expression contains only safe characters like digits, operators, parentheses, and spaces before calling eval()",
+      "Encrypting the expression before evaluation",
+      "Running eval() in a separate process with no permissions"
+    ],
+    "correct": 1,
+    "explanation": "The character whitelist approach restricts input to only characters that could appear in a math expression — digits 0-9, operators +-*/, decimal points, parentheses, and spaces. Since no letters are allowed, it is impossible to call functions, import modules, or access variables."
+  },
+  {
+    "question": "What should a tool return when it encounters an error?",
+    "options": [
+      "An empty string",
+      "The Python None value",
+      "A descriptive error message as a string that the agent can reason about",
+      "A numeric error code"
+    ],
+    "correct": 2,
+    "explanation": "Tools should return descriptive error messages as strings (e.g., 'Error: Could not evaluate expression'). This allows the agent to understand what went wrong and decide whether to retry with different input, use a different tool, or report the issue to the user."
+  },
+  {
+    "question": "How can you improve tool selection when an agent has many tools?",
+    "options": [
+      "Give all tools the same generic description",
+      "Use random selection to avoid bias",
+      "Write clearly differentiated descriptions and use consistent naming conventions",
+      "Limit the agent to exactly one tool"
+    ],
+    "correct": 2,
+    "explanation": "When tools have clearly differentiated descriptions, consistent naming (e.g., file_read, file_write, file_list), and the number of tools is limited to what the task needs, the LLM can more reliably pick the right tool. Providing usage examples in the system prompt also helps."
+  },
+  {
+    "question": "What does a ToolRegistry class typically manage?",
+    "options": [
+      "User authentication and authorization",
+      "Registration of tools, their descriptions, and execution by name",
+      "Database connections and transactions",
+      "Network routing between servers"
+    ],
+    "correct": 1,
+    "explanation": "A ToolRegistry is a central class that handles registering tools (storing their function and description), looking up tools by name, listing all available tools with descriptions, and executing tools by name with given arguments. It is the organizational backbone of an agent's tool system."
+  },
+  {
+    "question": "How does the AST approach to safe evaluation differ from the character whitelist?",
+    "options": [
+      "The AST approach is less secure but faster",
+      "The AST approach parses the expression into a tree and only evaluates explicitly allowed operations",
+      "The AST approach uses machine learning to detect malicious code",
+      "The AST approach requires a network connection to validate expressions"
+    ],
+    "correct": 1,
+    "explanation": "Python's ast module parses expressions into an abstract syntax tree. You then walk the tree and only evaluate nodes that match allowed operations (like ast.Add, ast.Sub). This is more robust than character whitelisting for complex cases because it validates the structure of the expression, not just its characters."
+  }
+]

@@ -1,0 +1,80 @@
+# ACE Generation Spec — Phase 7: RAG Systems
+# Run: ace generate --spec specs/phase-07.yml
+
+phase: "07"
+phase_slug: "phase-07-rag-systems"
+
+lessons:
+  - id: lesson-01
+    slug: "lesson-01-rag-architecture"
+    title: "RAG Architecture"
+    target_audience: "developers learning retrieval-augmented generation patterns"
+    prerequisites:
+      - "Phase 6 completed (Embeddings & Semantic Search)"
+    objectives:
+      - "Explain the Retrieval-Augmented Generation pipeline and its components"
+      - "Build context from retrieved documents within token limits"
+      - "Construct augmented prompts that combine context with user queries"
+    exercises:
+      - title: "RAG Pipeline"
+        description: >
+          Build a RAGPipeline class that stores retriever and generator callables.
+          Implement build_context to join documents within a max_chars limit,
+          build_prompt to format context and query into an augmented prompt, and
+          query() to chain retrieve, build_context, build_prompt, and generate.
+          Add query_with_sources for source tracking.
+        difficulty: medium
+        type: coding
+        objectives:
+          - "Chain retrieval, context building, prompting, and generation"
+          - "Truncate context to fit within character limits"
+          - "Track document sources alongside generated answers"
+
+  - id: lesson-02
+    slug: "lesson-02-document-chunking"
+    title: "Document Chunking & Processing"
+    target_audience: "developers preparing documents for RAG ingestion"
+    prerequisites:
+      - "RAG Architecture (Phase 7, Lesson 1)"
+    objectives:
+      - "Implement multiple chunking strategies for different document types"
+      - "Handle overlapping chunks to preserve context across boundaries"
+      - "Add metadata to chunks for source tracking and filtering"
+    exercises:
+      - title: "Document Chunking"
+        description: >
+          Implement chunk_by_size using a sliding window with configurable overlap,
+          chunk_by_paragraphs that splits on double newlines and merges small
+          paragraphs to reach max_chunk_size, and chunk_markdown that splits on
+          heading patterns while handling oversized sections.
+        difficulty: medium
+        type: coding
+        objectives:
+          - "Implement fixed-size chunking with overlap"
+          - "Merge small paragraphs into larger chunks"
+          - "Split markdown by headings with size constraints"
+
+  - id: lesson-03
+    slug: "lesson-03-building-rag-pipeline"
+    title: "Building a RAG Pipeline"
+    target_audience: "developers building complete document QA systems"
+    prerequisites:
+      - "Document Chunking & Processing (Phase 7, Lesson 2)"
+    objectives:
+      - "Build a complete document QA system from loading to answering"
+      - "Implement document processing with chunking and embedding"
+      - "Evaluate RAG answer quality using keyword-based metrics"
+    exercises:
+      - title: "Document QA System"
+        description: >
+          Build a DocumentQA class that stores embedding and generation functions.
+          Implement process_documents to chunk text, embed each chunk, and store
+          embeddings with source metadata. Build answer() to retrieve top chunks,
+          join their text as context, construct a prompt, generate a response,
+          and return the answer with source references.
+        difficulty: hard
+        type: coding
+        objectives:
+          - "Process documents through chunking and embedding pipeline"
+          - "Retrieve relevant chunks and build augmented prompts"
+          - "Return answers with source attribution"

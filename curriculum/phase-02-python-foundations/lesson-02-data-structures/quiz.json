@@ -1,0 +1,52 @@
+[
+  {
+    "question": "What is the main difference between a list and a tuple?",
+    "options": [
+      "Lists use square brackets, tuples use curly braces",
+      "Lists can be modified after creation, tuples cannot",
+      "Tuples can hold more items than lists",
+      "Lists are faster than tuples"
+    ],
+    "correct": 1,
+    "explanation": "Lists are mutable (changeable) while tuples are immutable (fixed after creation). This makes tuples useful for data that should not change."
+  },
+  {
+    "question": "How do you access the value associated with the key 'name' in a dictionary called person?",
+    "options": [
+      "person.name",
+      "person(name)",
+      "person['name']",
+      "person[0]"
+    ],
+    "correct": 2,
+    "explanation": "Dictionaries use square brackets with the key: person['name']. You can also use person.get('name') for safe access that returns None if the key is missing."
+  },
+  {
+    "question": "What does [x * 2 for x in range(4)] produce?",
+    "options": [
+      "[0, 1, 2, 3]",
+      "[2, 4, 6, 8]",
+      "[0, 2, 4, 6]",
+      "[1, 2, 3, 4]"
+    ],
+    "correct": 2,
+    "explanation": "range(4) produces 0, 1, 2, 3. Multiplying each by 2 gives [0, 2, 4, 6]. This is a list comprehension."
+  },
+  {
+    "question": "Which data structure automatically removes duplicates?",
+    "options": ["list", "dict", "tuple", "set"],
+    "correct": 3,
+    "explanation": "Sets only store unique values. If you add a duplicate, it's silently ignored. {1, 2, 2, 3} becomes {1, 2, 3}."
+  },
+  {
+    "question": "What does person.get('email', 'N/A') return if person has no 'email' key?",
+    "options": [
+      "It raises a KeyError",
+      "None",
+      "'N/A'",
+      "An empty string"
+    ],
+    "correct": 2,
+    "explanation": "The .get() method returns the default value ('N/A') when the key is not found, instead of raising an error."
+  }
+]

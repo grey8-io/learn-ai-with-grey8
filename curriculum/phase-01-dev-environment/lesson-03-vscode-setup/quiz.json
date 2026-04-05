@@ -1,0 +1,57 @@
+[
+  {
+    "question": "What is Ollama?",
+    "options": [
+      "A cloud-based AI service that requires an API key",
+      "A tool that lets you run language models locally on your machine",
+      "A Python package for data visualization",
+      "A VS Code extension for code completion"
+    ],
+    "correct": 1,
+    "explanation": "Ollama is a tool that downloads and serves language models locally. It runs a server on your machine that you can send prompts to via its API."
+  },
+  {
+    "question": "What is the default URL for the Ollama API?",
+    "options": [
+      "https://api.ollama.com/v1/generate",
+      "http://localhost:8080/api/chat",
+      "http://localhost:11434/api/generate",
+      "http://127.0.0.1:5000/generate"
+    ],
+    "correct": 2,
+    "explanation": "Ollama's API runs locally on port 11434. The generate endpoint is at http://localhost:11434/api/generate."
+  },
+  {
+    "question": "Which VS Code extension provides Python language support (syntax highlighting, debugging, IntelliSense)?",
+    "options": [
+      "GitLens",
+      "Prettier",
+      "Python (by Microsoft)",
+      "Live Server"
+    ],
+    "correct": 2,
+    "explanation": "The Python extension by Microsoft is the essential extension for Python development in VS Code, providing syntax highlighting, debugging, linting, and IntelliSense."
+  },
+  {
+    "question": "What does setting \"stream\": false do in an Ollama API request?",
+    "options": [
+      "It prevents the model from generating a response",
+      "It makes the model respond faster",
+      "It returns the complete response in a single JSON object instead of streaming tokens",
+      "It disables the model's memory of previous prompts"
+    ],
+    "correct": 2,
+    "explanation": "When stream is false, Ollama waits until the full response is generated and returns it all at once. When true, it streams the response token by token."
+  },
+  {
+    "question": "What keyboard shortcut opens the integrated terminal in VS Code?",
+    "options": [
+      "Ctrl+T",
+      "Ctrl+Shift+P",
+      "Ctrl+` (backtick)",
+      "Ctrl+Alt+T"
+    ],
+    "correct": 2,
+    "explanation": "Ctrl+` (the backtick key, usually above Tab) toggles the integrated terminal panel in VS Code."
+  }
+]

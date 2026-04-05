@@ -1,0 +1,5 @@
+[
+  "Define Pydantic models by inheriting from BaseModel. For example: class PredictRequest(BaseModel): text: str; model: str = 'default'. Use the same pattern for PredictResponse, BatchRequest, and BatchResponse.",
+  "In create_app(), start with app = FastAPI(). Then use @app.get('/health') for the health endpoint and @app.post('/predict') for the predict endpoint. The predict function takes a parameter typed as PredictRequest -- FastAPI will parse the JSON body automatically.",
+  "For /predict: confidence = min(len(request.text) / 100, 1.0); return PredictResponse(result=f'predicted: {request.text[:50]}', confidence=confidence, model=request.model). For /batch: results = [f'predicted: {text[:50]}' for text in request.texts]; return BatchResponse(results=results, count=len(results)). Don't forget to return the app at the end of create_app()."
+]

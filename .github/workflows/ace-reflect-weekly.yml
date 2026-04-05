@@ -1,0 +1,56 @@
+name: ACE Weekly Reflection
+
+# Runs every Monday at 9:00 UTC automatically — no developer action needed.
+# Can also be triggered manually from the Actions tab.
+#
+# This workflow does NOT need Ollama. The reflector only analyzes the
+# filesystem (phase dirs, lesson counts, difficulty distribution, gaps).
+
+on:
+  schedule:
+    - cron: "0 9 * * 1"  # Every Monday at 9:00 UTC
+  workflow_dispatch: {}
+
+permissions:
+  contents: read
+  issues: write
+
+jobs:
+  reflect:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up Python 3.11
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Install ACE package
+        run: |
+          cd ace
+          pip install -e .
+
+      - name: Run ACE reflect
+        working-directory: ${{ github.workspace }}
+        env:
+          ACE_CURRICULUM_PATH: curriculum
+        run: |
+          mkdir -p reports
+          ace reflect --output reports/weekly-report.md
+
+      - name: Create GitHub issue with report
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          DATE=$(date -u +"%Y-%m-%d")
+          TITLE="Weekly Curriculum Report — ${DATE}"
+
+          # Ensure ace-report label exists
+          gh label create "ace-report" --description "Automated ACE curriculum report" --color "6f42c1" 2>/dev/null || true
+
+          gh issue create \
+            --title "$TITLE" \
+            --body-file reports/weekly-report.md \
+            --label "ace-report"

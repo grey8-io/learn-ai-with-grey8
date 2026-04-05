@@ -1,0 +1,5 @@
+[
+  "For mock_llm, use a mutable container like index = [0] inside the closure. The inner function returns responses[index[0] % len(responses)] and increments index[0] += 1. This lets the function cycle through responses on repeated calls.",
+  "For test_prompt, call self.generate_fn(prompt) to get the response. Build a checks list: for each expected_keyword, check if keyword.lower() is in response.lower(). For max_length, check len(response) <= max_length. Set passed to all(c['passed'] for c in checks).",
+  "For evaluate_quality, compute keyword_overlap by splitting both strings into word sets (set(text.lower().split())), then: len(ref_words & resp_words) / len(ref_words). For length_ratio: min(len(response) / len(reference), 2.0). Return a dict with the requested metrics."
+]

@@ -1,0 +1,75 @@
+# ACE Generation Spec — Phase 2: Python Foundations
+# Run: ace generate --spec specs/phase-02.yml
+
+phase: "02"
+phase_slug: "phase-02-python-foundations"
+
+lessons:
+  - id: lesson-01
+    slug: "lesson-01-variables-functions"
+    title: "Variables, Types & Functions"
+    target_audience: "beginners with no prior Python experience"
+    prerequisites:
+      - "Phase 1 completed (environment setup)"
+    objectives:
+      - "Use Python variables with int, float, str, and bool types"
+      - "Write functions with type hints, default arguments, and docstrings"
+      - "Apply string manipulation and mathematical operations in functions"
+    exercises:
+      - title: "Temperature, Palindromes & BMI"
+        description: >
+          Implement three utility functions: celsius_to_fahrenheit for temperature
+          conversion, is_palindrome using string normalization and slice reversal,
+          and calculate_bmi with rounding.
+        difficulty: easy
+        type: coding
+        objectives:
+          - "Apply mathematical formulas in Python functions"
+          - "Use string methods like .lower() and slice notation [::-1]"
+          - "Return computed values with proper rounding"
+
+  - id: lesson-02
+    slug: "lesson-02-data-structures"
+    title: "Data Structures"
+    target_audience: "beginners learning to organize data in Python"
+    prerequisites:
+      - "Variables, Types & Functions (Phase 2, Lesson 1)"
+    objectives:
+      - "Use lists, dictionaries, tuples, and sets effectively"
+      - "Write list comprehensions to transform and filter data"
+      - "Build a CRUD application using lists of dictionaries"
+    exercises:
+      - title: "Contact Book"
+        description: >
+          Build a contact book with add_contact, find_contact, remove_contact,
+          and list_contacts functions operating on a list of dictionaries with
+          'name' and 'email' keys.
+        difficulty: easy
+        type: coding
+        objectives:
+          - "Use .append() to add dictionaries to a list"
+          - "Search and compare strings case-insensitively with .lower()"
+          - "Use enumerate() and .pop() for indexed removal"
+
+  - id: lesson-03
+    slug: "lesson-03-files-and-apis"
+    title: "Working with Files & APIs"
+    target_audience: "beginners ready to work with external data sources"
+    prerequisites:
+      - "Data Structures (Phase 2, Lesson 2)"
+    objectives:
+      - "Read and write files using Python's open() and with statements"
+      - "Parse and generate JSON data with the json module"
+      - "Make HTTP requests with httpx and handle errors with try/except"
+    exercises:
+      - title: "Fetch and Save JSON"
+        description: >
+          Write fetch_and_save to GET JSON from a URL with httpx and save it
+          to a file with json.dump, and load_json to read it back with
+          FileNotFoundError handling.
+        difficulty: medium
+        type: coding
+        objectives:
+          - "Use httpx.get() with timeout and raise_for_status()"
+          - "Serialize data with json.dump() and deserialize with json.load()"
+          - "Handle missing files gracefully with try/except"

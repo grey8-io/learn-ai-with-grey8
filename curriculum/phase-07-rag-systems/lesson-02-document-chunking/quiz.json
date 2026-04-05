@@ -1,0 +1,79 @@
+[
+  {
+    "question": "Why is chunking important for RAG systems?",
+    "options": [
+      "It makes documents load faster from disk",
+      "It improves retrieval precision and fits content within context window limits",
+      "It reduces the file size of documents",
+      "It encrypts documents for security"
+    ],
+    "correct": 1,
+    "explanation": "Chunking splits large documents into smaller, focused pieces. This improves retrieval precision because embeddings of smaller chunks represent more specific content. It also ensures chunks fit within the LLM's context window alongside the prompt."
+  },
+  {
+    "question": "What is the purpose of overlap in fixed-size chunking?",
+    "options": [
+      "To make chunks larger",
+      "To reduce the total number of chunks",
+      "To prevent cutting ideas in half by sharing text between adjacent chunks",
+      "To compress the text"
+    ],
+    "correct": 2,
+    "explanation": "When you split text at fixed positions, you might cut a sentence or concept in half. Overlap ensures that each chunk shares some text with its neighbors, so ideas that span a boundary are fully captured in at least one chunk."
+  },
+  {
+    "question": "What chunk size range is generally recommended for most RAG applications?",
+    "options": [
+      "10-50 characters",
+      "300-800 characters",
+      "10,000-50,000 characters",
+      "Exactly 100 characters"
+    ],
+    "correct": 1,
+    "explanation": "Chunks of 300-800 characters are a good sweet spot for most use cases. They are large enough to contain a complete idea with context, but small enough that embeddings are specific and meaningful. The ideal size depends on your documents and use case."
+  },
+  {
+    "question": "When is markdown-aware chunking better than fixed-size chunking?",
+    "options": [
+      "When processing binary files",
+      "When documents have structured headings and sections",
+      "When you need exactly equal chunk sizes",
+      "When processing images"
+    ],
+    "correct": 1,
+    "explanation": "Markdown-aware chunking splits on headings, preserving the document's logical structure. Each chunk contains a complete section with its heading, making it more meaningful than an arbitrary fixed-size split that might cut across sections."
+  },
+  {
+    "question": "What metadata is most useful to attach to each chunk?",
+    "options": [
+      "The chunk's color and font",
+      "Source file, position index, and character/word counts",
+      "The author's email address only",
+      "A random unique identifier only"
+    ],
+    "correct": 1,
+    "explanation": "Source file tells you where the chunk came from (for citations), position index tells you where in the document it appears (for ordering), and character/word counts help with prompt assembly and token estimation. This metadata is essential for traceability."
+  },
+  {
+    "question": "What is recursive chunking and why is it effective for diverse document types?",
+    "options": [
+      "It splits text into individual characters one at a time for maximum granularity",
+      "It tries the largest splitter first (sections), then falls back to paragraphs, sentences, and finally characters",
+      "It recursively compresses chunks until they fit a target size",
+      "It processes documents in a recursive directory structure"
+    ],
+    "correct": 1,
+    "explanation": "Recursive chunking (used by LangChain's RecursiveCharacterTextSplitter) tries to split on the largest natural boundary first — sections, then paragraphs, then sentences, then characters. This preserves the most meaningful structure possible for each chunk, making it effective across different document formats."
+  },
+  {
+    "question": "What problem does sentence-based chunking solve compared to fixed-size chunking?",
+    "options": [
+      "It produces fewer total chunks, reducing storage costs",
+      "It respects natural language boundaries so each chunk contains complete thoughts",
+      "It makes chunks exactly the same size for consistent embeddings",
+      "It removes stop words from the text before chunking"
+    ],
+    "correct": 1,
+    "explanation": "Fixed-size chunking splits at arbitrary character positions, often cutting sentences in half. Sentence-based chunking splits at sentence boundaries first, then groups sentences together. This ensures each chunk contains complete, coherent thoughts, producing better embeddings and more useful retrieval results."
+  }
+]

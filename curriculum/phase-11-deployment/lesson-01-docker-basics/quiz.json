@@ -1,0 +1,112 @@
+[
+  {
+    "question": "What is the main benefit of using Docker for AI applications?",
+    "options": [
+      "It makes your code run faster",
+      "It ensures reproducibility by packaging all dependencies together",
+      "It automatically trains your models",
+      "It replaces the need for Python virtual environments entirely"
+    ],
+    "correct": 1,
+    "explanation": "Docker packages your application, its dependencies, and its environment into a container that runs identically everywhere. This solves the 'it works on my machine' problem that is especially common with AI apps due to complex dependency chains."
+  },
+  {
+    "question": "Why should you COPY requirements.txt before copying the rest of your source code in a Dockerfile?",
+    "options": [
+      "Docker requires files to be copied in alphabetical order",
+      "It allows Docker to cache the pip install layer, so dependencies aren't reinstalled when only code changes",
+      "requirements.txt must be in the image before any other files",
+      "It reduces the final image size"
+    ],
+    "correct": 1,
+    "explanation": "Docker builds images in layers. If requirements.txt hasn't changed, Docker reuses the cached pip install layer. This makes rebuilds much faster when you only change your source code."
+  },
+  {
+    "question": "What does Docker Compose do?",
+    "options": [
+      "It compresses Docker images for faster downloads",
+      "It defines and runs multi-container applications with a single YAML configuration",
+      "It compiles Python code into Docker-compatible binaries",
+      "It automatically scales containers based on CPU usage"
+    ],
+    "correct": 1,
+    "explanation": "Docker Compose lets you define multiple services (like a web app, API, and Ollama model server) in a single docker-compose.yml file. Running 'docker compose up' starts all services together on a shared network."
+  },
+  {
+    "question": "What is the purpose of a .dockerignore file?",
+    "options": [
+      "It lists Docker commands to skip during build",
+      "It prevents specified files and directories from being copied into the Docker image",
+      "It tells Docker which containers to ignore when running",
+      "It hides Docker images from the registry"
+    ],
+    "correct": 1,
+    "explanation": "A .dockerignore file excludes files and directories (like .venv, .git, .env, __pycache__) from the Docker build context. This makes builds faster and prevents sensitive files like .env from ending up in the image."
+  },
+  {
+    "question": "Which base image should you prefer for production Python AI applications?",
+    "options": [
+      "ubuntu:latest",
+      "python:3.11 (full image)",
+      "python:3.11-slim",
+      "alpine:latest"
+    ],
+    "correct": 2,
+    "explanation": "python:3.11-slim is the best choice for most Python AI apps. It's much smaller than the full image (saving hundreds of megabytes) while still including the essentials. Alpine can cause issues with Python packages that need C libraries."
+  },
+  {
+    "question": "What is the relationship between a Docker image and a Docker container?",
+    "options": [
+      "They are the same thing with different names",
+      "An image is a blueprint; a container is a running instance of that image",
+      "A container is built first, then an image is created from it",
+      "An image runs on the host, while a container runs in the cloud"
+    ],
+    "correct": 1,
+    "explanation": "A Docker image is like a snapshot or blueprint containing your code, dependencies, and configuration. A container is a running instance created from that image. One image can spawn many containers, each running independently."
+  },
+  {
+    "question": "What is the purpose of a multi-stage Docker build?",
+    "options": [
+      "To run multiple applications in a single container",
+      "To keep the final production image small by separating build dependencies from runtime",
+      "To build images for multiple operating systems simultaneously",
+      "To automatically test the application during the build process"
+    ],
+    "correct": 1,
+    "explanation": "Multi-stage builds use a builder stage to install packages and compile code, then copy only the necessary artifacts into a clean final stage. This avoids including build tools, compilers, and other build-time dependencies in the production image, resulting in a much smaller image."
+  },
+  {
+    "question": "Why should you use environment variables instead of hardcoded values in a Dockerfile?",
+    "options": [
+      "Docker does not support hardcoded strings",
+      "Environment variables can be overridden at runtime without rebuilding the image",
+      "Hardcoded values cause the Docker build to fail",
+      "Environment variables are encrypted automatically by Docker"
+    ],
+    "correct": 1,
+    "explanation": "Environment variables allow you to change configuration (like model names, API hosts, or feature flags) at runtime using 'docker run -e KEY=VALUE' without rebuilding the image. This makes the same image reusable across development, staging, and production environments."
+  },
+  {
+    "question": "In a docker-compose.yml file, what does the 'depends_on' field specify?",
+    "options": [
+      "Which volumes a service needs",
+      "The startup order of services, ensuring dependencies start before dependents",
+      "Which ports a service exposes",
+      "The maximum memory each service can use"
+    ],
+    "correct": 1,
+    "explanation": "The 'depends_on' field tells Docker Compose to start the listed services before the current one. For example, if your API depends_on ollama, Compose will start the Ollama container first. Note that depends_on only controls startup order, not readiness."
+  },
+  {
+    "question": "What does the EXPOSE instruction do in a Dockerfile?",
+    "options": [
+      "It opens a firewall port on the host machine",
+      "It documents which port the containerized application listens on",
+      "It automatically maps the container port to the same host port",
+      "It restricts the container to only accept traffic on that port"
+    ],
+    "correct": 1,
+    "explanation": "EXPOSE is a documentation instruction that indicates which port the application inside the container listens on. It does not actually publish or map the port -- you still need the 'ports' mapping in docker-compose.yml or the '-p' flag with 'docker run' to make it accessible from the host."
+  }
+]

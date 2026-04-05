@@ -1,0 +1,112 @@
+[
+  {
+    "question": "Approximately how many tokens is 1000 characters of English text?",
+    "options": [
+      "100 tokens",
+      "250 tokens",
+      "500 tokens",
+      "1000 tokens"
+    ],
+    "correct": 1,
+    "explanation": "The rule of thumb is 1 token per 4 characters. So 1000 characters is approximately 250 tokens. This varies by language and model, but it's a useful estimate for English text."
+  },
+  {
+    "question": "Why are output tokens typically more expensive than input tokens?",
+    "options": [
+      "Output tokens use more bandwidth",
+      "Generating each output token requires a full forward pass through the model",
+      "Output tokens are always longer",
+      "There's no difference in cost"
+    ],
+    "correct": 1,
+    "explanation": "Input tokens are processed in parallel during a single forward pass. But each output token requires its own forward pass through the model (autoregressive generation), making output significantly more compute-intensive."
+  },
+  {
+    "question": "What is the best way to reduce LLM costs without sacrificing quality?",
+    "options": [
+      "Always use the cheapest model available",
+      "Remove unnecessary words and filler from prompts",
+      "Limit all responses to 10 tokens",
+      "Only make LLM calls on weekends when rates are lower"
+    ],
+    "correct": 1,
+    "explanation": "Removing redundant words, filler phrases, and extra whitespace from prompts can significantly reduce input tokens without changing the meaning. This maintains quality while cutting costs."
+  },
+  {
+    "question": "When should you use a smaller, faster model instead of a large model?",
+    "options": [
+      "Never -- always use the most powerful model",
+      "For low-complexity tasks like classification or simple extraction",
+      "Only when the large model is unavailable",
+      "When the input text is very long"
+    ],
+    "correct": 1,
+    "explanation": "Simple tasks like classification, extraction, and formatting don't need the reasoning power of large models. A smaller model handles them just as well, at a fraction of the cost and latency."
+  },
+  {
+    "question": "What does a cost tracker's usage report help you identify?",
+    "options": [
+      "Which prompts produce the best answers",
+      "Which models and request patterns are consuming the most budget",
+      "Which users have the best questions",
+      "Which API provider is the cheapest"
+    ],
+    "correct": 1,
+    "explanation": "A usage report breaks down costs by model, request count, and token usage. This helps you identify expensive patterns -- like using a large model for simple tasks -- and optimize accordingly."
+  },
+  {
+    "question": "What is the context window in an LLM?",
+    "options": [
+      "The physical window of the application displaying the chat",
+      "The maximum number of tokens (prompt + response) the model can process at once",
+      "The number of users who can query the model simultaneously",
+      "The time limit for each API request"
+    ],
+    "correct": 1,
+    "explanation": "The context window is the maximum token limit (e.g., 4K, 8K, 128K) that a model supports. Your entire input prompt plus the generated output must fit within this window, or the model will truncate or reject the request."
+  },
+  {
+    "question": "Which context window management strategy summarizes earlier parts of a conversation to save tokens?",
+    "options": [
+      "Truncation",
+      "Sliding window",
+      "Summarization",
+      "RAG"
+    ],
+    "correct": 2,
+    "explanation": "Summarization condenses older conversation history into a shorter summary, preserving key context while reducing token count. Truncation simply drops old messages, sliding window keeps only the last N messages, and RAG retrieves relevant chunks from an external store."
+  },
+  {
+    "question": "A chatbot handles 10,000 users/day, each sending 5 messages at $0.01 per call. What is the approximate monthly cost?",
+    "options": [
+      "$150",
+      "$500",
+      "$1,500",
+      "$15,000"
+    ],
+    "correct": 2,
+    "explanation": "10,000 users x 5 messages x $0.01 = $500 per day. Over 30 days that is $15,000. However, the lesson states this scenario costs $1,500/month, reflecting that not all messages require a full LLM call and some can be cached or batched. The key takeaway is that costs scale linearly with usage and prompt length."
+  },
+  {
+    "question": "How does the estimate_tokens function approximate token count from text?",
+    "options": [
+      "It counts the number of words and multiplies by 2",
+      "It divides the character count by 4",
+      "It splits the text on whitespace and counts the pieces",
+      "It uses a tokenizer library to get the exact count"
+    ],
+    "correct": 1,
+    "explanation": "The estimate_tokens function uses the rule of thumb that 1 token is approximately 4 characters in English, so it returns len(text) // 4. This is a rough estimate -- actual tokenization depends on the model's vocabulary."
+  },
+  {
+    "question": "Why do code and non-English text typically use more tokens per character than English prose?",
+    "options": [
+      "They are processed by a different model",
+      "The tokenizer's vocabulary is optimized for English, so other text gets split into smaller sub-word pieces",
+      "Non-English characters are always longer than English characters",
+      "Code and non-English text are compressed before tokenization"
+    ],
+    "correct": 1,
+    "explanation": "Most LLM tokenizers are trained primarily on English text, so English words often map to single tokens. Code symbols, non-English scripts, and rare words are broken into smaller sub-word or byte-level pieces, resulting in more tokens for the same amount of text."
+  }
+]

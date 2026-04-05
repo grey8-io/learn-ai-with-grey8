@@ -1,0 +1,207 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI SaaS App</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: system-ui, sans-serif; background: #f5f5f5; color: #333; }
+        .container { max-width: 900px; margin: 0 auto; padding: 2rem; }
+        h1 { text-align: center; margin-bottom: 0.5rem; color: #2563eb; }
+        .subtitle { text-align: center; color: #666; margin-bottom: 2rem; }
+
+        .card {
+            background: white; border-radius: 8px; padding: 1.5rem;
+            margin-bottom: 1.5rem; box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+        }
+        .card h2 { margin-bottom: 1rem; font-size: 1.2rem; }
+
+        textarea, input[type="text"], input[type="file"] {
+            width: 100%; padding: 0.75rem; border: 1px solid #ddd;
+            border-radius: 4px; font-size: 1rem; margin-bottom: 0.5rem;
+        }
+        textarea { min-height: 80px; resize: vertical; }
+
+        button {
+            background: #2563eb; color: white; border: none; padding: 0.75rem 1.5rem;
+            border-radius: 4px; cursor: pointer; font-size: 1rem; transition: background 0.2s;
+        }
+        button:hover { background: #1d4ed8; }
+        button:disabled { background: #93c5fd; cursor: not-allowed; }
+
+        #chat-messages {
+            max-height: 400px; overflow-y: auto; border: 1px solid #eee;
+            border-radius: 4px; padding: 1rem; margin-bottom: 1rem;
+            background: #fafafa; min-height: 100px;
+        }
+        .msg { margin-bottom: 0.75rem; padding: 0.75rem; border-radius: 4px; line-height: 1.5; }
+        .msg.user { background: #dbeafe; text-align: right; }
+        .msg.ai { background: #f0fdf4; }
+        .msg .label { font-weight: bold; font-size: 0.85rem; margin-bottom: 0.25rem; }
+
+        #search-results { margin-top: 1rem; }
+        .result {
+            background: #fefce8; padding: 0.75rem; border-radius: 4px;
+            margin-bottom: 0.5rem; border-left: 3px solid #eab308;
+        }
+
+        .status { padding: 0.5rem; margin-top: 0.5rem; border-radius: 4px; font-size: 0.9rem; }
+        .status.success { background: #dcfce7; color: #166534; }
+        .status.error { background: #fee2e2; color: #991b1b; }
+        .status.loading { background: #dbeafe; color: #1e40af; }
+
+        .stats { text-align: center; color: #666; font-size: 0.85rem; margin-bottom: 1rem; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>AI SaaS App</h1>
+        <p class="subtitle">Upload documents, ask questions, search your knowledge base</p>
+
+        <!-- Document Upload Section -->
+        <div class="card">
+            <h2>Upload Document</h2>
+            <form id="upload-form">
+                <input type="file" id="file-input" name="file" accept=".txt" required>
+                <button type="submit" id="upload-btn">Upload to Knowledge Base</button>
+            </form>
+            <div id="upload-status"></div>
+        </div>
+
+        <!-- Chat Section -->
+        <div class="card">
+            <h2>Chat with AI</h2>
+            <p class="stats">Ask questions — the AI will use your uploaded documents as context</p>
+            <div id="chat-messages"></div>
+            <form id="chat-form">
+                <textarea id="chat-input" name="message" placeholder="Ask a question about your documents..." required></textarea>
+                <button type="submit" id="chat-btn">Send</button>
+            </form>
+        </div>
+
+        <!-- Search Section -->
+        <div class="card">
+            <h2>Search Knowledge Base</h2>
+            <form id="search-form">
+                <input type="text" id="search-input" name="query" placeholder="Search documents..." required>
+                <button type="submit" id="search-btn">Search</button>
+            </form>
+            <div id="search-results"></div>
+        </div>
+    </div>
+
+    <script>
+        // Upload form handler
+        document.getElementById('upload-form').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const statusEl = document.getElementById('upload-status');
+            const btn = document.getElementById('upload-btn');
+            const fileInput = document.getElementById('file-input');
+
+            if (!fileInput.files[0]) return;
+
+            btn.disabled = true;
+            statusEl.innerHTML = '<div class="status loading">Uploading and processing...</div>';
+
+            try {
+                const formData = new FormData();
+                formData.append('file', fileInput.files[0]);
+
+                const resp = await fetch('/upload', { method: 'POST', body: formData });
+                const data = await resp.json();
+
+                if (resp.ok) {
+                    statusEl.innerHTML = `<div class="status success">${data.message} (${data.characters} chars, ${data.chunks_stored} total chunks)</div>`;
+                    fileInput.value = '';
+                } else {
+                    statusEl.innerHTML = `<div class="status error">${data.error}</div>`;
+                }
+            } catch (err) {
+                statusEl.innerHTML = `<div class="status error">Upload failed: ${err.message}</div>`;
+            }
+            btn.disabled = false;
+        });
+
+        // Chat form handler
+        document.getElementById('chat-form').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const messagesEl = document.getElementById('chat-messages');
+            const input = document.getElementById('chat-input');
+            const btn = document.getElementById('chat-btn');
+            const message = input.value.trim();
+
+            if (!message) return;
+
+            // Show user message
+            messagesEl.innerHTML += `<div class="msg user"><div class="label">You</div>${escapeHtml(message)}</div>`;
+            input.value = '';
+            btn.disabled = true;
+
+            // Show loading
+            messagesEl.innerHTML += '<div class="msg ai" id="loading"><div class="label">AI</div>Thinking...</div>';
+            messagesEl.scrollTop = messagesEl.scrollHeight;
+
+            try {
+                const formData = new FormData();
+                formData.append('message', message);
+
+                const resp = await fetch('/chat', { method: 'POST', body: formData });
+                const data = await resp.json();
+
+                // Remove loading, add response
+                document.getElementById('loading').remove();
+                if (resp.ok) {
+                    messagesEl.innerHTML += `<div class="msg ai"><div class="label">AI</div>${escapeHtml(data.response)}</div>`;
+                } else {
+                    messagesEl.innerHTML += `<div class="msg ai"><div class="label">Error</div>${escapeHtml(data.error)}</div>`;
+                }
+            } catch (err) {
+                document.getElementById('loading')?.remove();
+                messagesEl.innerHTML += `<div class="msg ai"><div class="label">Error</div>Request failed: ${err.message}</div>`;
+            }
+
+            btn.disabled = false;
+            messagesEl.scrollTop = messagesEl.scrollHeight;
+        });
+
+        // Search form handler
+        document.getElementById('search-form').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const resultsEl = document.getElementById('search-results');
+            const input = document.getElementById('search-input');
+            const btn = document.getElementById('search-btn');
+            const query = input.value.trim();
+
+            if (!query) return;
+
+            btn.disabled = true;
+            resultsEl.innerHTML = '<div class="status loading">Searching...</div>';
+
+            try {
+                const resp = await fetch(`/search?query=${encodeURIComponent(query)}`);
+                const data = await resp.json();
+
+                if (data.results && data.results.length > 0) {
+                    resultsEl.innerHTML = `<p><strong>${data.count} results for "${escapeHtml(query)}"</strong></p>`;
+                    data.results.forEach((text, i) => {
+                        resultsEl.innerHTML += `<div class="result"><strong>#${i + 1}</strong> ${escapeHtml(text)}</div>`;
+                    });
+                } else {
+                    resultsEl.innerHTML = '<div class="status">No results found. Try uploading some documents first.</div>';
+                }
+            } catch (err) {
+                resultsEl.innerHTML = `<div class="status error">Search failed: ${err.message}</div>`;
+            }
+            btn.disabled = false;
+        });
+
+        // Utility: escape HTML to prevent XSS
+        function escapeHtml(text) {
+            const div = document.createElement('div');
+            div.textContent = text;
+            return div.innerHTML;
+        }
+    </script>
+</body>
+</html>

@@ -1,0 +1,5 @@
+[
+  "Remember the Fahrenheit formula: F = C * 9/5 + 32. For palindromes, think about how to normalize the text first.",
+  "For is_palindrome, use text.lower().replace(\" \", \"\") to clean the input. Then compare the cleaned string to its reverse using [::-1] slice notation.",
+  "celsius_to_fahrenheit: return celsius * 9 / 5 + 32. is_palindrome: cleaned = text.lower().replace(\" \", \"\"); return cleaned == cleaned[::-1]. calculate_bmi: return round(weight_kg / (height_m ** 2), 1)."
+]

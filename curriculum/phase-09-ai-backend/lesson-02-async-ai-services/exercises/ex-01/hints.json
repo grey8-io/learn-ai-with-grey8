@@ -1,0 +1,5 @@
+[
+  "For __init__, store self.base_url = base_url.rstrip('/') and self.timeout = timeout. For generate(), use 'async with httpx.AsyncClient() as client:' then 'response = await client.post(f\"{self.base_url}/api/generate\", json={...}, timeout=self.timeout)' and return response.json()['response'].",
+  "For batch_generate(), create a semaphore = asyncio.Semaphore(max_concurrent). Define an inner 'async def _limited(prompt):' that does 'async with semaphore: return await self.generate(prompt, model)'. Then return list(await asyncio.gather(*[_limited(p) for p in prompts])).",
+  "For retry_with_backoff: loop 'for attempt in range(max_retries):', try 'return await fn()', except Exception: if attempt == max_retries - 1: raise, else await asyncio.sleep(base_delay * (2 ** attempt)). For create_sse_response: return [f'data: {chunk}\\n\\n' for chunk in chunks]."
+]

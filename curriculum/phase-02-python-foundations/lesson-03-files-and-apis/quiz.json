@@ -1,0 +1,52 @@
+[
+  {
+    "question": "What is the difference between json.dump() and json.dumps()?",
+    "options": [
+      "dump() is faster than dumps()",
+      "dump() writes to a file, dumps() returns a string",
+      "dumps() writes to a file, dump() returns a string",
+      "There is no difference"
+    ],
+    "correct": 1,
+    "explanation": "json.dump() writes JSON directly to a file object, while json.dumps() returns a JSON-formatted string (the 's' stands for 'string')."
+  },
+  {
+    "question": "What does response.raise_for_status() do?",
+    "options": [
+      "Returns the HTTP status code",
+      "Prints the status to the console",
+      "Raises an exception if the HTTP response indicates an error (4xx or 5xx)",
+      "Sets the status code to 200"
+    ],
+    "correct": 2,
+    "explanation": "raise_for_status() checks the response code and raises an HTTPStatusError if it indicates a client error (4xx) or server error (5xx)."
+  },
+  {
+    "question": "Why should you use 'with open(...)' instead of just 'open(...)'?",
+    "options": [
+      "It makes the code run faster",
+      "It automatically closes the file when done, even if an error occurs",
+      "It allows reading and writing at the same time",
+      "It creates the file if it doesn't exist"
+    ],
+    "correct": 1,
+    "explanation": "The 'with' statement (context manager) ensures the file is properly closed when the block exits, even if an exception is raised. This prevents resource leaks."
+  },
+  {
+    "question": "What file mode would you use to add content to the end of an existing file?",
+    "options": ["'r'", "'w'", "'a'", "'x'"],
+    "correct": 2,
+    "explanation": "'a' stands for append mode, which adds new content to the end of a file without erasing existing content. 'w' would overwrite the entire file."
+  },
+  {
+    "question": "What happens if you try to json.loads() an invalid JSON string?",
+    "options": [
+      "It returns None",
+      "It returns an empty dictionary",
+      "It raises a json.JSONDecodeError",
+      "It silently ignores the error"
+    ],
+    "correct": 2,
+    "explanation": "json.loads() raises a json.JSONDecodeError when the input string is not valid JSON. You should catch this exception with try/except if invalid input is possible."
+  }
+]

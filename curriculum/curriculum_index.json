@@ -1,0 +1,700 @@
+{
+  "generated": true,
+  "lessons": [
+    {
+      "id": "phase-01/lesson-01",
+      "phase": 1,
+      "title": "Terminal & Git Basics",
+      "summary": "Welcome to your very first lesson! Before we build AI applications, we need to get comfortable with two foundational tools that every developer uses daily:...",
+      "concepts": [
+        "Why the Terminal?",
+        "Essential Terminal Commands",
+        "`pwd` — Print Working Directory",
+        "`ls` — List Files",
+        "`cd` — Change Directory",
+        "`mkdir` — Make Directory",
+        "`cat` — Display File Contents",
+        "Why Version Control?"
+      ],
+      "prerequisites": [],
+      "estimated_minutes": 45
+    },
+    {
+      "id": "phase-01/lesson-02",
+      "phase": 1,
+      "title": "Python Environment Setup",
+      "summary": "When you ran `bash scripts/setup.sh`, the setup script created a Python virtual environment, installed all the project's dependencies, and configured everything so the platform works...",
+      "concepts": [
+        "Why Python?",
+        "What the Setup Script Did",
+        "Virtual Environments Explained",
+        "What `.venv/` Actually Contains",
+        "Activating and Deactivating",
+        "Installing Packages with pip",
+        "Running Python",
+        "The REPL (Interactive Mode)"
+      ],
+      "prerequisites": [
+        "phase-01/lesson-01"
+      ],
+      "estimated_minutes": 40
+    },
+    {
+      "id": "phase-01/lesson-03",
+      "phase": 1,
+      "title": "VS Code & AI Tools Setup",
+      "summary": "This is where things get exciting. You've got your terminal skills, Git is tracking your work, and Python is ready to go. When you ran...",
+      "concepts": [
+        "Setting Up VS Code",
+        "Installation",
+        "Essential Extensions",
+        "The Integrated Terminal",
+        "Setting Your Python Interpreter",
+        "Your AI Model Is Already Running",
+        "Verify It's Running",
+        "What Is Ollama?"
+      ],
+      "prerequisites": [
+        "phase-01/lesson-02"
+      ],
+      "estimated_minutes": 50
+    },
+    {
+      "id": "phase-02/lesson-01",
+      "phase": 2,
+      "title": "Variables, Types & Functions",
+      "summary": "Welcome to Phase 2! Now that your development environment is set up, it's time to learn the building blocks of Python. In this lesson, you'll...",
+      "concepts": [
+        "Variables and Assignment",
+        "Naming Conventions",
+        "Data Types",
+        "Type Conversion",
+        "Type Hints",
+        "Functions",
+        "Defining a Function",
+        "Calling a Function"
+      ],
+      "prerequisites": [
+        "phase-01/lesson-03"
+      ],
+      "estimated_minutes": 45
+    },
+    {
+      "id": "phase-02/lesson-02",
+      "phase": 2,
+      "title": "Data Structures",
+      "summary": "Now that you can create variables and functions, it's time to learn how to organize collections of data. Python gives you four powerful built-in data...",
+      "concepts": [
+        "Lists — Ordered Collections",
+        "Common List Operations",
+        "List Comprehensions",
+        "Dictionaries — Key-Value Pairs",
+        "Common Dictionary Operations",
+        "When to Use Dicts",
+        "Tuples — Immutable Sequences",
+        "Sets — Unique Collections"
+      ],
+      "prerequisites": [
+        "phase-02/lesson-01"
+      ],
+      "estimated_minutes": 50
+    },
+    {
+      "id": "phase-02/lesson-03",
+      "phase": 2,
+      "title": "Working with Files & APIs",
+      "summary": "So far you've been working with data that lives only in memory — once your program ends, it's gone. In this lesson, you'll learn to...",
+      "concepts": [
+        "Reading Files",
+        "Reading Line by Line",
+        "Writing Files",
+        "Working with JSON",
+        "Writing JSON to a File",
+        "Reading JSON from a File",
+        "JSON Strings",
+        "Making HTTP Requests"
+      ],
+      "prerequisites": [
+        "phase-02/lesson-02"
+      ],
+      "estimated_minutes": 50
+    },
+    {
+      "id": "phase-03/lesson-01",
+      "phase": 3,
+      "title": "What is AI? Machine Learning Basics",
+      "summary": "Welcome to Phase 3! You've got Python skills under your belt, and now it's time to understand the technology you're going to build with. In...",
+      "concepts": [
+        "AI vs ML vs Deep Learning",
+        "Types of Machine Learning",
+        "1. Supervised Learning",
+        "2. Unsupervised Learning",
+        "3. Reinforcement Learning",
+        "How Machine Learning Actually Works (Simplified)",
+        "Where Does ChatGPT Fit In?",
+        "Why This Matters for You"
+      ],
+      "prerequisites": [
+        "phase-02/lesson-03"
+      ],
+      "estimated_minutes": 40
+    },
+    {
+      "id": "phase-03/lesson-02",
+      "phase": 3,
+      "title": "How LLMs Work",
+      "summary": "Large Language Models like GPT, Llama, and Mistral are the engines behind modern AI assistants. In this lesson, you'll learn how they actually work —...",
+      "concepts": [
+        "Tokens: The Language of LLMs",
+        "Why Tokens Matter",
+        "The Transformer Architecture (High Level)",
+        "The Prediction Game",
+        "Attention: The Secret Sauce",
+        "Layers and Parameters",
+        "Pre-training vs Fine-tuning",
+        "Pre-training"
+      ],
+      "prerequisites": [
+        "phase-03/lesson-01"
+      ],
+      "estimated_minutes": 45
+    },
+    {
+      "id": "phase-03/lesson-03",
+      "phase": 3,
+      "title": "AI Limitations & Ethics",
+      "summary": "You've learned what AI is and how LLMs work. Now for the most important lesson in this phase: understanding what AI **cannot** do, where it...",
+      "concepts": [
+        "Hallucinations",
+        "Examples of Hallucinations",
+        "Why They Happen",
+        "How to Mitigate",
+        "Bias",
+        "Types of Bias",
+        "Real-World Impact",
+        "Mitigation Strategies"
+      ],
+      "prerequisites": [
+        "phase-03/lesson-02"
+      ],
+      "estimated_minutes": 45
+    },
+    {
+      "id": "phase-04/lesson-01",
+      "phase": 4,
+      "title": "Calling LLM APIs",
+      "summary": "It's time to build something real. In this lesson, you'll learn how to call a local LLM (Ollama) programmatically using Python. You'll understand the request/response...",
+      "concepts": [
+        "The Ollama API",
+        "The Chat API Format",
+        "Message Roles",
+        "The Response",
+        "Making Your First API Call",
+        "System Prompts",
+        "Multi-Turn Conversations",
+        "Error Handling"
+      ],
+      "prerequisites": [
+        "phase-03/lesson-03"
+      ],
+      "estimated_minutes": 50
+    },
+    {
+      "id": "phase-04/lesson-02",
+      "phase": 4,
+      "title": "Building a CLI AI Assistant",
+      "summary": "You can talk to an LLM from Python. Now let's turn that into a real application — an interactive command-line AI assistant. This is the...",
+      "concepts": [
+        "The Architecture",
+        "System Prompts for Personality",
+        "Examples of Good System Prompts",
+        "Managing Conversation History",
+        "Displaying History",
+        "Context Window Management",
+        "Saving and Loading Conversations",
+        "Command Parsing"
+      ],
+      "prerequisites": [
+        "phase-04/lesson-01"
+      ],
+      "estimated_minutes": 45
+    },
+    {
+      "id": "phase-05/lesson-01",
+      "phase": 5,
+      "title": "Role Prompting & System Messages",
+      "summary": "You've already sent messages to an LLM. Now it's time to learn the single most powerful technique for controlling AI behavior: **system prompts and role...",
+      "concepts": [
+        "What Is a System Prompt?",
+        "Why System Prompts Matter",
+        "Anatomy of a Good System Prompt",
+        "1. Role Assignment",
+        "2. Expertise Definition",
+        "3. Tone and Style",
+        "4. Constraints",
+        "Examples of Effective System Prompts"
+      ],
+      "prerequisites": [
+        "phase-04/lesson-02"
+      ],
+      "estimated_minutes": 45
+    },
+    {
+      "id": "phase-05/lesson-02",
+      "phase": 5,
+      "title": "Structured Outputs",
+      "summary": "LLMs generate free-form text by default. But real applications need structured data -- JSON for APIs, markdown for documents, CSV for spreadsheets. In this lesson,...",
+      "concepts": [
+        "Why Structured Output Matters",
+        "Technique 1: Explicit Format Instructions",
+        "Technique 2: Provide a Schema",
+        "Technique 3: Show an Example",
+        "Parsing LLM Output",
+        "Working with Markdown Output",
+        "Issues Found",
+        "Suggestions"
+      ],
+      "prerequisites": [
+        "phase-05/lesson-01"
+      ],
+      "estimated_minutes": 50
+    },
+    {
+      "id": "phase-05/lesson-03",
+      "phase": 5,
+      "title": "Few-Shot Patterns & Chain of Thought",
+      "summary": "Some prompts work dramatically better than others. In this lesson, you'll learn the two most powerful prompting techniques: **few-shot prompting** (showing examples) and **chain-of-thought** (step-by-step...",
+      "concepts": [
+        "The Prompting Spectrum",
+        "Zero-Shot",
+        "One-Shot",
+        "Few-Shot",
+        "When to Use Few-Shot",
+        "Chain-of-Thought (CoT) Prompting",
+        "Without CoT",
+        "With CoT"
+      ],
+      "prerequisites": [
+        "phase-05/lesson-02"
+      ],
+      "estimated_minutes": 45
+    },
+    {
+      "id": "phase-06/lesson-01",
+      "phase": 6,
+      "title": "What Are Embeddings?",
+      "summary": "Up until now, you've used LLMs to generate text. But there's another incredibly powerful capability: turning text into **numbers**. These numbers -- called embeddings --...",
+      "concepts": [
+        "From Words to Numbers",
+        "Vector Spaces (Intuitive)",
+        "Word Embeddings vs Sentence Embeddings",
+        "Cosine Similarity",
+        "Euclidean Distance",
+        "Normalizing Vectors",
+        "How Ollama Generates Embeddings",
+        "Why Embeddings Matter for AI Apps"
+      ],
+      "prerequisites": [
+        "phase-05/lesson-03"
+      ],
+      "estimated_minutes": 45
+    },
+    {
+      "id": "phase-06/lesson-02",
+      "phase": 6,
+      "title": "Vector Databases",
+      "summary": "You know how to turn text into vectors and measure similarity. But where do you *store* millions of vectors and search them efficiently? That's what...",
+      "concepts": [
+        "Why Regular Databases Aren't Enough",
+        "What Vector Databases Do",
+        "Popular Vector Databases",
+        "ChromaDB",
+        "FAISS (Facebook AI Similarity Search)",
+        "Qdrant",
+        "Pinecone",
+        "How Indexing Works (Simplified)"
+      ],
+      "prerequisites": [
+        "phase-06/lesson-01"
+      ],
+      "estimated_minutes": 50
+    },
+    {
+      "id": "phase-06/lesson-03",
+      "phase": 6,
+      "title": "Building Semantic Search",
+      "summary": "You've learned embeddings, similarity math, and vector stores. Now it's time to put it all together into a complete **semantic search engine**. In this lesson,...",
+      "concepts": [
+        "The Semantic Search Pipeline",
+        "Generating Embeddings with Ollama",
+        "Indexing Documents",
+        "Querying and Ranking",
+        "Keyword Search as a Fallback",
+        "Hybrid Search: The Best of Both Worlds",
+        "The Embedding Function Pattern",
+        "Choosing Embedding Models"
+      ],
+      "prerequisites": [
+        "phase-06/lesson-02"
+      ],
+      "estimated_minutes": 55
+    },
+    {
+      "id": "phase-07/lesson-01",
+      "phase": 7,
+      "title": "RAG Architecture",
+      "summary": "You have probably noticed that LLMs sometimes make things up. Ask a model about your company's internal policies or yesterday's news, and it will confidently...",
+      "concepts": [
+        "The RAG Pipeline",
+        "Why LLMs Need External Knowledge",
+        "Components of a RAG System",
+        "RAG vs Fine-Tuning",
+        "Real-World Use Cases",
+        "The Pipeline in Code"
+      ],
+      "prerequisites": [
+        "phase-06/lesson-03"
+      ],
+      "estimated_minutes": 50
+    },
+    {
+      "id": "phase-07/lesson-02",
+      "phase": 7,
+      "title": "Document Chunking & Processing",
+      "summary": "In the previous lesson, you built a RAG pipeline that takes documents and feeds them to an LLM. But there is a problem: real documents...",
+      "concepts": [
+        "Why Chunking Matters",
+        "Chunk Size Tradeoffs",
+        "Overlapping Chunks",
+        "Chunking Strategies",
+        "Fixed-Size Chunking",
+        "Sentence-Based Chunking",
+        "Paragraph-Based Chunking",
+        "Markdown-Aware Chunking"
+      ],
+      "prerequisites": [
+        "phase-07/lesson-01"
+      ],
+      "estimated_minutes": 50
+    },
+    {
+      "id": "phase-07/lesson-03",
+      "phase": 7,
+      "title": "Building a RAG Pipeline",
+      "summary": "You have learned about RAG architecture and document chunking. Now it is time to put everything together into a complete, working system. In this lesson,...",
+      "concepts": [
+        "The Complete Pipeline",
+        "Loading Documents",
+        "A Simple Vector Store",
+        "Processing Documents",
+        "Answering Questions",
+        "Evaluating RAG Answers",
+        "Confidence Scoring"
+      ],
+      "prerequisites": [
+        "phase-07/lesson-02"
+      ],
+      "estimated_minutes": 60
+    },
+    {
+      "id": "phase-08/lesson-01",
+      "phase": 8,
+      "title": "Agent Concepts & Patterns",
+      "summary": "So far, you have built systems where a human sends a prompt and an LLM returns a response. One turn, one answer. But what if...",
+      "concepts": [
+        "Agent vs Chatbot",
+        "The Agent Loop",
+        "Types of Agents",
+        "ReAct (Reasoning + Acting)",
+        "Plan & Execute",
+        "Reflexion",
+        "Tools and Function Calling",
+        "Agent Memory"
+      ],
+      "prerequisites": [
+        "phase-07/lesson-03"
+      ],
+      "estimated_minutes": 50
+    },
+    {
+      "id": "phase-08/lesson-02",
+      "phase": 8,
+      "title": "Tool Use & Function Calling",
+      "summary": "In the previous lesson, you built an agent that could parse actions and call tools. But we glossed over an important question: how do you...",
+      "concepts": [
+        "What Makes a Good Tool?",
+        "Parameter Schemas",
+        "Formatting Tools for the Prompt",
+        "Error Handling in Tools",
+        "Safe Evaluation",
+        "The Character Whitelist Approach",
+        "The AST Approach (Advanced)",
+        "Common Tool Patterns"
+      ],
+      "prerequisites": [
+        "phase-08/lesson-01"
+      ],
+      "estimated_minutes": 50
+    },
+    {
+      "id": "phase-08/lesson-03",
+      "phase": 8,
+      "title": "Multi-Agent Systems",
+      "summary": "In the previous lessons, you built a single agent that uses tools to complete tasks. But some problems are too complex or too broad for...",
+      "concepts": [
+        "Why Multiple Agents?",
+        "Agent Roles",
+        "Orchestration Patterns",
+        "Sequential Pipeline",
+        "Routing",
+        "Debate",
+        "Message Passing",
+        "Consensus and Conflict Resolution"
+      ],
+      "prerequisites": [
+        "phase-08/lesson-02"
+      ],
+      "estimated_minutes": 55
+    },
+    {
+      "id": "phase-09/lesson-01",
+      "phase": 9,
+      "title": "FastAPI Basics",
+      "summary": "You've built AI pipelines and agents -- now it's time to put them behind a real web API so the world can use them. In...",
+      "concepts": [
+        "Why FastAPI for AI?",
+        "Pydantic Models: Your Data Contracts",
+        "Creating Endpoints",
+        "Path and Query Parameters",
+        "Request and Response Patterns for AI",
+        "Batch Processing",
+        "Listing Available Models",
+        "Automatic Documentation"
+      ],
+      "prerequisites": [
+        "phase-08/lesson-03"
+      ],
+      "estimated_minutes": 50
+    },
+    {
+      "id": "phase-09/lesson-02",
+      "phase": 9,
+      "title": "Async AI Services",
+      "summary": "You've built a FastAPI backend. Now let's tackle the reality of AI applications: **LLM calls are slow**. A single call to a language model can...",
+      "concepts": [
+        "Why Async Matters for AI",
+        "asyncio Basics",
+        "Coroutines",
+        "Running Concurrent Tasks",
+        "Async HTTP Clients with httpx",
+        "Streaming Responses with SSE",
+        "Controlling Concurrency with Semaphores",
+        "Retry with Exponential Backoff"
+      ],
+      "prerequisites": [
+        "phase-09/lesson-01"
+      ],
+      "estimated_minutes": 55
+    },
+    {
+      "id": "phase-09/lesson-03",
+      "phase": 9,
+      "title": "Production Patterns",
+      "summary": "Your API works. Your async services hum along. But production is a different beast. Real users will send garbage input, hammer your endpoints, and expect...",
+      "concepts": [
+        "Rate Limiting: Protecting Your Resources",
+        "Caching LLM Responses",
+        "Input Sanitization",
+        "Standardized Error Responses",
+        "CORS and Middleware",
+        "Environment Configuration",
+        "Health Checks",
+        "What You'll Build"
+      ],
+      "prerequisites": [
+        "phase-09/lesson-02"
+      ],
+      "estimated_minutes": 50
+    },
+    {
+      "id": "phase-10/lesson-01",
+      "phase": 10,
+      "title": "Token & Cost Management",
+      "summary": "Every time you call an LLM, you're spending money -- or compute resources if you're running locally. In production, costs can spiral fast. A chatbot...",
+      "concepts": [
+        "Understanding Tokens",
+        "Why Tokens Matter",
+        "Tracking Costs",
+        "Prompt Optimization",
+        "1. Remove Redundancy",
+        "2. Strip Whitespace and Filler",
+        "3. Use Shorter Instructions",
+        "Model Selection"
+      ],
+      "prerequisites": [
+        "phase-09/lesson-03"
+      ],
+      "estimated_minutes": 45
+    },
+    {
+      "id": "phase-10/lesson-02",
+      "phase": 10,
+      "title": "Caching & Batching",
+      "summary": "Here's a costly truth about AI applications: users ask the same questions over and over. \"What's your return policy?\" \"How do I reset my password?\"...",
+      "concepts": [
+        "Why Caching Matters More for AI",
+        "Cache Strategies",
+        "Exact Match Cache",
+        "Normalized Match Cache",
+        "Semantic Similarity Cache",
+        "Cache Statistics",
+        "When NOT to Cache",
+        "Batch Processing"
+      ],
+      "prerequisites": [
+        "phase-10/lesson-01"
+      ],
+      "estimated_minutes": 50
+    },
+    {
+      "id": "phase-10/lesson-03",
+      "phase": 10,
+      "title": "Latency Optimization",
+      "summary": "Users don't wait. Studies show that after 3 seconds, 50% of users abandon a request. AI applications routinely take 5-30 seconds to respond. That's a...",
+      "concepts": [
+        "Where Does Latency Come From?",
+        "Measurement First",
+        "Percentile Statistics",
+        "Streaming: Perceived vs Actual Latency",
+        "Stream Buffering",
+        "Parallel Processing",
+        "Model Quantization Concepts",
+        "Local vs Remote Tradeoffs"
+      ],
+      "prerequisites": [
+        "phase-10/lesson-02"
+      ],
+      "estimated_minutes": 50
+    },
+    {
+      "id": "phase-11/lesson-01",
+      "phase": 11,
+      "title": "Docker Basics for AI Apps",
+      "summary": "You've built AI applications that work on your machine. But what happens when you need to share them with the world, deploy them on a...",
+      "concepts": [
+        "Why Docker for AI?",
+        "Core Docker Concepts",
+        "Images",
+        "Containers",
+        "Volumes",
+        "Dockerfiles",
+        "Writing Dockerfiles for Python AI Apps",
+        "Multi-Stage Builds"
+      ],
+      "prerequisites": [
+        "phase-10/lesson-03"
+      ],
+      "estimated_minutes": 50
+    },
+    {
+      "id": "phase-11/lesson-02",
+      "phase": 11,
+      "title": "Cloud Deployment",
+      "summary": "Your AI app is containerized and running locally. Now it's time to put it on a server where the world can use it. In this...",
+      "concepts": [
+        "Deployment Options for AI Apps",
+        "VPS (Virtual Private Server)",
+        "Cloud Platforms (AWS, GCP, Azure)",
+        "Serverless",
+        "Self-Hosting",
+        "Environment Configuration",
+        "Secrets Management",
+        "Health Checks"
+      ],
+      "prerequisites": [
+        "phase-11/lesson-01"
+      ],
+      "estimated_minutes": 50
+    },
+    {
+      "id": "phase-11/lesson-03",
+      "phase": 11,
+      "title": "Monitoring & Observability",
+      "summary": "Your AI app is deployed and running. But how do you know it's working *well*? Is it responding fast enough? Are errors creeping in? Is...",
+      "concepts": [
+        "Why AI Apps Need Special Monitoring",
+        "Key Metrics for AI Applications",
+        "Response Latency",
+        "Token Usage",
+        "Error Rate",
+        "Requests Per Minute",
+        "Response Quality",
+        "Structured Logging"
+      ],
+      "prerequisites": [
+        "phase-11/lesson-02"
+      ],
+      "estimated_minutes": 55
+    },
+    {
+      "id": "phase-12/lesson-01",
+      "phase": 12,
+      "title": "Project Planning & Architecture",
+      "summary": "Congratulations -- you've made it to the capstone phase! Over the past eleven phases, you've learned Python, AI fundamentals, prompt engineering, RAG systems, agents, backend...",
+      "concepts": [
+        "Why Planning Matters",
+        "The MVP Approach",
+        "Example: AI Study Buddy MVP",
+        "Choose Your Capstone Project",
+        "Apply What You Know (Phases 1-5)",
+        "Build Real Systems (Phases 6-9)",
+        "Production-Grade (Phases 9-11)",
+        "Requirements Gathering"
+      ],
+      "prerequisites": [
+        "phase-11/lesson-03"
+      ],
+      "estimated_minutes": 45
+    },
+    {
+      "id": "phase-12/lesson-02",
+      "phase": 12,
+      "title": "Building & Testing AI Applications",
+      "summary": "You have a plan. Now it's time to build -- and more importantly, to build with confidence. Testing AI applications is different from testing traditional...",
+      "concepts": [
+        "Why Testing AI Apps Is Hard",
+        "Testing Strategy for AI Applications",
+        "Layer 1: Unit Tests (Fast, Deterministic)",
+        "Layer 2: Mock LLM Tests (Fast, Controlled)",
+        "Layer 3: Integration Tests (Slow, Real)",
+        "Layer 4: Evaluation Tests (Periodic)",
+        "Mocking LLM Responses",
+        "What to Test in AI Responses"
+      ],
+      "prerequisites": [
+        "phase-12/lesson-01"
+      ],
+      "estimated_minutes": 50
+    },
+    {
+      "id": "phase-12/lesson-03",
+      "phase": 12,
+      "title": "Deployment & Showcase",
+      "summary": "This is it -- the final lesson. You've planned your project, built it, tested it, and now it's time to deploy it, document it, and...",
+      "concepts": [
+        "The Deployment Checklist",
+        "Code Quality",
+        "Configuration",
+        "Documentation",
+        "Security",
+        "Writing Project Documentation",
+        "1. What does it do?",
+        "2. Why does it exist?"
+      ],
+      "prerequisites": [
+        "phase-12/lesson-02"
+      ],
+      "estimated_minutes": 45
+    }
+  ]
+}

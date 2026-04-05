@@ -1,0 +1,5 @@
+[
+  "Start by using mkdir to create the project directory, then cd into it.",
+  "After creating the directory, run git init to turn it into a repository. Then use echo \"Hello, AI world!\" > hello.txt to create your file.",
+  "Use git add hello.txt to stage the file, and git commit -m \"Initial commit\" to save the snapshot."
+]

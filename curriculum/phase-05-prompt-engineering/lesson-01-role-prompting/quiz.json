@@ -1,0 +1,79 @@
+[
+  {
+    "question": "What is the primary purpose of a system prompt?",
+    "options": [
+      "To store conversation history",
+      "To set the AI's behavior, role, and constraints before the user interacts",
+      "To make the API call faster",
+      "To encrypt the user's message"
+    ],
+    "correct": 1,
+    "explanation": "A system prompt tells the model how to behave -- its role, personality, tone, and constraints. It shapes all subsequent responses without the user seeing it."
+  },
+  {
+    "question": "Which temperature setting is best for a code reviewer persona?",
+    "options": [
+      "0.9 - 1.0 for maximum creativity",
+      "0.5 for balanced output",
+      "0.1 - 0.3 for consistency and precision",
+      "Temperature doesn't affect role-based prompts"
+    ],
+    "correct": 2,
+    "explanation": "Code review requires consistency and precision, so a low temperature (0.1-0.3) works best. Higher temperatures introduce randomness that could lead to inconsistent or inaccurate feedback."
+  },
+  {
+    "question": "What are the four key components of a well-crafted system prompt?",
+    "options": [
+      "Input, output, model, temperature",
+      "Role assignment, expertise, tone, and constraints",
+      "Username, password, API key, and endpoint",
+      "Question, answer, context, and history"
+    ],
+    "correct": 1,
+    "explanation": "A strong system prompt defines the role (who the AI is), expertise (what it knows), tone (how it communicates), and constraints (rules and limits)."
+  },
+  {
+    "question": "Why is 'Be helpful' a poor system prompt?",
+    "options": [
+      "It's too long",
+      "It contains forbidden words",
+      "It's too vague -- it doesn't give the model specific direction",
+      "System prompts must be in JSON format"
+    ],
+    "correct": 2,
+    "explanation": "Vague prompts like 'Be helpful' don't differentiate the AI's behavior from its default. Specific roles like 'You are a Docker expert who helps debug container issues' produce much better results."
+  },
+  {
+    "question": "How can you estimate the token count of a prompt?",
+    "options": [
+      "Count the number of sentences",
+      "Divide the character count by 4 as a rough estimate",
+      "Tokens always equal the word count",
+      "You can't estimate tokens -- only the model knows"
+    ],
+    "correct": 1,
+    "explanation": "A common rule of thumb is that 1 token is roughly 4 characters in English. So dividing character count by 4 gives a reasonable estimate. This helps you stay within context window limits."
+  },
+  {
+    "question": "What happens when you include too many constraints in a system prompt?",
+    "options": [
+      "The API rejects the request with a validation error",
+      "The model follows all constraints perfectly regardless of count",
+      "The model may ignore some instructions because the prompt becomes overloaded",
+      "Extra constraints are automatically moved to the user message"
+    ],
+    "correct": 2,
+    "explanation": "Overloading a system prompt with too many constraints can cause the model to ignore or deprioritize some of them. It is better to keep the system prompt focused on the most important instructions rather than trying to cover every possible edge case."
+  },
+  {
+    "question": "Why do few-shot examples embedded in a system prompt improve output consistency?",
+    "options": [
+      "They increase the model's temperature automatically",
+      "They show the model the exact input/output pattern to follow, so it mimics the format",
+      "They bypass the system prompt and directly control the model weights",
+      "They reduce the number of tokens in the response"
+    ],
+    "correct": 1,
+    "explanation": "Few-shot examples give the model concrete demonstrations of the expected format and behavior. Instead of interpreting a verbal description, the model can directly pattern-match against the examples, producing much more consistent and correctly formatted outputs."
+  }
+]

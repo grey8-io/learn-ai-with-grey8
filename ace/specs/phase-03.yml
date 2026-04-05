@@ -1,0 +1,72 @@
+# ACE Generation Spec — Phase 3: AI Fundamentals
+# Run: ace generate --spec specs/phase-03.yml
+
+phase: "03"
+phase_slug: "phase-03-ai-fundamentals"
+
+lessons:
+  - id: lesson-01
+    slug: "lesson-01-what-is-ai"
+    title: "What is AI? Machine Learning Basics"
+    target_audience: "beginners with Python skills wanting to understand AI concepts"
+    prerequisites:
+      - "Phase 2 completed (Python Foundations)"
+    objectives:
+      - "Explain the difference between AI, Machine Learning, and Deep Learning"
+      - "Identify supervised, unsupervised, and reinforcement learning problems"
+      - "Describe the high-level steps of the machine learning process"
+    exercises:
+      - title: "Classify ML Problems"
+        description: >
+          Write a function that classifies problem descriptions as supervised,
+          unsupervised, or reinforcement learning by matching keywords in the
+          text against category-specific keyword lists.
+        difficulty: easy
+        type: coding
+        objectives:
+          - "Map real-world problems to ML categories"
+          - "Use keyword matching with string methods"
+
+  - id: lesson-02
+    slug: "lesson-02-how-llms-work"
+    title: "How LLMs Work"
+    target_audience: "beginners curious about the inner workings of language models"
+    prerequisites:
+      - "What is AI? Machine Learning Basics (Phase 3, Lesson 1)"
+    objectives:
+      - "Explain how text is broken into tokens and why token counts matter"
+      - "Describe the transformer architecture and attention mechanism at a high level"
+      - "Understand temperature, top-p, and context windows and their effects"
+    exercises:
+      - title: "Simple Tokenizer"
+        description: >
+          Build simple_tokenize using regex to split text into words and
+          punctuation tokens, and count_tokens that returns the token count
+          for a given string.
+        difficulty: easy
+        type: coding
+        objectives:
+          - "Use re.findall() with a word/punctuation regex pattern"
+          - "Understand the relationship between text and token counts"
+
+  - id: lesson-03
+    slug: "lesson-03-ai-limitations"
+    title: "AI Limitations & Ethics"
+    target_audience: "beginners learning to use AI responsibly"
+    prerequisites:
+      - "How LLMs Work (Phase 3, Lesson 2)"
+    objectives:
+      - "Identify and explain AI hallucinations, bias, and prompt injection"
+      - "Describe strategies for mitigating common AI failure modes"
+      - "Determine when AI is and is not appropriate for a given task"
+    exercises:
+      - title: "AI Fact Checker"
+        description: >
+          Build a fact checker that compares AI-generated claims against a
+          dictionary of known facts, classifying each claim as verified,
+          contradicted, or unverified based on case-insensitive matching.
+        difficulty: medium
+        type: coding
+        objectives:
+          - "Cross-reference claims against a knowledge base"
+          - "Implement case-insensitive string comparison logic"

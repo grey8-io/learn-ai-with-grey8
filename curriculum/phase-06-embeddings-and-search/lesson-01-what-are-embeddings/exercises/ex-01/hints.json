@@ -1,0 +1,5 @@
+[
+  "For cosine_similarity, compute three things: dot product = sum(a*b for a,b in zip(vec_a, vec_b)), magnitude_a = math.sqrt(sum(a*a for a in vec_a)), magnitude_b = math.sqrt(sum(b*b for b in vec_b)). If either magnitude is 0, return 0.0. Otherwise return dot / (magnitude_a * magnitude_b).",
+  "For euclidean_distance, use: math.sqrt(sum((a - b) ** 2 for a, b in zip(vec_a, vec_b))). For normalize_vector: magnitude = math.sqrt(sum(x*x for x in vec)); if magnitude == 0 return list(vec); else return [x/magnitude for x in vec].",
+  "For most_similar, loop through vectors with enumerate: for i, vec in enumerate(vectors). Compute cosine_similarity(query_vec, vec) for each. Track the index with the highest score. Return labels[best_index]."
+]

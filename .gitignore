@@ -1,0 +1,79 @@
+# ===== Python =====
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+*.egg-info/
+*.egg
+dist/
+build/
+.eggs/
+.venv/
+venv/
+env/
+*.whl
+pip-log.txt
+pip-delete-this-directory.txt
+.mypy_cache/
+.ruff_cache/
+.pytest_cache/
+htmlcov/
+coverage/
+.coverage
+.coverage.*
+*.cover
+*.log
+
+# ===== Node.js =====
+node_modules/
+.next/
+out/
+.turbo/
+*.tsbuildinfo
+.npm
+.yarn/cache
+.yarn/unplugged
+.pnp.*
+
+# ===== Environment & Secrets =====
+.env
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
+!.env.example
+
+# ===== IDE & Editors =====
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+*.sublime-project
+*.sublime-workspace
+
+# ===== OS Files =====
+.DS_Store
+Thumbs.db
+Desktop.ini
+ehthumbs.db
+
+# ===== Docker =====
+docker-compose.override.yml
+
+# ===== Supabase Local =====
+supabase/.branches
+supabase/.temp
+
+# ===== Ollama Models (local cache) =====
+models/
+*.gguf
+.ollama_model
+.ollama_hw_profile
+.running_pids
+.logs/
+
+# ===== Misc =====
+tmp/
+temp/
+*.bak

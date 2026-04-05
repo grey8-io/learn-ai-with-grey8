@@ -1,0 +1,81 @@
+# ACE Generation Spec — Phase 10: Optimization & Cost Control
+# Run: ace generate --spec specs/phase-10.yml
+
+phase: "10"
+phase_slug: "phase-10-optimization"
+
+lessons:
+  - id: lesson-01
+    slug: "lesson-01-token-cost-control"
+    title: "Token & Cost Management"
+    target_audience: "developers managing LLM costs in production"
+    prerequisites:
+      - "Phase 9 completed (AI Backend Development)"
+    objectives:
+      - "Estimate token counts and track costs across multiple LLM calls"
+      - "Optimize prompts to reduce token usage without losing quality"
+      - "Select the right model based on task complexity and constraints"
+    exercises:
+      - title: "Cost Tracker & Optimizer"
+        description: >
+          Implement estimate_tokens (len(text) // 4) and a CostTracker class
+          that records calls and computes per-call costs. Build optimize_prompt
+          to collapse whitespace and remove filler phrases, truncating to
+          max_tokens * 4 chars. Create select_model to pick models by task
+          complexity level.
+        difficulty: medium
+        type: coding
+        objectives:
+          - "Estimate token counts from character length"
+          - "Track and aggregate LLM usage costs"
+          - "Optimize prompts by removing redundant text"
+
+  - id: lesson-02
+    slug: "lesson-02-caching-and-batching"
+    title: "Caching & Batching"
+    target_audience: "developers reducing redundant LLM calls at scale"
+    prerequisites:
+      - "Token & Cost Management (Phase 10, Lesson 1)"
+    objectives:
+      - "Build a semantic cache with normalized key matching"
+      - "Implement batch processing to efficiently handle multiple requests"
+      - "Deduplicate requests to eliminate redundant LLM calls"
+    exercises:
+      - title: "Intelligent Caching"
+        description: >
+          Build a SemanticCache that normalizes keys by lowercasing, stripping
+          punctuation, and collapsing whitespace. Implement a BatchProcessor
+          that queues items and flushes in configurable batch sizes. Create
+          deduplicate_requests using a key function to identify duplicates
+          and map indices back to results.
+        difficulty: hard
+        type: coding
+        objectives:
+          - "Normalize cache keys for semantic matching"
+          - "Queue and flush batched requests"
+          - "Deduplicate requests using key functions"
+
+  - id: lesson-03
+    slug: "lesson-03-latency-optimization"
+    title: "Latency Optimization"
+    target_audience: "developers optimizing AI pipeline performance"
+    prerequisites:
+      - "Caching & Batching (Phase 10, Lesson 2)"
+    objectives:
+      - "Measure and profile latency with percentile-based statistics"
+      - "Implement stream buffering for smoother real-time output"
+      - "Identify and optimize the slowest operations in AI pipelines"
+    exercises:
+      - title: "Performance Monitor"
+        description: >
+          Build a LatencyTracker that stores pending start times and completed
+          durations per operation. Implement get_stats to compute min, max, avg,
+          and percentiles (p50, p95, p99) from sorted durations. Create a
+          StreamBuffer that accumulates chunks and flushes when reaching a
+          min_chars threshold.
+        difficulty: hard
+        type: coding
+        objectives:
+          - "Track operation start/end times and compute durations"
+          - "Calculate percentile-based latency statistics"
+          - "Buffer streaming output for smoother delivery"

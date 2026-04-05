@@ -1,0 +1,1352 @@
+{
+  "title": "Learn AI With Grey8",
+  "version": "0.1.0",
+  "schema": "./schema.json",
+  "phases": [
+    {
+      "phase": 1,
+      "title": "Dev Environment Setup",
+      "directory": "phase-01-dev-environment",
+      "lessons": [
+        {
+          "id": "phase-01/lesson-01",
+          "title": "Terminal & Git Basics",
+          "phase": 1,
+          "order": 1,
+          "objectives": [
+            "Navigate the file system using command-line commands",
+            "Initialize a Git repository and make commits",
+            "Explain why version control matters for AI development"
+          ],
+          "prerequisites": [],
+          "estimated_minutes": 45,
+          "content_file": "phase-01-dev-environment/lesson-01-terminal-git/content.md",
+          "exercises": [
+            {
+              "id": "ex-01",
+              "title": "Your First Git Repository",
+              "difficulty": "easy",
+              "starter_file": "phase-01-dev-environment/lesson-01-terminal-git/exercises/ex-01/starter/main.sh",
+              "solution_file": "phase-01-dev-environment/lesson-01-terminal-git/exercises/ex-01/solution/main.sh",
+              "test_file": "phase-01-dev-environment/lesson-01-terminal-git/exercises/ex-01/tests/test_exercise.py",
+              "rubric_file": "phase-01-dev-environment/lesson-01-terminal-git/exercises/ex-01/rubric.md",
+              "hints": [
+                "Start by using mkdir to create the project directory, then cd into it.",
+                "After creating the directory, run git init to turn it into a repository.",
+                "Use echo to create a file, git add to stage it, and git commit -m to save your snapshot."
+              ]
+            }
+          ],
+          "quiz_file": "phase-01-dev-environment/lesson-01-terminal-git/quiz.json"
+        },
+        {
+          "id": "phase-01/lesson-02",
+          "title": "Python Environment Setup",
+          "phase": 1,
+          "order": 2,
+          "objectives": [
+            "Install Python 3.11+ and verify the installation",
+            "Create and activate a virtual environment",
+            "Install packages with pip and run Python scripts"
+          ],
+          "prerequisites": [
+            "phase-01/lesson-01"
+          ],
+          "estimated_minutes": 40,
+          "content_file": "phase-01-dev-environment/lesson-02-python-setup/content.md",
+          "exercises": [
+            {
+              "id": "ex-01",
+              "title": "Python Hello World with Functions",
+              "difficulty": "easy",
+              "starter_file": "phase-01-dev-environment/lesson-02-python-setup/exercises/ex-01/starter/main.py",
+              "solution_file": "phase-01-dev-environment/lesson-02-python-setup/exercises/ex-01/solution/main.py",
+              "test_file": "phase-01-dev-environment/lesson-02-python-setup/exercises/ex-01/tests/test_exercise.py",
+              "rubric_file": "phase-01-dev-environment/lesson-02-python-setup/exercises/ex-01/rubric.md",
+              "hints": [
+                "Remember that Python variables don't need type declarations — just assign a value with =.",
+                "F-strings let you embed variables inside curly braces: f\"Hello, {name}!\"",
+                "Your greet function should take a name parameter and return an f-string greeting."
+              ]
+            }
+          ],
+          "quiz_file": "phase-01-dev-environment/lesson-02-python-setup/quiz.json"
+        },
+        {
+          "id": "phase-01/lesson-03",
+          "title": "VS Code & AI Tools Setup",
+          "phase": 1,
+          "order": 3,
+          "objectives": [
+            "Set up VS Code with essential extensions for AI development",
+            "Install Ollama and pull a local language model",
+            "Send a prompt to a local AI model and receive a response"
+          ],
+          "prerequisites": [
+            "phase-01/lesson-02"
+          ],
+          "estimated_minutes": 50,
+          "content_file": "phase-01-dev-environment/lesson-03-vscode-setup/content.md",
+          "exercises": [
+            {
+              "id": "ex-01",
+              "title": "Talk to a Local AI",
+              "difficulty": "easy",
+              "starter_file": "phase-01-dev-environment/lesson-03-vscode-setup/exercises/ex-01/starter/main.py",
+              "solution_file": "phase-01-dev-environment/lesson-03-vscode-setup/exercises/ex-01/solution/main.py",
+              "test_file": "phase-01-dev-environment/lesson-03-vscode-setup/exercises/ex-01/tests/test_exercise.py",
+              "rubric_file": "phase-01-dev-environment/lesson-03-vscode-setup/exercises/ex-01/rubric.md",
+              "hints": [
+                "The Ollama API lives at http://localhost:11434/api/generate — use httpx.post() to call it.",
+                "The request body needs two keys: \"model\" (e.g. \"tinyllama\") and \"prompt\" (your question).",
+                "Set \"stream\" to false in the request body so you get the full response in one shot."
+              ]
+            }
+          ],
+          "quiz_file": "phase-01-dev-environment/lesson-03-vscode-setup/quiz.json"
+        }
+      ]
+    },
+    {
+      "phase": 2,
+      "title": "Python Foundations",
+      "directory": "phase-02-python-foundations",
+      "lessons": [
+        {
+          "id": "phase-02/lesson-01",
+          "title": "Variables, Types & Functions",
+          "phase": 2,
+          "order": 1,
+          "objectives": [
+            "Use Python variables with int, float, str, and bool types",
+            "Write functions with type hints, default arguments, and docstrings",
+            "Apply string manipulation and mathematical operations in functions"
+          ],
+          "prerequisites": [
+            "phase-01/lesson-03"
+          ],
+          "estimated_minutes": 45,
+          "content_file": "phase-02-python-foundations/lesson-01-variables-functions/content.md",
+          "exercises": [
+            {
+              "id": "ex-01",
+              "title": "Temperature, Palindromes & BMI",
+              "difficulty": "easy",
+              "starter_file": "phase-02-python-foundations/lesson-01-variables-functions/exercises/ex-01/starter/main.py",
+              "solution_file": "phase-02-python-foundations/lesson-01-variables-functions/exercises/ex-01/solution/main.py",
+              "test_file": "phase-02-python-foundations/lesson-01-variables-functions/exercises/ex-01/tests/test_exercise.py",
+              "rubric_file": "phase-02-python-foundations/lesson-01-variables-functions/exercises/ex-01/rubric.md",
+              "hints": [
+                "Remember the Fahrenheit formula: F = C * 9/5 + 32. For palindromes, think about how to normalize the text first.",
+                "For is_palindrome, use text.lower().replace(\" \", \"\") to clean the input. Then compare the cleaned string to its reverse using [::-1] slice notation.",
+                "celsius_to_fahrenheit: return celsius * 9 / 5 + 32. is_palindrome: cleaned = text.lower().replace(\" \", \"\"); return cleaned == cleaned[::-1]. calculate_bmi: return round(weight_kg / (height_m ** 2), 1)."
+              ]
+            }
+          ],
+          "quiz_file": "phase-02-python-foundations/lesson-01-variables-functions/quiz.json"
+        },
+        {
+          "id": "phase-02/lesson-02",
+          "title": "Data Structures",
+          "phase": 2,
+          "order": 2,
+          "objectives": [
+            "Use lists, dictionaries, tuples, and sets effectively",
+            "Write list comprehensions to transform and filter data",
+            "Build a CRUD application using lists of dictionaries"
+          ],
+          "prerequisites": [
+            "phase-02/lesson-01"
+          ],
+          "estimated_minutes": 50,
+          "content_file": "phase-02-python-foundations/lesson-02-data-structures/content.md",
+          "exercises": [
+            {
+              "id": "ex-01",
+              "title": "Contact Book",
+              "difficulty": "easy",
+              "starter_file": "phase-02-python-foundations/lesson-02-data-structures/exercises/ex-01/starter/main.py",
+              "solution_file": "phase-02-python-foundations/lesson-02-data-structures/exercises/ex-01/solution/main.py",
+              "test_file": "phase-02-python-foundations/lesson-02-data-structures/exercises/ex-01/tests/test_exercise.py",
+              "rubric_file": "phase-02-python-foundations/lesson-02-data-structures/exercises/ex-01/rubric.md",
+              "hints": [
+                "Each contact is a dictionary with 'name' and 'email' keys. The contacts list stores these dicts. Use .append() to add and a for loop to search.",
+                "For find_contact, loop through the list and compare contact['name'].lower() to name.lower(). For list_contacts, try a list comprehension with an f-string.",
+                "add_contact: contacts.append({'name': name, 'email': email}). find_contact: loop and compare .lower(). remove_contact: use enumerate() to get the index, then contacts.pop(i)."
+              ]
+            }
+          ],
+          "quiz_file": "phase-02-python-foundations/lesson-02-data-structures/quiz.json"
+        },
+        {
+          "id": "phase-02/lesson-03",
+          "title": "Working with Files & APIs",
+          "phase": 2,
+          "order": 3,
+          "objectives": [
+            "Read and write files using Python's open() and with statements",
+            "Parse and generate JSON data with the json module",
+            "Make HTTP requests with httpx and handle errors with try/except"
+          ],
+          "prerequisites": [
+            "phase-02/lesson-02"
+          ],
+          "estimated_minutes": 50,
+          "content_file": "phase-02-python-foundations/lesson-03-files-and-apis/content.md",
+          "exercises": [
+            {
+              "id": "ex-01",
+              "title": "Fetch and Save JSON",
+              "difficulty": "medium",
+              "starter_file": "phase-02-python-foundations/lesson-03-files-and-apis/exercises/ex-01/starter/main.py",
+              "solution_file": "phase-02-python-foundations/lesson-03-files-and-apis/exercises/ex-01/solution/main.py",
+              "test_file": "phase-02-python-foundations/lesson-03-files-and-apis/exercises/ex-01/tests/test_exercise.py",
+              "rubric_file": "phase-02-python-foundations/lesson-03-files-and-apis/exercises/ex-01/rubric.md",
+              "hints": [
+                "For fetch_and_save, use httpx.get(url, timeout=10) and then response.json() to get the data. For load_json, wrap your file reading in a try/except block.",
+                "After getting the response, call response.raise_for_status() before parsing JSON. To save, use json.dump(data, f, indent=2) inside a with open(filepath, 'w') block.",
+                "fetch_and_save: response = httpx.get(url, timeout=10); response.raise_for_status(); data = response.json(); then json.dump(data, f, indent=2). load_json: try open and json.load, except FileNotFoundError return None."
+              ]
+            }
+          ],
+          "quiz_file": "phase-02-python-foundations/lesson-03-files-and-apis/quiz.json"
+        }
+      ]
+    },
+    {
+      "phase": 3,
+      "title": "AI Fundamentals",
+      "directory": "phase-03-ai-fundamentals",
+      "lessons": [
+        {
+          "id": "phase-03/lesson-01",
+          "title": "What is AI? Machine Learning Basics",
+          "phase": 3,
+          "order": 1,
+          "objectives": [
+            "Explain the difference between AI, Machine Learning, and Deep Learning",
+            "Identify supervised, unsupervised, and reinforcement learning problems",
+            "Describe the high-level steps of the machine learning process"
+          ],
+          "prerequisites": [
+            "phase-02/lesson-03"
+          ],
+          "estimated_minutes": 40,
+          "content_file": "phase-03-ai-fundamentals/lesson-01-what-is-ai/content.md",
+          "exercises": [
+            {
+              "id": "ex-01",
+              "title": "Classify ML Problems",
+              "difficulty": "easy",
+              "starter_file": "phase-03-ai-fundamentals/lesson-01-what-is-ai/exercises/ex-01/starter/main.py",
+              "solution_file": "phase-03-ai-fundamentals/lesson-01-what-is-ai/exercises/ex-01/solution/main.py",
+              "test_file": "phase-03-ai-fundamentals/lesson-01-what-is-ai/exercises/ex-01/tests/test_exercise.py",
+              "rubric_file": "phase-03-ai-fundamentals/lesson-01-what-is-ai/exercises/ex-01/rubric.md",
+              "hints": [
+                "Convert the description to lowercase with .lower(), then check if any keywords from each category appear in the text.",
+                "Create three lists of keywords — one for each ML type. Loop through each list and check if any keyword is found.",
+                "supervised_keywords = ['predict', 'classify', 'label', 'diagnose', 'spam']. Loop: for kw in supervised_keywords: if kw in text: return 'supervised'."
+              ]
+            }
+          ],
+          "quiz_file": "phase-03-ai-fundamentals/lesson-01-what-is-ai/quiz.json"
+        },
+        {
+          "id": "phase-03/lesson-02",
+          "title": "How LLMs Work",
+          "phase": 3,
+          "order": 2,
+          "objectives": [
+            "Explain how text is broken into tokens and why token counts matter",
+            "Describe the transformer architecture and attention mechanism at a high level",
+            "Understand temperature, top-p, and context windows and their effects"
+          ],
+          "prerequisites": [
+            "phase-03/lesson-01"
+          ],
+          "estimated_minutes": 45,
+          "content_file": "phase-03-ai-fundamentals/lesson-02-how-llms-work/content.md",
+          "exercises": [
+            {
+              "id": "ex-01",
+              "title": "Simple Tokenizer",
+              "difficulty": "easy",
+              "starter_file": "phase-03-ai-fundamentals/lesson-02-how-llms-work/exercises/ex-01/starter/main.py",
+              "solution_file": "phase-03-ai-fundamentals/lesson-02-how-llms-work/exercises/ex-01/solution/main.py",
+              "test_file": "phase-03-ai-fundamentals/lesson-02-how-llms-work/exercises/ex-01/tests/test_exercise.py",
+              "rubric_file": "phase-03-ai-fundamentals/lesson-02-how-llms-work/exercises/ex-01/rubric.md",
+              "hints": [
+                "For simple_tokenize, the regex pattern r\"\\w+|[^\\w\\s]\" matches either word characters or individual punctuation.",
+                "count_tokens just calls simple_tokenize and returns the length with len().",
+                "simple_tokenize: return re.findall(r\"\\w+|[^\\w\\s]\", text). count_tokens: return len(simple_tokenize(text))."
+              ]
+            }
+          ],
+          "quiz_file": "phase-03-ai-fundamentals/lesson-02-how-llms-work/quiz.json"
+        },
+        {
+          "id": "phase-03/lesson-03",
+          "title": "AI Limitations & Ethics",
+          "phase": 3,
+          "order": 3,
+          "objectives": [
+            "Identify and explain AI hallucinations, bias, and prompt injection",
+            "Describe strategies for mitigating common AI failure modes",
+            "Determine when AI is and is not appropriate for a given task"
+          ],
+          "prerequisites": [
+            "phase-03/lesson-02"
+          ],
+          "estimated_minutes": 45,
+          "content_file": "phase-03-ai-fundamentals/lesson-03-ai-limitations/content.md",
+          "exercises": [
+            {
+              "id": "ex-01",
+              "title": "AI Fact Checker",
+              "difficulty": "medium",
+              "starter_file": "phase-03-ai-fundamentals/lesson-03-ai-limitations/exercises/ex-01/starter/main.py",
+              "solution_file": "phase-03-ai-fundamentals/lesson-03-ai-limitations/exercises/ex-01/solution/main.py",
+              "test_file": "phase-03-ai-fundamentals/lesson-03-ai-limitations/exercises/ex-01/tests/test_exercise.py",
+              "rubric_file": "phase-03-ai-fundamentals/lesson-03-ai-limitations/exercises/ex-01/rubric.md",
+              "hints": [
+                "Loop through each claim, then for each claim loop through known_facts.items(). Compare using .lower().",
+                "Check if the fact value matches the claim (verified), then if the topic appears but doesn't match (contradicted).",
+                "for claim in claims: claim_lower = claim.lower(). For each (topic, fact): if fact.lower() in claim_lower: verified."
+              ]
+            }
+          ],
+          "quiz_file": "phase-03-ai-fundamentals/lesson-03-ai-limitations/quiz.json"
+        }
+      ]
+    },
+    {
+      "phase": 4,
+      "title": "Your First AI App",
+      "directory": "phase-04-first-ai-app",
+      "lessons": [
+        {
+          "id": "phase-04/lesson-01",
+          "title": "Calling LLM APIs",
+          "phase": 4,
+          "order": 1,
+          "objectives": [
+            "Call the Ollama chat API with system and user messages",
+            "Build a reusable Python class for LLM communication",
+            "Handle multi-turn conversations by managing message history"
+          ],
+          "prerequisites": [
+            "phase-03/lesson-03"
+          ],
+          "estimated_minutes": 50,
+          "content_file": "phase-04-first-ai-app/lesson-01-calling-llm-apis/content.md",
+          "exercises": [
+            {
+              "id": "ex-01",
+              "title": "OllamaChat Client",
+              "difficulty": "medium",
+              "starter_file": "phase-04-first-ai-app/lesson-01-calling-llm-apis/exercises/ex-01/starter/main.py",
+              "solution_file": "phase-04-first-ai-app/lesson-01-calling-llm-apis/exercises/ex-01/solution/main.py",
+              "test_file": "phase-04-first-ai-app/lesson-01-calling-llm-apis/exercises/ex-01/tests/test_exercise.py",
+              "rubric_file": "phase-04-first-ai-app/lesson-01-calling-llm-apis/exercises/ex-01/rubric.md",
+              "hints": [
+                "The OllamaChat class needs __init__, send, and send_with_history methods. Store model and host in __init__.",
+                "In send(), build a messages list: start empty, optionally append a system message, then append the user message.",
+                "send: messages = []; if system_prompt: messages.append({'role':'system','content':system_prompt}); messages.append({'role':'user','content':prompt})."
+              ]
+            }
+          ],
+          "quiz_file": "phase-04-first-ai-app/lesson-01-calling-llm-apis/quiz.json"
+        },
+        {
+          "id": "phase-04/lesson-02",
+          "title": "Building a CLI AI Assistant",
+          "phase": 4,
+          "order": 2,
+          "objectives": [
+            "Design system prompts that give an AI assistant personality and constraints",
+            "Manage conversation history for multi-turn interactions",
+            "Save and load conversations to and from JSON files"
+          ],
+          "prerequisites": [
+            "phase-04/lesson-01"
+          ],
+          "estimated_minutes": 45,
+          "content_file": "phase-04-first-ai-app/lesson-02-cli-assistant/content.md",
+          "exercises": [
+            {
+              "id": "ex-01",
+              "title": "CLI Assistant Utilities",
+              "difficulty": "medium",
+              "starter_file": "phase-04-first-ai-app/lesson-02-cli-assistant/exercises/ex-01/starter/main.py",
+              "solution_file": "phase-04-first-ai-app/lesson-02-cli-assistant/exercises/ex-01/solution/main.py",
+              "test_file": "phase-04-first-ai-app/lesson-02-cli-assistant/exercises/ex-01/tests/test_exercise.py",
+              "rubric_file": "phase-04-first-ai-app/lesson-02-cli-assistant/exercises/ex-01/rubric.md",
+              "hints": [
+                "create_system_prompt uses an f-string. format_history loops through messages and checks msg['role'].",
+                "For format_history, build a list of formatted strings, skip messages where role is 'system', then join with newlines.",
+                "create_system_prompt: return f'You are {name}, an AI assistant. {personality} Keep responses concise and helpful.'."
+              ]
+            }
+          ],
+          "quiz_file": "phase-04-first-ai-app/lesson-02-cli-assistant/quiz.json"
+        },
+        {
+          "id": "phase-04/lesson-03",
+          "title": "Milestone Project: AI Chatbot",
+          "phase": 4,
+          "order": 3,
+          "objectives": [],
+          "prerequisites": [],
+          "estimated_minutes": 30,
+          "content_file": "phase-04-first-ai-app/lesson-03-milestone-ai-chatbot/content.md",
+          "exercises": [
+            {
+              "id": "ex-01",
+              "title": "Ex 01",
+              "difficulty": "medium",
+              "starter_file": "phase-04-first-ai-app/lesson-03-milestone-ai-chatbot/exercises/ex-01/starter/main.py",
+              "solution_file": "phase-04-first-ai-app/lesson-03-milestone-ai-chatbot/exercises/ex-01/solution/main.py",
+              "test_file": "phase-04-first-ai-app/lesson-03-milestone-ai-chatbot/exercises/ex-01/tests/test_exercise.py",
+              "rubric_file": "phase-04-first-ai-app/lesson-03-milestone-ai-chatbot/exercises/ex-01/rubric.md",
+              "hints": [
+                "Think about what the `history` list needs to look like before you send the request. Each entry is a dictionary with \"role\" and \"content\" keys. You need to append the user's message *before* making the POST request, and the assistant's reply *after* you parse the response.",
+                "The API payload should look like this: `{\"model\": MODEL, \"messages\": history, \"stream\": False}`. POST it to `f\"{OLLAMA_URL}/api/chat\"` using `requests.post(..., json=payload)`. The response JSON has the structure `{\"message\": {\"content\": \"...\"}}` -- extract the content string from there.",
+                "Here is near-complete pseudocode for `main()`:\n```\nprint welcome banner\nwhile True:\n    try:\n        user_input = console.input(prompt).strip()\n        if not user_input: continue\n        if user_input.lower() == \"/quit\":\n            print goodbye\n            break\n        reply = chat(user_input)\n        console.print(Markdown(reply))\n    except KeyboardInterrupt:\n        print goodbye\n        break\n    except requests.exceptions.ConnectionError:\n        print error message\n        break\n```"
+              ]
+            }
+          ],
+          "quiz_file": "phase-04-first-ai-app/lesson-03-milestone-ai-chatbot/quiz.json"
+        }
+      ]
+    },
+    {
+      "phase": 5,
+      "title": "Prompt Engineering",
+      "directory": "phase-05-prompt-engineering",
+      "lessons": [
+        {
+          "id": "phase-05/lesson-01",
+          "title": "Role Prompting & System Messages",
+          "phase": 5,
+          "order": 1,
+          "objectives": [
+            "Craft effective system prompts that shape LLM behavior",
+            "Assign roles and personas to get higher-quality responses",
+            "Validate prompts for token limits and structural completeness"
+          ],
+          "prerequisites": [
+            "phase-04/lesson-02"
+          ],
+          "estimated_minutes": 45,
+          "content_file": "phase-05-prompt-engineering/lesson-01-role-prompting/content.md",
+          "exercises": [
+            {
+              "id": "ex-01",
+              "title": "Prompt Engineering Utilities",
+              "difficulty": "medium",
+              "starter_file": "phase-05-prompt-engineering/lesson-01-role-prompting/exercises/ex-01/starter/main.py",
+              "solution_file": "phase-05-prompt-engineering/lesson-01-role-prompting/exercises/ex-01/solution/main.py",
+              "test_file": "phase-05-prompt-engineering/lesson-01-role-prompting/exercises/ex-01/tests/test_exercise.py",
+              "rubric_file": "phase-05-prompt-engineering/lesson-01-role-prompting/exercises/ex-01/rubric.md",
+              "hints": [
+                "For create_system_prompt, use an f-string to combine role, expertise, tone, and constraints into a formatted prompt.",
+                "For create_few_shot_prompt, loop through examples adding Input/Output pairs, then append the query.",
+                "For validate_prompt: estimated_tokens = len(prompt) // 4; check if empty or exceeds max_tokens."
+              ]
+            }
+          ],
+          "quiz_file": "phase-05-prompt-engineering/lesson-01-role-prompting/quiz.json"
+        },
+        {
+          "id": "phase-05/lesson-02",
+          "title": "Structured Outputs",
+          "phase": 5,
+          "order": 2,
+          "objectives": [
+            "Extract JSON and structured data from LLM text responses",
+            "Design prompts that reliably produce structured output formats",
+            "Validate and handle malformed LLM responses gracefully"
+          ],
+          "prerequisites": [
+            "phase-05/lesson-01"
+          ],
+          "estimated_minutes": 50,
+          "content_file": "phase-05-prompt-engineering/lesson-02-structured-outputs/content.md",
+          "exercises": [
+            {
+              "id": "ex-01",
+              "title": "Output Parsers",
+              "difficulty": "medium",
+              "starter_file": "phase-05-prompt-engineering/lesson-02-structured-outputs/exercises/ex-01/starter/main.py",
+              "solution_file": "phase-05-prompt-engineering/lesson-02-structured-outputs/exercises/ex-01/solution/main.py",
+              "test_file": "phase-05-prompt-engineering/lesson-02-structured-outputs/exercises/ex-01/tests/test_exercise.py",
+              "rubric_file": "phase-05-prompt-engineering/lesson-02-structured-outputs/exercises/ex-01/rubric.md",
+              "hints": [
+                "For extract_json, use re.search with re.DOTALL flag to find JSON objects in text.",
+                "For extract_markdown_sections, split on lines starting with # and group content by heading.",
+                "For validate_llm_json, call extract_json first, then check required_fields against the parsed data."
+              ]
+            }
+          ],
+          "quiz_file": "phase-05-prompt-engineering/lesson-02-structured-outputs/quiz.json"
+        },
+        {
+          "id": "phase-05/lesson-03",
+          "title": "Few-Shot Patterns & Chain of Thought",
+          "phase": 5,
+          "order": 3,
+          "objectives": [
+            "Build few-shot prompts with input/output examples for consistent results",
+            "Apply chain-of-thought prompting for complex reasoning tasks",
+            "Extract final answers from chain-of-thought responses"
+          ],
+          "prerequisites": [
+            "phase-05/lesson-02"
+          ],
+          "estimated_minutes": 45,
+          "content_file": "phase-05-prompt-engineering/lesson-03-few-shot-patterns/content.md",
+          "exercises": [
+            {
+              "id": "ex-01",
+              "title": "Advanced Prompt Patterns",
+              "difficulty": "medium",
+              "starter_file": "phase-05-prompt-engineering/lesson-03-few-shot-patterns/exercises/ex-01/starter/main.py",
+              "solution_file": "phase-05-prompt-engineering/lesson-03-few-shot-patterns/exercises/ex-01/solution/main.py",
+              "test_file": "phase-05-prompt-engineering/lesson-03-few-shot-patterns/exercises/ex-01/tests/test_exercise.py",
+              "rubric_file": "phase-05-prompt-engineering/lesson-03-few-shot-patterns/exercises/ex-01/rubric.md",
+              "hints": [
+                "For build_chain_of_thought_prompt, wrap the question with 'Let's think step by step' instruction.",
+                "For extract_final_answer, search for markers like 'therefore' or 'final answer:' in the response.",
+                "For build_self_consistency_prompts, create n slightly varied prompts using different reasoning prefixes."
+              ]
+            }
+          ],
+          "quiz_file": "phase-05-prompt-engineering/lesson-03-few-shot-patterns/quiz.json"
+        }
+      ]
+    },
+    {
+      "phase": 6,
+      "title": "Embeddings & Semantic Search",
+      "directory": "phase-06-embeddings-and-search",
+      "lessons": [
+        {
+          "id": "phase-06/lesson-01",
+          "title": "What Are Embeddings?",
+          "phase": 6,
+          "order": 1,
+          "objectives": [
+            "Explain what vector embeddings are and why they matter for AI",
+            "Compute cosine similarity and euclidean distance between vectors",
+            "Find the most similar item in a collection using vector math"
+          ],
+          "prerequisites": [
+            "phase-05/lesson-03"
+          ],
+          "estimated_minutes": 45,
+          "content_file": "phase-06-embeddings-and-search/lesson-01-what-are-embeddings/content.md",
+          "exercises": [
+            {
+              "id": "ex-01",
+              "title": "Embedding Utilities",
+              "difficulty": "medium",
+              "starter_file": "phase-06-embeddings-and-search/lesson-01-what-are-embeddings/exercises/ex-01/starter/main.py",
+              "solution_file": "phase-06-embeddings-and-search/lesson-01-what-are-embeddings/exercises/ex-01/solution/main.py",
+              "test_file": "phase-06-embeddings-and-search/lesson-01-what-are-embeddings/exercises/ex-01/tests/test_exercise.py",
+              "rubric_file": "phase-06-embeddings-and-search/lesson-01-what-are-embeddings/exercises/ex-01/rubric.md",
+              "hints": [
+                "For cosine_similarity, compute dot product, magnitude_a, and magnitude_b. Return dot / (mag_a * mag_b).",
+                "For euclidean_distance, use math.sqrt(sum((a-b)**2 for a,b in zip(vec_a, vec_b))).",
+                "For most_similar, loop through vectors computing cosine_similarity and track the best match."
+              ]
+            }
+          ],
+          "quiz_file": "phase-06-embeddings-and-search/lesson-01-what-are-embeddings/quiz.json"
+        },
+        {
+          "id": "phase-06/lesson-02",
+          "title": "Vector Databases",
+          "phase": 6,
+          "order": 2,
+          "objectives": [
+            "Explain why vector databases are needed for similarity search",
+            "Build a simple in-memory vector store with CRUD operations",
+            "Implement nearest-neighbor search using cosine similarity"
+          ],
+          "prerequisites": [
+            "phase-06/lesson-01"
+          ],
+          "estimated_minutes": 50,
+          "content_file": "phase-06-embeddings-and-search/lesson-02-vector-databases/content.md",
+          "exercises": [
+            {
+              "id": "ex-01",
+              "title": "Simple Vector Store",
+              "difficulty": "medium",
+              "starter_file": "phase-06-embeddings-and-search/lesson-02-vector-databases/exercises/ex-01/starter/main.py",
+              "solution_file": "phase-06-embeddings-and-search/lesson-02-vector-databases/exercises/ex-01/solution/main.py",
+              "test_file": "phase-06-embeddings-and-search/lesson-02-vector-databases/exercises/ex-01/tests/test_exercise.py",
+              "rubric_file": "phase-06-embeddings-and-search/lesson-02-vector-databases/exercises/ex-01/rubric.md",
+              "hints": [
+                "Store documents in a dict: self._store[id] = {'vector': vector, 'metadata': metadata or {}}.",
+                "For search(), compute cosine_similarity for each document, sort by score descending, return top_k.",
+                "For delete(), use self._store.pop(id, None) to safely remove without KeyError."
+              ]
+            }
+          ],
+          "quiz_file": "phase-06-embeddings-and-search/lesson-02-vector-databases/quiz.json"
+        },
+        {
+          "id": "phase-06/lesson-03",
+          "title": "Building Semantic Search",
+          "phase": 6,
+          "order": 3,
+          "objectives": [
+            "Build an end-to-end semantic search pipeline with embeddings",
+            "Implement keyword search as a fallback strategy",
+            "Combine semantic and keyword scores in a hybrid search approach"
+          ],
+          "prerequisites": [
+            "phase-06/lesson-02"
+          ],
+          "estimated_minutes": 55,
+          "content_file": "phase-06-embeddings-and-search/lesson-03-semantic-search/content.md",
+          "exercises": [
+            {
+              "id": "ex-01",
+              "title": "Semantic Search Engine",
+              "difficulty": "hard",
+              "starter_file": "phase-06-embeddings-and-search/lesson-03-semantic-search/exercises/ex-01/starter/main.py",
+              "solution_file": "phase-06-embeddings-and-search/lesson-03-semantic-search/exercises/ex-01/solution/main.py",
+              "test_file": "phase-06-embeddings-and-search/lesson-03-semantic-search/exercises/ex-01/tests/test_exercise.py",
+              "rubric_file": "phase-06-embeddings-and-search/lesson-03-semantic-search/exercises/ex-01/rubric.md",
+              "hints": [
+                "Store embedding_fn and use an internal dict as the vector store. Index documents by embedding each text.",
+                "For keyword_search, split query into terms, count matching terms per document, score = matches / total terms.",
+                "For hybrid_search, combine alpha * semantic_score + (1-alpha) * keyword_score for each document."
+              ]
+            }
+          ],
+          "quiz_file": "phase-06-embeddings-and-search/lesson-03-semantic-search/quiz.json"
+        }
+      ]
+    },
+    {
+      "phase": 7,
+      "title": "RAG Systems",
+      "directory": "phase-07-rag-systems",
+      "lessons": [
+        {
+          "id": "phase-07/lesson-01",
+          "title": "RAG Architecture",
+          "phase": 7,
+          "order": 1,
+          "objectives": [
+            "Explain the Retrieval-Augmented Generation pipeline and its components",
+            "Build context from retrieved documents within token limits",
+            "Construct augmented prompts that combine context with user queries"
+          ],
+          "prerequisites": [
+            "phase-06/lesson-03"
+          ],
+          "estimated_minutes": 50,
+          "content_file": "phase-07-rag-systems/lesson-01-rag-architecture/content.md",
+          "exercises": [
+            {
+              "id": "ex-01",
+              "title": "RAG Pipeline",
+              "difficulty": "medium",
+              "starter_file": "phase-07-rag-systems/lesson-01-rag-architecture/exercises/ex-01/starter/main.py",
+              "solution_file": "phase-07-rag-systems/lesson-01-rag-architecture/exercises/ex-01/solution/main.py",
+              "test_file": "phase-07-rag-systems/lesson-01-rag-architecture/exercises/ex-01/tests/test_exercise.py",
+              "rubric_file": "phase-07-rag-systems/lesson-01-rag-architecture/exercises/ex-01/rubric.md",
+              "hints": [
+                "Store retriever and generator callables in __init__. build_context joins docs within max_chars limit.",
+                "build_prompt formats: 'Given the following context:\\n{context}\\n\\nAnswer: {query}'.",
+                "query() chains: retrieve → build_context → build_prompt → generate. query_with_sources adds source tracking."
+              ]
+            }
+          ],
+          "quiz_file": "phase-07-rag-systems/lesson-01-rag-architecture/quiz.json"
+        },
+        {
+          "id": "phase-07/lesson-02",
+          "title": "Document Chunking & Processing",
+          "phase": 7,
+          "order": 2,
+          "objectives": [
+            "Implement multiple chunking strategies for different document types",
+            "Handle overlapping chunks to preserve context across boundaries",
+            "Add metadata to chunks for source tracking and filtering"
+          ],
+          "prerequisites": [
+            "phase-07/lesson-01"
+          ],
+          "estimated_minutes": 50,
+          "content_file": "phase-07-rag-systems/lesson-02-document-chunking/content.md",
+          "exercises": [
+            {
+              "id": "ex-01",
+              "title": "Document Chunking",
+              "difficulty": "medium",
+              "starter_file": "phase-07-rag-systems/lesson-02-document-chunking/exercises/ex-01/starter/main.py",
+              "solution_file": "phase-07-rag-systems/lesson-02-document-chunking/exercises/ex-01/solution/main.py",
+              "test_file": "phase-07-rag-systems/lesson-02-document-chunking/exercises/ex-01/tests/test_exercise.py",
+              "rubric_file": "phase-07-rag-systems/lesson-02-document-chunking/exercises/ex-01/rubric.md",
+              "hints": [
+                "For chunk_by_size, use a while loop advancing by (chunk_size - overlap) each step.",
+                "For chunk_by_paragraphs, split on '\\n\\n' and merge small paragraphs until reaching max_chunk_size.",
+                "For chunk_markdown, split on heading patterns and handle sections that exceed max_chunk_size."
+              ]
+            }
+          ],
+          "quiz_file": "phase-07-rag-systems/lesson-02-document-chunking/quiz.json"
+        },
+        {
+          "id": "phase-07/lesson-03",
+          "title": "Building a RAG Pipeline",
+          "phase": 7,
+          "order": 3,
+          "objectives": [
+            "Build a complete document QA system from loading to answering",
+            "Implement document processing with chunking and embedding",
+            "Evaluate RAG answer quality using keyword-based metrics"
+          ],
+          "prerequisites": [
+            "phase-07/lesson-02"
+          ],
+          "estimated_minutes": 60,
+          "content_file": "phase-07-rag-systems/lesson-03-building-rag-pipeline/content.md",
+          "exercises": [
+            {
+              "id": "ex-01",
+              "title": "Document QA System",
+              "difficulty": "hard",
+              "starter_file": "phase-07-rag-systems/lesson-03-building-rag-pipeline/exercises/ex-01/starter/main.py",
+              "solution_file": "phase-07-rag-systems/lesson-03-building-rag-pipeline/exercises/ex-01/solution/main.py",
+              "test_file": "phase-07-rag-systems/lesson-03-building-rag-pipeline/exercises/ex-01/tests/test_exercise.py",
+              "rubric_file": "phase-07-rag-systems/lesson-03-building-rag-pipeline/exercises/ex-01/rubric.md",
+              "hints": [
+                "DocumentQA stores embedding_fn, generate_fn, and an internal list as the vector store.",
+                "process_documents chunks text, embeds each chunk, and stores {embedding, text, source}.",
+                "answer() retrieves top chunks, joins their text as context, builds prompt, generates, returns with sources."
+              ]
+            }
+          ],
+          "quiz_file": "phase-07-rag-systems/lesson-03-building-rag-pipeline/quiz.json"
+        },
+        {
+          "id": "phase-07/lesson-04",
+          "title": "Milestone Project: RAG Knowledge Base",
+          "phase": 7,
+          "order": 4,
+          "objectives": [],
+          "prerequisites": [],
+          "estimated_minutes": 30,
+          "content_file": "phase-07-rag-systems/lesson-04-milestone-rag-knowledge-base/content.md",
+          "exercises": [
+            {
+              "id": "ex-01",
+              "title": "Ex 01",
+              "difficulty": "medium",
+              "starter_file": "phase-07-rag-systems/lesson-04-milestone-rag-knowledge-base/exercises/ex-01/starter/main.py",
+              "solution_file": "phase-07-rag-systems/lesson-04-milestone-rag-knowledge-base/exercises/ex-01/solution/main.py",
+              "test_file": "phase-07-rag-systems/lesson-04-milestone-rag-knowledge-base/exercises/ex-01/tests/test_exercise.py",
+              "rubric_file": "phase-07-rag-systems/lesson-04-milestone-rag-knowledge-base/exercises/ex-01/rubric.md",
+              "hints": [
+                "Start with `chunk_text()` -- it is the simplest function. Use a list comprehension to slice the text at every `chunk_size` interval: `text[i:i+chunk_size]`. Then filter out any chunks where `.strip()` is empty. For `ingest_folder()`, use `Path(folder_path).glob(\"**/*.md\")` to find files and remember to generate unique IDs for each chunk.",
+                "For `ingest_folder()`, the ChromaDB `collection.add()` call expects three keyword arguments: `documents` (list of chunk strings), `ids` (list of unique ID strings like `f\"{filename}_chunk_{i}\"`), and `metadatas` (list of dicts like `{\"source\": filename}`). For `ask()`, use `collection.query(query_texts=[question], n_results=n)` and access `results[\"documents\"][0]` and `results[\"metadatas\"][0]`.",
+                "Here is the near-complete flow:\n```python\n# chunk_text\nchunks = [text[i:i+chunk_size] for i in range(0, len(text), chunk_size)]\nreturn [c for c in chunks if c.strip()]\n\n# ingest_folder\nfor filepath in Path(folder_path).glob(\"**/*.md\"):\n    text = filepath.read_text(encoding=\"utf-8\")\n    chunks = chunk_text(text)\n    ids = [f\"{filepath.name}_chunk_{i}\" for i in range(len(chunks))]\n    metadatas = [{\"source\": filepath.name} for _ in chunks]\n    collection.add(documents=chunks, ids=ids, metadatas=metadatas)\n\n# ask\nresults = collection.query(query_texts=[question], n_results=n)\ncontext = \"\\n\\n\".join(results[\"documents\"][0])\nprompt = f\"Context:\\n{context}\\n\\nQuestion: {question}\\n\\nAnswer based only on the context.\"\nreturn chat(prompt)\n```"
+              ]
+            }
+          ],
+          "quiz_file": "phase-07-rag-systems/lesson-04-milestone-rag-knowledge-base/quiz.json"
+        }
+      ]
+    },
+    {
+      "phase": 8,
+      "title": "AI Agents",
+      "directory": "phase-08-ai-agents",
+      "lessons": [
+        {
+          "id": "phase-08/lesson-01",
+          "title": "Agent Concepts & Patterns",
+          "phase": 8,
+          "order": 1,
+          "objectives": [
+            "Explain the agent loop: observe, think, act, and iterate",
+            "Parse LLM responses for tool actions using structured formats",
+            "Build a simple agent that uses tools to answer questions"
+          ],
+          "prerequisites": [
+            "phase-07/lesson-03"
+          ],
+          "estimated_minutes": 50,
+          "content_file": "phase-08-ai-agents/lesson-01-agent-concepts/content.md",
+          "exercises": [
+            {
+              "id": "ex-01",
+              "title": "Simple Agent Framework",
+              "difficulty": "hard",
+              "starter_file": "phase-08-ai-agents/lesson-01-agent-concepts/exercises/ex-01/starter/main.py",
+              "solution_file": "phase-08-ai-agents/lesson-01-agent-concepts/exercises/ex-01/solution/main.py",
+              "test_file": "phase-08-ai-agents/lesson-01-agent-concepts/exercises/ex-01/tests/test_exercise.py",
+              "rubric_file": "phase-08-ai-agents/lesson-01-agent-concepts/exercises/ex-01/rubric.md",
+              "hints": [
+                "Build Tool, AgentState, and SimpleAgent classes. Tool stores name, description, and a callable.",
+                "parse_action uses regex to find 'ACTION: tool_name(args)' pattern in LLM responses.",
+                "run() loops: generate → parse_action → if None return answer, else execute_tool → repeat."
+              ]
+            }
+          ],
+          "quiz_file": "phase-08-ai-agents/lesson-01-agent-concepts/quiz.json"
+        },
+        {
+          "id": "phase-08/lesson-02",
+          "title": "Tool Use & Function Calling",
+          "phase": 8,
+          "order": 2,
+          "objectives": [
+            "Design tool registries that LLMs can understand and use",
+            "Implement safe tool execution with error handling",
+            "Format tool descriptions as prompts for LLM-based tool selection"
+          ],
+          "prerequisites": [
+            "phase-08/lesson-01"
+          ],
+          "estimated_minutes": 50,
+          "content_file": "phase-08-ai-agents/lesson-02-tool-use/content.md",
+          "exercises": [
+            {
+              "id": "ex-01",
+              "title": "Tool Registry System",
+              "difficulty": "hard",
+              "starter_file": "phase-08-ai-agents/lesson-02-tool-use/exercises/ex-01/starter/main.py",
+              "solution_file": "phase-08-ai-agents/lesson-02-tool-use/exercises/ex-01/solution/main.py",
+              "test_file": "phase-08-ai-agents/lesson-02-tool-use/exercises/ex-01/tests/test_exercise.py",
+              "rubric_file": "phase-08-ai-agents/lesson-02-tool-use/exercises/ex-01/rubric.md",
+              "hints": [
+                "ToolRegistry stores tools in a dict. register() saves fn, description, and parameters.",
+                "format_tools_for_prompt() creates numbered tool descriptions for LLM prompts.",
+                "execute() looks up the tool, wraps fn(**kwargs) in try/except, returns string result or error."
+              ]
+            }
+          ],
+          "quiz_file": "phase-08-ai-agents/lesson-02-tool-use/quiz.json"
+        },
+        {
+          "id": "phase-08/lesson-03",
+          "title": "Multi-Agent Systems",
+          "phase": 8,
+          "order": 3,
+          "objectives": [
+            "Design agent roles with specialized capabilities and system prompts",
+            "Implement pipeline and debate orchestration patterns",
+            "Route tasks to the most appropriate agent based on capabilities"
+          ],
+          "prerequisites": [
+            "phase-08/lesson-02"
+          ],
+          "estimated_minutes": 55,
+          "content_file": "phase-08-ai-agents/lesson-03-multi-agent-systems/content.md",
+          "exercises": [
+            {
+              "id": "ex-01",
+              "title": "Multi-Agent Orchestrator",
+              "difficulty": "hard",
+              "starter_file": "phase-08-ai-agents/lesson-03-multi-agent-systems/exercises/ex-01/starter/main.py",
+              "solution_file": "phase-08-ai-agents/lesson-03-multi-agent-systems/exercises/ex-01/solution/main.py",
+              "test_file": "phase-08-ai-agents/lesson-03-multi-agent-systems/exercises/ex-01/tests/test_exercise.py",
+              "rubric_file": "phase-08-ai-agents/lesson-03-multi-agent-systems/exercises/ex-01/rubric.md",
+              "hints": [
+                "Build AgentRole, Message, and Orchestrator. route_task matches task keywords to agent capabilities.",
+                "run_pipeline passes each agent's output as input to the next agent in sequence.",
+                "run_debate has agents respond to each other's outputs for n rounds, tracking all messages."
+              ]
+            }
+          ],
+          "quiz_file": "phase-08-ai-agents/lesson-03-multi-agent-systems/quiz.json"
+        }
+      ]
+    },
+    {
+      "phase": 9,
+      "title": "AI Backend Development",
+      "directory": "phase-09-ai-backend",
+      "lessons": [
+        {
+          "id": "phase-09/lesson-01",
+          "title": "FastAPI Basics",
+          "phase": 9,
+          "order": 1,
+          "objectives": [
+            "Create a FastAPI application with multiple endpoints",
+            "Define request and response models with Pydantic validation",
+            "Test API endpoints using FastAPI's TestClient"
+          ],
+          "prerequisites": [
+            "phase-08/lesson-03"
+          ],
+          "estimated_minutes": 50,
+          "content_file": "phase-09-ai-backend/lesson-01-fastapi-basics/content.md",
+          "exercises": [
+            {
+              "id": "ex-01",
+              "title": "AI-Ready API",
+              "difficulty": "medium",
+              "starter_file": "phase-09-ai-backend/lesson-01-fastapi-basics/exercises/ex-01/starter/main.py",
+              "solution_file": "phase-09-ai-backend/lesson-01-fastapi-basics/exercises/ex-01/solution/main.py",
+              "test_file": "phase-09-ai-backend/lesson-01-fastapi-basics/exercises/ex-01/tests/test_exercise.py",
+              "rubric_file": "phase-09-ai-backend/lesson-01-fastapi-basics/exercises/ex-01/rubric.md",
+              "hints": [
+                "Define Pydantic models inheriting from BaseModel. Use type hints for automatic validation.",
+                "create_app() returns a FastAPI() instance with @app.get and @app.post decorators for endpoints.",
+                "For /predict: confidence = min(len(text)/100, 1.0). For /batch: process each text in a list comprehension."
+              ]
+            }
+          ],
+          "quiz_file": "phase-09-ai-backend/lesson-01-fastapi-basics/quiz.json"
+        },
+        {
+          "id": "phase-09/lesson-02",
+          "title": "Async AI Services",
+          "phase": 9,
+          "order": 2,
+          "objectives": [
+            "Build async HTTP clients for LLM API communication",
+            "Implement concurrent batch processing with semaphore limiting",
+            "Create retry logic with exponential backoff for resilient services"
+          ],
+          "prerequisites": [
+            "phase-09/lesson-01"
+          ],
+          "estimated_minutes": 55,
+          "content_file": "phase-09-ai-backend/lesson-02-async-ai-services/content.md",
+          "exercises": [
+            {
+              "id": "ex-01",
+              "title": "Async LLM Client",
+              "difficulty": "hard",
+              "starter_file": "phase-09-ai-backend/lesson-02-async-ai-services/exercises/ex-01/starter/main.py",
+              "solution_file": "phase-09-ai-backend/lesson-02-async-ai-services/exercises/ex-01/solution/main.py",
+              "test_file": "phase-09-ai-backend/lesson-02-async-ai-services/exercises/ex-01/tests/test_exercise.py",
+              "rubric_file": "phase-09-ai-backend/lesson-02-async-ai-services/exercises/ex-01/rubric.md",
+              "hints": [
+                "AsyncLLMClient uses httpx.AsyncClient for async HTTP calls to the Ollama API.",
+                "For batch_generate, use asyncio.Semaphore to limit concurrent requests.",
+                "retry_with_backoff loops max_retries times, sleeping base_delay * 2^attempt on failure."
+              ]
+            }
+          ],
+          "quiz_file": "phase-09-ai-backend/lesson-02-async-ai-services/quiz.json"
+        },
+        {
+          "id": "phase-09/lesson-03",
+          "title": "Production Patterns",
+          "phase": 9,
+          "order": 3,
+          "objectives": [
+            "Implement rate limiting to protect AI services from overload",
+            "Build a TTL-based response cache to reduce redundant LLM calls",
+            "Sanitize user input and create standardized error responses"
+          ],
+          "prerequisites": [
+            "phase-09/lesson-02"
+          ],
+          "estimated_minutes": 50,
+          "content_file": "phase-09-ai-backend/lesson-03-production-patterns/content.md",
+          "exercises": [
+            {
+              "id": "ex-01",
+              "title": "Production Middleware",
+              "difficulty": "hard",
+              "starter_file": "phase-09-ai-backend/lesson-03-production-patterns/exercises/ex-01/starter/main.py",
+              "solution_file": "phase-09-ai-backend/lesson-03-production-patterns/exercises/ex-01/solution/main.py",
+              "test_file": "phase-09-ai-backend/lesson-03-production-patterns/exercises/ex-01/tests/test_exercise.py",
+              "rubric_file": "phase-09-ai-backend/lesson-03-production-patterns/exercises/ex-01/rubric.md",
+              "hints": [
+                "RateLimiter stores timestamps per client_id. Clean old timestamps before checking the count.",
+                "ResponseCache uses SHA-256 hashing for keys and checks timestamp + ttl for expiry.",
+                "sanitize_input strips control characters and enforces max_length limits."
+              ]
+            }
+          ],
+          "quiz_file": "phase-09-ai-backend/lesson-03-production-patterns/quiz.json"
+        },
+        {
+          "id": "phase-09/lesson-04",
+          "title": "Milestone Project: AI-Powered API",
+          "phase": 9,
+          "order": 4,
+          "objectives": [],
+          "prerequisites": [],
+          "estimated_minutes": 30,
+          "content_file": "phase-09-ai-backend/lesson-04-milestone-ai-powered-api/content.md",
+          "exercises": [
+            {
+              "id": "ex-01",
+              "title": "Ex 01",
+              "difficulty": "medium",
+              "starter_file": "phase-09-ai-backend/lesson-04-milestone-ai-powered-api/exercises/ex-01/starter/main.py",
+              "solution_file": "phase-09-ai-backend/lesson-04-milestone-ai-powered-api/exercises/ex-01/solution/main.py",
+              "test_file": "phase-09-ai-backend/lesson-04-milestone-ai-powered-api/exercises/ex-01/tests/test_exercise.py",
+              "rubric_file": "phase-09-ai-backend/lesson-04-milestone-ai-powered-api/exercises/ex-01/rubric.md",
+              "hints": [
+                "The chat() helper uses requests.post() to send a JSON payload to f\"{OLLAMA_URL}/api/chat\". The payload needs three keys: \"model\" (set to MODEL), \"messages\" (a list of dicts with \"role\" and \"content\"), and \"stream\" (set to False). The response content is at response.json()[\"message\"][\"content\"]. Wrap everything in try/except requests.RequestException and raise HTTPException(status_code=503) in the except block.",
+                "Each Pydantic model inherits from BaseModel. SummarizeRequest needs one field: text: str. ClassifyRequest needs text: str and categories: list[str]. GenerateRequest needs prompt: str and max_tokens: int = 200 (the default value makes it optional). AIResponse needs result: str. That's it -- Pydantic handles validation automatically.",
+                "All three endpoints follow the same pattern: (1) build a system_prompt string with task-specific instructions, (2) call result = chat(system_prompt, req.text) passing the user's input, (3) return AIResponse(result=result). For /classify, join the categories into a string with ', '.join(req.categories) and include them in the system prompt. For /generate, use req.prompt instead of req.text."
+              ]
+            }
+          ],
+          "quiz_file": "phase-09-ai-backend/lesson-04-milestone-ai-powered-api/quiz.json"
+        }
+      ]
+    },
+    {
+      "phase": 10,
+      "title": "Optimization & Cost Control",
+      "directory": "phase-10-optimization",
+      "lessons": [
+        {
+          "id": "phase-10/lesson-01",
+          "title": "Token & Cost Management",
+          "phase": 10,
+          "order": 1,
+          "objectives": [
+            "Estimate token counts and track costs across multiple LLM calls",
+            "Optimize prompts to reduce token usage without losing quality",
+            "Select the right model based on task complexity and constraints"
+          ],
+          "prerequisites": [
+            "phase-09/lesson-03"
+          ],
+          "estimated_minutes": 45,
+          "content_file": "phase-10-optimization/lesson-01-token-cost-control/content.md",
+          "exercises": [
+            {
+              "id": "ex-01",
+              "title": "Cost Tracker & Optimizer",
+              "difficulty": "medium",
+              "starter_file": "phase-10-optimization/lesson-01-token-cost-control/exercises/ex-01/starter/main.py",
+              "solution_file": "phase-10-optimization/lesson-01-token-cost-control/exercises/ex-01/solution/main.py",
+              "test_file": "phase-10-optimization/lesson-01-token-cost-control/exercises/ex-01/tests/test_exercise.py",
+              "rubric_file": "phase-10-optimization/lesson-01-token-cost-control/exercises/ex-01/rubric.md",
+              "hints": [
+                "estimate_tokens returns len(text) // 4. CostTracker stores records and computes costs per call.",
+                "optimize_prompt collapses whitespace and removes filler phrases. Truncate to max_tokens * 4 chars.",
+                "select_model picks by task_complexity: 'low' → fastest model, 'high' → highest quality."
+              ]
+            }
+          ],
+          "quiz_file": "phase-10-optimization/lesson-01-token-cost-control/quiz.json"
+        },
+        {
+          "id": "phase-10/lesson-02",
+          "title": "Caching & Batching",
+          "phase": 10,
+          "order": 2,
+          "objectives": [
+            "Build a semantic cache with normalized key matching",
+            "Implement batch processing to efficiently handle multiple requests",
+            "Deduplicate requests to eliminate redundant LLM calls"
+          ],
+          "prerequisites": [
+            "phase-10/lesson-01"
+          ],
+          "estimated_minutes": 50,
+          "content_file": "phase-10-optimization/lesson-02-caching-and-batching/content.md",
+          "exercises": [
+            {
+              "id": "ex-01",
+              "title": "Intelligent Caching",
+              "difficulty": "hard",
+              "starter_file": "phase-10-optimization/lesson-02-caching-and-batching/exercises/ex-01/starter/main.py",
+              "solution_file": "phase-10-optimization/lesson-02-caching-and-batching/exercises/ex-01/solution/main.py",
+              "test_file": "phase-10-optimization/lesson-02-caching-and-batching/exercises/ex-01/tests/test_exercise.py",
+              "rubric_file": "phase-10-optimization/lesson-02-caching-and-batching/exercises/ex-01/rubric.md",
+              "hints": [
+                "SemanticCache normalizes keys by lowercasing, stripping punctuation, and collapsing whitespace.",
+                "BatchProcessor queues items and flushes in configurable batch sizes.",
+                "deduplicate_requests uses a key function to identify duplicates and maps indices back."
+              ]
+            }
+          ],
+          "quiz_file": "phase-10-optimization/lesson-02-caching-and-batching/quiz.json"
+        },
+        {
+          "id": "phase-10/lesson-03",
+          "title": "Latency Optimization",
+          "phase": 10,
+          "order": 3,
+          "objectives": [
+            "Measure and profile latency with percentile-based statistics",
+            "Implement stream buffering for smoother real-time output",
+            "Identify and optimize the slowest operations in AI pipelines"
+          ],
+          "prerequisites": [
+            "phase-10/lesson-02"
+          ],
+          "estimated_minutes": 50,
+          "content_file": "phase-10-optimization/lesson-03-latency-optimization/content.md",
+          "exercises": [
+            {
+              "id": "ex-01",
+              "title": "Performance Monitor",
+              "difficulty": "hard",
+              "starter_file": "phase-10-optimization/lesson-03-latency-optimization/exercises/ex-01/starter/main.py",
+              "solution_file": "phase-10-optimization/lesson-03-latency-optimization/exercises/ex-01/solution/main.py",
+              "test_file": "phase-10-optimization/lesson-03-latency-optimization/exercises/ex-01/tests/test_exercise.py",
+              "rubric_file": "phase-10-optimization/lesson-03-latency-optimization/exercises/ex-01/rubric.md",
+              "hints": [
+                "LatencyTracker stores pending start times and completed durations per operation name.",
+                "get_stats computes min, max, avg, and percentiles (p50, p95, p99) from sorted durations.",
+                "StreamBuffer accumulates small chunks and flushes when reaching min_chars threshold."
+              ]
+            }
+          ],
+          "quiz_file": "phase-10-optimization/lesson-03-latency-optimization/quiz.json"
+        }
+      ]
+    },
+    {
+      "phase": 11,
+      "title": "Deployment & Monitoring",
+      "directory": "phase-11-deployment",
+      "lessons": [
+        {
+          "id": "phase-11/lesson-01",
+          "title": "Docker Basics for AI Apps",
+          "phase": 11,
+          "order": 1,
+          "objectives": [
+            "Generate Dockerfiles for different AI application types",
+            "Create Docker Compose configurations for multi-service setups",
+            "Validate Dockerfiles for common issues and best practices"
+          ],
+          "prerequisites": [
+            "phase-10/lesson-03"
+          ],
+          "estimated_minutes": 50,
+          "content_file": "phase-11-deployment/lesson-01-docker-basics/content.md",
+          "exercises": [
+            {
+              "id": "ex-01",
+              "title": "Docker Config Generator",
+              "difficulty": "medium",
+              "starter_file": "phase-11-deployment/lesson-01-docker-basics/exercises/ex-01/starter/main.py",
+              "solution_file": "phase-11-deployment/lesson-01-docker-basics/exercises/ex-01/solution/main.py",
+              "test_file": "phase-11-deployment/lesson-01-docker-basics/exercises/ex-01/tests/test_exercise.py",
+              "rubric_file": "phase-11-deployment/lesson-01-docker-basics/exercises/ex-01/rubric.md",
+              "hints": [
+                "Build Dockerfiles as a list of strings joined with newlines. Use if/else on app_type for CMD.",
+                "For generate_compose, build a dict and use yaml.dump() with sort_keys=False for clean output.",
+                "validate_dockerfile checks for FROM, EXPOSE, and CMD/ENTRYPOINT using string search."
+              ]
+            }
+          ],
+          "quiz_file": "phase-11-deployment/lesson-01-docker-basics/quiz.json"
+        },
+        {
+          "id": "phase-11/lesson-02",
+          "title": "Cloud Deployment",
+          "phase": 11,
+          "order": 2,
+          "objectives": [
+            "Generate nginx reverse proxy and systemd service configurations",
+            "Estimate server resource requirements for AI model hosting",
+            "Create health check scripts and deployment environment files"
+          ],
+          "prerequisites": [
+            "phase-11/lesson-01"
+          ],
+          "estimated_minutes": 50,
+          "content_file": "phase-11-deployment/lesson-02-cloud-deployment/content.md",
+          "exercises": [
+            {
+              "id": "ex-01",
+              "title": "Deployment Config Generator",
+              "difficulty": "hard",
+              "starter_file": "phase-11-deployment/lesson-02-cloud-deployment/exercises/ex-01/starter/main.py",
+              "solution_file": "phase-11-deployment/lesson-02-cloud-deployment/exercises/ex-01/solution/main.py",
+              "test_file": "phase-11-deployment/lesson-02-cloud-deployment/exercises/ex-01/tests/test_exercise.py",
+              "rubric_file": "phase-11-deployment/lesson-02-cloud-deployment/exercises/ex-01/rubric.md",
+              "hints": [
+                "DeploymentConfig generates nginx, systemd, .env, and health check configs from its properties.",
+                "generate_nginx_config uses f-strings for server_name, listen port, and proxy_pass directives.",
+                "estimate_server_requirements computes RAM, CPU, GPU, and disk based on model size and concurrency."
+              ]
+            }
+          ],
+          "quiz_file": "phase-11-deployment/lesson-02-cloud-deployment/quiz.json"
+        },
+        {
+          "id": "phase-11/lesson-03",
+          "title": "Monitoring & Observability",
+          "phase": 11,
+          "order": 3,
+          "objectives": [
+            "Record and analyze AI service metrics with time-window filtering",
+            "Implement structured JSON logging for AI operations",
+            "Build alerting rules that trigger on metric thresholds"
+          ],
+          "prerequisites": [
+            "phase-11/lesson-02"
+          ],
+          "estimated_minutes": 55,
+          "content_file": "phase-11-deployment/lesson-03-monitoring/content.md",
+          "exercises": [
+            {
+              "id": "ex-01",
+              "title": "AI Monitoring System",
+              "difficulty": "hard",
+              "starter_file": "phase-11-deployment/lesson-03-monitoring/exercises/ex-01/starter/main.py",
+              "solution_file": "phase-11-deployment/lesson-03-monitoring/exercises/ex-01/solution/main.py",
+              "test_file": "phase-11-deployment/lesson-03-monitoring/exercises/ex-01/tests/test_exercise.py",
+              "rubric_file": "phase-11-deployment/lesson-03-monitoring/exercises/ex-01/rubric.md",
+              "hints": [
+                "AIMetrics stores records with timestamps. get_summary filters by time window before computing stats.",
+                "StructuredLogger outputs JSON lines with timestamp, service, level, message, and context fields.",
+                "get_alerts checks current metrics against rules with operator comparisons (>, <, >=, <=)."
+              ]
+            }
+          ],
+          "quiz_file": "phase-11-deployment/lesson-03-monitoring/quiz.json"
+        },
+        {
+          "id": "phase-11/lesson-04",
+          "title": "Milestone Project: Streaming Chat App",
+          "phase": 11,
+          "order": 4,
+          "objectives": [],
+          "prerequisites": [],
+          "estimated_minutes": 30,
+          "content_file": "phase-11-deployment/lesson-04-milestone-streaming-chat/content.md",
+          "exercises": [
+            {
+              "id": "ex-01",
+              "title": "Ex 01",
+              "difficulty": "medium",
+              "starter_file": "phase-11-deployment/lesson-04-milestone-streaming-chat/exercises/ex-01/starter/main.py",
+              "solution_file": "phase-11-deployment/lesson-04-milestone-streaming-chat/exercises/ex-01/solution/main.py",
+              "test_file": "phase-11-deployment/lesson-04-milestone-streaming-chat/exercises/ex-01/tests/test_exercise.py",
+              "rubric_file": "phase-11-deployment/lesson-04-milestone-streaming-chat/exercises/ex-01/rubric.md",
+              "hints": [
+                "For stream_chat(), you need TWO places where streaming is enabled: (1) in the Ollama JSON payload set \"stream\": True, and (2) in the requests.post() call pass stream=True as a keyword argument. This gives you a response object where you can call response.iter_lines() to get one JSON line at a time. Each line looks like {\"message\": {\"content\": \"token\"}, \"done\": false}.",
+                "The /chat endpoint is surprisingly simple. Import EventSourceResponse from sse_starlette.sse, then return EventSourceResponse(stream_chat(req.message)). That's it -- EventSourceResponse handles the SSE protocol, sets the Content-Type header to text/event-stream, and formats each yielded {\"data\": token} dict as a proper SSE event.",
+                "For the HTML page, use fetch('/chat', {method: 'POST', headers: {'Content-Type': 'application/json'}, body: JSON.stringify({message})}) to send the request. Then read the stream with response.body.getReader() and a TextDecoder. In a while loop, call reader.read() to get chunks. Split each decoded chunk by newlines, and for lines starting with 'data:', extract the token (line.slice(5).trim()) and append it to your message div's textContent."
+              ]
+            }
+          ],
+          "quiz_file": "phase-11-deployment/lesson-04-milestone-streaming-chat/quiz.json"
+        }
+      ]
+    },
+    {
+      "phase": 12,
+      "title": "Capstone Projects",
+      "directory": "phase-12-capstone",
+      "lessons": [
+        {
+          "id": "phase-12/lesson-01",
+          "title": "Project Planning & Architecture",
+          "phase": 12,
+          "order": 1,
+          "objectives": [
+            "Create structured project plans with requirements and milestones",
+            "Generate README templates and directory structures for AI projects",
+            "Select appropriate capstone projects based on interests and skill level"
+          ],
+          "prerequisites": [
+            "phase-11/lesson-03"
+          ],
+          "estimated_minutes": 45,
+          "content_file": "phase-12-capstone/lesson-01-project-planning/content.md",
+          "exercises": [
+            {
+              "id": "ex-01",
+              "title": "Project Planner",
+              "difficulty": "medium",
+              "starter_file": "phase-12-capstone/lesson-01-project-planning/exercises/ex-01/starter/main.py",
+              "solution_file": "phase-12-capstone/lesson-01-project-planning/exercises/ex-01/solution/main.py",
+              "test_file": "phase-12-capstone/lesson-01-project-planning/exercises/ex-01/tests/test_exercise.py",
+              "rubric_file": "phase-12-capstone/lesson-01-project-planning/exercises/ex-01/rubric.md",
+              "hints": [
+                "ProjectPlan stores name, description, tech_stack, requirements, and milestones lists.",
+                "generate_readme builds a markdown string with project name, description, tech stack, and placeholders.",
+                "select_project matches interest keywords against project tags and filters by skill level."
+              ]
+            }
+          ],
+          "quiz_file": "phase-12-capstone/lesson-01-project-planning/quiz.json"
+        },
+        {
+          "id": "phase-12/lesson-02",
+          "title": "Building & Testing AI Applications",
+          "phase": 12,
+          "order": 2,
+          "objectives": [
+            "Build test harnesses that validate LLM outputs against criteria",
+            "Mock LLM responses for deterministic and fast testing",
+            "Evaluate response quality using keyword overlap and length metrics"
+          ],
+          "prerequisites": [
+            "phase-12/lesson-01"
+          ],
+          "estimated_minutes": 50,
+          "content_file": "phase-12-capstone/lesson-02-building-and-testing/content.md",
+          "exercises": [
+            {
+              "id": "ex-01",
+              "title": "AI Test Harness",
+              "difficulty": "hard",
+              "starter_file": "phase-12-capstone/lesson-02-building-and-testing/exercises/ex-01/starter/main.py",
+              "solution_file": "phase-12-capstone/lesson-02-building-and-testing/exercises/ex-01/solution/main.py",
+              "test_file": "phase-12-capstone/lesson-02-building-and-testing/exercises/ex-01/tests/test_exercise.py",
+              "rubric_file": "phase-12-capstone/lesson-02-building-and-testing/exercises/ex-01/rubric.md",
+              "hints": [
+                "mock_llm returns a closure that cycles through predefined responses using a mutable index.",
+                "test_prompt calls generate_fn and checks response against expected/unexpected keywords and max_length.",
+                "evaluate_quality computes exact_match, keyword_overlap (set intersection), and length_ratio."
+              ]
+            }
+          ],
+          "quiz_file": "phase-12-capstone/lesson-02-building-and-testing/quiz.json"
+        },
+        {
+          "id": "phase-12/lesson-03",
+          "title": "Deployment & Showcase",
+          "phase": 12,
+          "order": 3,
+          "objectives": [
+            "Generate demo scripts and architecture diagrams for project showcases",
+            "Create deployment checklists tailored to the project's tech stack",
+            "Build portfolio entries with proper licensing and changelogs"
+          ],
+          "prerequisites": [
+            "phase-12/lesson-02"
+          ],
+          "estimated_minutes": 45,
+          "content_file": "phase-12-capstone/lesson-03-deployment-showcase/content.md",
+          "exercises": [
+            {
+              "id": "ex-01",
+              "title": "Project Showcase Builder",
+              "difficulty": "medium",
+              "starter_file": "phase-12-capstone/lesson-03-deployment-showcase/exercises/ex-01/starter/main.py",
+              "solution_file": "phase-12-capstone/lesson-03-deployment-showcase/exercises/ex-01/solution/main.py",
+              "test_file": "phase-12-capstone/lesson-03-deployment-showcase/exercises/ex-01/tests/test_exercise.py",
+              "rubric_file": "phase-12-capstone/lesson-03-deployment-showcase/exercises/ex-01/rubric.md",
+              "hints": [
+                "ProjectShowcase stores project metadata. generate_demo_script builds markdown from step dicts.",
+                "generate_deployment_checklist creates a base checklist and adds items based on tech_stack contents.",
+                "generate_license uses if/elif for license types, with f-strings for year and author."
+              ]
+            }
+          ],
+          "quiz_file": "phase-12-capstone/lesson-03-deployment-showcase/quiz.json"
+        }
+      ]
+    }
+  ]
+}

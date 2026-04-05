@@ -1,0 +1,5 @@
+[
+  "In __init__, set self._store = {}. In add(), store documents as self._store[id] = {'vector': vector, 'metadata': metadata or {}}. The 'or {}' ensures None becomes an empty dict.",
+  "For search(), loop through self._store.items(). For each (doc_id, doc), compute cosine_similarity(query_vector, doc['vector']). Build a list of {'id': doc_id, 'score': score, 'metadata': doc['metadata']}. Sort with scores.sort(key=lambda x: x['score'], reverse=True). Return scores[:top_k].",
+  "For delete(), use self._store.pop(id, None) -- the second argument prevents a KeyError if the ID doesn't exist. For count(), simply return len(self._store)."
+]

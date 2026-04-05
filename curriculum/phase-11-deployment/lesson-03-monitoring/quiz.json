@@ -1,0 +1,112 @@
+[
+  {
+    "question": "Why do AI applications need different monitoring than traditional web apps?",
+    "options": [
+      "AI apps use more bandwidth",
+      "Model quality can degrade silently while the app still returns HTTP 200",
+      "AI apps don't need monitoring at all",
+      "Traditional monitoring tools don't work with Python"
+    ],
+    "correct": 1,
+    "explanation": "AI apps can return successful HTTP responses (200 OK) while the model's output quality has degraded. Traditional monitoring only checks if the app is running, but AI monitoring must also track response quality, token usage, and model performance."
+  },
+  {
+    "question": "What is p95 latency?",
+    "options": [
+      "The fastest 95% of requests",
+      "The latency value where 95% of requests are faster (the 95th percentile)",
+      "95 milliseconds of latency",
+      "The average latency multiplied by 0.95"
+    ],
+    "correct": 1,
+    "explanation": "p95 (95th percentile) latency means that 95% of requests are faster than this value. It captures the experience of the slowest 5% of users, which average latency can hide. It's a better metric than average for understanding real user experience."
+  },
+  {
+    "question": "What is the main advantage of structured logging over print statements?",
+    "options": [
+      "Structured logs use less disk space",
+      "Structured logs are machine-readable (JSON), making them searchable, filterable, and analyzable",
+      "Print statements don't work in production",
+      "Structured logs are automatically sent to monitoring tools"
+    ],
+    "correct": 1,
+    "explanation": "Structured logs output machine-readable formats like JSON with consistent fields (timestamp, level, message, context). This makes it possible to search, filter, aggregate, and alert on specific fields -- something impossible with unstructured print statements."
+  },
+  {
+    "question": "What are the three pillars of observability?",
+    "options": [
+      "CPU, memory, and disk",
+      "Metrics, logs, and traces",
+      "Alerts, dashboards, and reports",
+      "Latency, throughput, and errors"
+    ],
+    "correct": 1,
+    "explanation": "The three pillars of observability are metrics (numerical measurements over time), logs (detailed records of events), and traces (end-to-end request paths). Together they answer: something is wrong (metrics), what happened (logs), and where it happened (traces)."
+  },
+  {
+    "question": "What makes a good alerting rule?",
+    "options": [
+      "Alert on every single error",
+      "A clear threshold, a time window, and an actionable response",
+      "Only alert when the server is completely down",
+      "Send alerts to as many people as possible"
+    ],
+    "correct": 1,
+    "explanation": "Good alerts have clear numeric thresholds ('error rate > 5%'), time windows to avoid false alarms from brief spikes, and actionable responses so the on-call engineer knows what to do. Too many alerts cause alert fatigue; too few miss real problems."
+  },
+  {
+    "question": "What is the difference between a Counter and a Gauge in Prometheus-style metrics?",
+    "options": [
+      "Counters are faster to update than gauges",
+      "A Counter only increases (e.g., total requests); a Gauge can go up and down (e.g., active connections)",
+      "Counters track errors while gauges track latency",
+      "There is no meaningful difference between the two"
+    ],
+    "correct": 1,
+    "explanation": "A Counter is a cumulative metric that only goes up, like total requests served or total errors. A Gauge represents a value that can increase or decrease, like current memory usage or the number of active connections. Choosing the right type ensures metrics are interpreted correctly."
+  },
+  {
+    "question": "What does a trace provide that metrics and logs alone cannot?",
+    "options": [
+      "The total number of requests per minute",
+      "The end-to-end path of a single request across multiple services",
+      "The current CPU utilization of the server",
+      "The text content of each log message"
+    ],
+    "correct": 1,
+    "explanation": "A trace follows a single request as it moves through your system -- for example, from the web frontend to the API to Ollama and back. This helps pinpoint where latency or errors occur in a multi-service architecture, which individual metrics or logs from a single service cannot show."
+  },
+  {
+    "question": "Why is monitoring only infrastructure metrics (CPU, memory, disk) insufficient for AI applications?",
+    "options": [
+      "AI applications do not use CPU or memory",
+      "Infrastructure metrics do not reveal whether the model's response quality has degraded",
+      "CPU and memory metrics are not supported by monitoring tools",
+      "AI applications always use 100% of available resources"
+    ],
+    "correct": 1,
+    "explanation": "An AI application might show normal CPU and memory usage while producing low-quality or incorrect responses due to prompt issues, model degradation, or configuration errors. Application-level metrics like token usage, error rate, and response quality are needed to detect these problems."
+  },
+  {
+    "question": "How is error rate typically expressed in monitoring systems?",
+    "options": [
+      "As a percentage from 0% to 100%",
+      "As a fraction from 0.0 to 1.0",
+      "As a count of total errors",
+      "As a letter grade from A to F"
+    ],
+    "correct": 1,
+    "explanation": "Error rate is expressed as a fraction from 0.0 to 1.0 in most monitoring systems and code (e.g., 0.05 means 5% of requests failed). This makes it easy to use in calculations and threshold comparisons. A healthy AI app should keep error rate below 0.01 (1%)."
+  },
+  {
+    "question": "What is alert fatigue, and why is it dangerous?",
+    "options": [
+      "It is the physical tiredness from staying up to fix alerts",
+      "It happens when too many alerts fire, causing engineers to start ignoring all alerts -- including real problems",
+      "It is when the alerting system runs out of memory",
+      "It occurs when alerts take too long to send"
+    ],
+    "correct": 1,
+    "explanation": "Alert fatigue occurs when a monitoring system generates too many alerts (often from thresholds that are too sensitive or conditions that are not truly actionable). Engineers begin ignoring or silencing alerts, which means real critical issues may go unnoticed. The solution is fewer, higher-quality alerts with clear thresholds and time windows."
+  }
+]

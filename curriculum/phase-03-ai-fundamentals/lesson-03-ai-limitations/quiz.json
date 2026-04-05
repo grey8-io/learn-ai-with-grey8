@@ -1,0 +1,57 @@
+[
+  {
+    "question": "What is a 'hallucination' in the context of AI?",
+    "options": [
+      "When the AI crashes due to a bug",
+      "When the AI generates confident but factually incorrect information",
+      "When the AI takes too long to respond",
+      "When the AI refuses to answer a question"
+    ],
+    "correct": 1,
+    "explanation": "Hallucinations occur when LLMs generate plausible-sounding but incorrect information. This happens because they predict likely text patterns, not verified facts."
+  },
+  {
+    "question": "What is prompt injection?",
+    "options": [
+      "Adding more context to improve AI responses",
+      "A technique where malicious input tricks an AI into ignoring its instructions",
+      "The process of fine-tuning a model with new data",
+      "Sending too many prompts at once"
+    ],
+    "correct": 1,
+    "explanation": "Prompt injection is a security vulnerability where crafted user input manipulates the AI into bypassing its system instructions, potentially causing harmful or unintended behavior."
+  },
+  {
+    "question": "Why are LLMs bad at arithmetic?",
+    "options": [
+      "They weren't trained on math problems",
+      "They predict likely token sequences rather than performing actual computation",
+      "They can only handle numbers under 100",
+      "Math was intentionally disabled for safety reasons"
+    ],
+    "correct": 1,
+    "explanation": "LLMs predict the next token based on patterns, not by computing. They might get simple math right from memorized patterns, but they don't actually calculate. For reliable math, have the model write and execute code."
+  },
+  {
+    "question": "Which of the following is the BEST approach to using AI in medical diagnosis?",
+    "options": [
+      "Let the AI make final diagnostic decisions autonomously",
+      "Use AI as an assistive tool with human doctor oversight and final approval",
+      "Avoid using AI in medicine entirely",
+      "Only use AI for rare diseases that doctors can't diagnose"
+    ],
+    "correct": 1,
+    "explanation": "The responsible approach is to use AI as an assistive tool that supports human experts, not replaces them. Human oversight is essential for high-stakes decisions like medical diagnosis."
+  },
+  {
+    "question": "How can you reduce the risk of AI hallucinations in your application?",
+    "options": [
+      "Use higher temperature settings for more creative responses",
+      "Trust the AI's output because it was trained on reliable data",
+      "Use RAG to ground responses in real data and verify critical claims",
+      "Ask the AI to promise it won't hallucinate"
+    ],
+    "correct": 2,
+    "explanation": "Retrieval-Augmented Generation (RAG) grounds the AI's responses in actual retrieved data, significantly reducing hallucinations. Combined with verification of critical claims, this is the most practical defense."
+  }
+]

@@ -1,0 +1,36 @@
+#!/usr/bin/env bash
+# pre-commit hook — blocks commit if curriculum manifest is out of sync.
+# Lightweight: only runs ace sync --check when curriculum/ files are staged.
+
+set -euo pipefail
+
+# Check if any curriculum/ files are staged
+STAGED_CURRICULUM=$(git diff --cached --name-only -- 'curriculum/' 2>/dev/null || true)
+
+if [ -z "$STAGED_CURRICULUM" ]; then
+    exit 0
+fi
+
+# Check if ace CLI is available
+if ! command -v ace &>/dev/null; then
+    # ace not installed — skip gracefully
+    exit 0
+fi
+
+# Run sync check
+if ! ace sync --check 2>/dev/null; then
+    echo ""
+    echo "=========================================================="
+    echo "  COMMIT BLOCKED: curriculum manifest is out of sync"
+    echo "=========================================================="
+    echo ""
+    echo "  Staged curriculum files:"
+    echo "$STAGED_CURRICULUM" | sed 's/^/    /'
+    echo ""
+    echo "  Run this command first, then re-stage and commit:"
+    echo ""
+    echo "      ace sync"
+    echo ""
+    echo "=========================================================="
+    exit 1
+fi

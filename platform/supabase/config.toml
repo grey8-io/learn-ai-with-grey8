@@ -1,0 +1,49 @@
+# =============================================================================
+# Supabase Local Configuration
+# =============================================================================
+# Used by the Supabase CLI (`supabase start`) for local development.
+# See: https://supabase.com/docs/guides/cli/config
+# =============================================================================
+
+[project]
+id = "learn-ai-with-grey8"
+
+[api]
+# Port for the PostgREST API
+port = 54321
+# Schemas exposed via the API
+schemas = ["public", "graphql_public"]
+# Extra schemas to add to the search_path
+extra_search_path = ["public", "extensions"]
+# Max number of rows returned by a single request
+max_rows = 1000
+
+[db]
+# Port for the local Postgres instance
+port = 54322
+major_version = 15
+
+[studio]
+# Port for Supabase Studio (admin UI)
+port = 54323
+
+[auth]
+# Site URL for redirect links
+site_url = "http://localhost:3000"
+# Additional redirect URLs (comma-separated)
+additional_redirect_urls = ["http://localhost:3000"]
+
+[auth.email]
+# Enable email/password auth
+enable_signup = true
+# Double-confirm changes to email (local dev: disabled for convenience)
+double_confirm_changes = false
+# Auto-confirm new users in local dev
+enable_confirmations = false
+
+[auth.external.phone]
+# Phone auth is not used in this project
+enabled = false
+
+[analytics]
+enabled = false

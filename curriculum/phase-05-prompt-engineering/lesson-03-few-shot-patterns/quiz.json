@@ -1,0 +1,79 @@
+[
+  {
+    "question": "What is few-shot prompting?",
+    "options": [
+      "Using a very small model to save memory",
+      "Providing examples of input/output pairs before the actual query",
+      "Running the model multiple times and averaging results",
+      "Limiting the model to short responses"
+    ],
+    "correct": 1,
+    "explanation": "Few-shot prompting provides examples (shots) of the desired input/output pattern before presenting the actual query. This helps the model understand the exact format and behavior you expect."
+  },
+  {
+    "question": "What is the key phrase that enables chain-of-thought reasoning?",
+    "options": [
+      "Answer immediately",
+      "Be concise",
+      "Let's think step by step",
+      "Respond in JSON format"
+    ],
+    "correct": 2,
+    "explanation": "The phrase 'Let's think step by step' (or similar variations) triggers chain-of-thought reasoning. Research has shown this simple addition significantly improves accuracy on math, logic, and multi-step reasoning tasks."
+  },
+  {
+    "question": "Why does chain-of-thought prompting improve accuracy?",
+    "options": [
+      "It makes the model use more GPU memory",
+      "It forces the model to show intermediate reasoning, which becomes context for subsequent steps",
+      "It reduces the temperature automatically",
+      "It connects to the internet for fact-checking"
+    ],
+    "correct": 1,
+    "explanation": "LLMs generate text token by token. When reasoning steps are written out, each step becomes part of the context for the next step. This effectively gives the model a 'scratchpad' to work through complex problems."
+  },
+  {
+    "question": "What is self-consistency in prompting?",
+    "options": [
+      "Always using the same system prompt",
+      "Running the same question with varied prompts and taking the majority answer",
+      "Ensuring the model never contradicts itself",
+      "Using the same temperature for every request"
+    ],
+    "correct": 1,
+    "explanation": "Self-consistency generates multiple answers to the same question using slightly different prompts, then takes the majority (most common) answer. This reduces the chance of getting an incorrect answer from a single run."
+  },
+  {
+    "question": "Which task benefits MOST from chain-of-thought prompting?",
+    "options": [
+      "Simple greeting responses",
+      "Multi-step math word problems",
+      "Translating a single word",
+      "Generating a random number"
+    ],
+    "correct": 1,
+    "explanation": "Chain-of-thought is most valuable for tasks requiring multi-step reasoning, like math word problems. Simple tasks (greetings, translations) don't benefit much because they don't need intermediate reasoning steps."
+  },
+  {
+    "question": "How do you extract the final answer from a chain-of-thought response?",
+    "options": [
+      "Always take the first line of the response",
+      "Parse the entire response as JSON",
+      "Search for marker phrases like 'Therefore' or 'Final answer:' near the end of the response",
+      "The final answer is always in the last token generated"
+    ],
+    "correct": 2,
+    "explanation": "CoT responses contain reasoning steps followed by a conclusion. To extract the final answer, you scan from the end of the response for marker phrases like 'therefore', 'final answer:', or 'the answer is'. If no marker is found, the last non-empty line is used as a fallback."
+  },
+  {
+    "question": "When is few-shot prompting LEAST effective?",
+    "options": [
+      "When you need consistent output formatting like labels or JSON",
+      "When the task has clear input/output patterns like classification",
+      "When you need creative, open-ended responses that should vary each time",
+      "When zero-shot gives inconsistent results"
+    ],
+    "correct": 2,
+    "explanation": "Few-shot prompting steers the model toward following a fixed pattern. This is great for classification and structured output, but counterproductive for creative tasks where you want variety and originality. For creative or open-ended responses, zero-shot or simple role prompting works better."
+  }
+]

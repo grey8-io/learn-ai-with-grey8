@@ -1,0 +1,79 @@
+[
+  {
+    "question": "Why can't regular SQL databases efficiently handle vector similarity search?",
+    "options": [
+      "SQL doesn't support floating-point numbers",
+      "Comparing a query against every vector is too slow at scale (brute-force O(n))",
+      "Regular databases can't store lists of numbers",
+      "SQL databases are always slower than Python"
+    ],
+    "correct": 1,
+    "explanation": "Regular databases would need to compare the query vector against every stored vector -- a brute-force O(n) operation. Vector databases use approximate nearest neighbor (ANN) algorithms and specialized indexes to find similar vectors much faster."
+  },
+  {
+    "question": "What does Approximate Nearest Neighbor (ANN) search trade off?",
+    "options": [
+      "Memory for speed",
+      "Perfect accuracy for dramatic speed improvements",
+      "Speed for perfect results",
+      "Disk space for network bandwidth"
+    ],
+    "correct": 1,
+    "explanation": "ANN algorithms might occasionally miss the absolute best match, but they find very good matches 100x-1000x faster than exact search. For most applications, this tradeoff is well worth it."
+  },
+  {
+    "question": "What is metadata filtering in a vector database?",
+    "options": [
+      "Removing duplicate vectors from the store",
+      "Compressing vectors to save memory",
+      "Combining vector similarity search with traditional attribute-based filtering",
+      "Converting metadata to embeddings for better search"
+    ],
+    "correct": 2,
+    "explanation": "Metadata filtering lets you search for similar vectors while also applying traditional filters. For example, finding similar documents but only within a specific category. This combines the power of semantic search with structured data filtering."
+  },
+  {
+    "question": "Which vector database is best for beginners and prototyping?",
+    "options": [
+      "FAISS -- it's the fastest",
+      "Pinecone -- it's cloud-hosted",
+      "ChromaDB -- it's simple and works as a Python library",
+      "PostgreSQL with pgvector"
+    ],
+    "correct": 2,
+    "explanation": "ChromaDB is the easiest to get started with. It runs as a Python library (no separate server needed), supports in-memory and persistent storage, and even has built-in embedding generation. It's ideal for learning and prototyping."
+  },
+  {
+    "question": "In the SimpleVectorStore, why do we sort search results in descending order?",
+    "options": [
+      "Alphabetical order is descending by convention",
+      "Higher cosine similarity means more similar, so the best matches come first",
+      "Descending order uses less memory",
+      "Python sorts are faster in descending order"
+    ],
+    "correct": 1,
+    "explanation": "Cosine similarity ranges from -1 to 1, where 1 means most similar. Sorting in descending order puts the most similar documents first, which is what users expect when searching."
+  },
+  {
+    "question": "How does an IVF (Inverted File Index) speed up vector search?",
+    "options": [
+      "It compresses all vectors into a single summary vector",
+      "It pre-clusters vectors into groups and only searches the nearest clusters at query time instead of every vector",
+      "It converts vectors from floats to integers for faster comparison",
+      "It sorts all vectors alphabetically by their document ID"
+    ],
+    "correct": 1,
+    "explanation": "IVF clusters vectors into groups using k-means. At query time, the system first identifies which cluster(s) the query is closest to, then only compares against vectors in those clusters. This reduces comparisons from millions to thousands, dramatically improving search speed."
+  },
+  {
+    "question": "What is vector quantization in the context of vector databases?",
+    "options": [
+      "Converting text documents into vectors",
+      "Counting the number of vectors in the database",
+      "Compressing vectors to use less memory while preserving most similarity information",
+      "Sorting vectors by their magnitude"
+    ],
+    "correct": 2,
+    "explanation": "Quantization compresses vector representations to use less memory — for example, reducing 32-bit floats to 8-bit integers. This sacrifices some precision in similarity calculations but allows the database to store and search far more vectors in the same amount of memory."
+  }
+]

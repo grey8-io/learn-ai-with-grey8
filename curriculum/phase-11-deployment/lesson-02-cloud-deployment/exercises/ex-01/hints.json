@@ -1,0 +1,5 @@
+[
+  "For generate_nginx_config, build a list of strings for each line. Use f-strings for the listen port (80 or 443), server_name, and proxy_pass. If ssl is True, add ssl_certificate and ssl_certificate_key lines pointing to /etc/letsencrypt/live/{domain}/. Join all lines with '\\n'.",
+  "For generate_systemd_service, the format is three sections: [Unit] with Description and After, [Service] with Type=simple, User, WorkingDirectory, ExecStart, Restart=always, RestartSec=5, and [Install] with WantedBy=multi-user.target. Use self.app_name for the Description.",
+  "For estimate_server_requirements, use: ram_gb = max(4, ceil(model_size_gb * 2 + concurrent_users * 0.5)), cpu_cores = max(2, concurrent_users // 5 + 2), gpu_vram_gb = 0 if model_size_gb < 3 else ceil(model_size_gb * 1.2), disk_gb = ceil(model_size_gb * 3 + 20). Cost min = ram_gb * 3 + cpu_cores * 5, max = int(min * 2.5)."
+]

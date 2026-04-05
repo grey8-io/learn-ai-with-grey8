@@ -1,0 +1,112 @@
+[
+  {
+    "question": "What is the main difference between an AI agent and a chatbot?",
+    "options": [
+      "Agents are faster than chatbots",
+      "Agents can autonomously take actions in a loop to complete tasks; chatbots respond to single messages",
+      "Chatbots use larger models than agents",
+      "Agents cannot use natural language"
+    ],
+    "correct": 1,
+    "explanation": "A chatbot responds to individual messages — one prompt, one response. An agent can autonomously decide what actions to take, execute tools, evaluate results, and continue in a loop until the task is complete. The key difference is autonomy and multi-step reasoning."
+  },
+  {
+    "question": "What are the three steps of the agent loop?",
+    "options": [
+      "Load, Process, Save",
+      "Observe, Think, Act",
+      "Input, Compute, Output",
+      "Read, Write, Execute"
+    ],
+    "correct": 1,
+    "explanation": "The agent loop follows Observe (look at current state and results), Think (reason about what to do next), and Act (execute a tool or provide a final answer). This loop repeats until the task is complete or the iteration limit is reached."
+  },
+  {
+    "question": "Why is a max_iterations limit important for agents?",
+    "options": [
+      "It makes the agent think faster",
+      "It prevents infinite loops where the agent never produces a final answer",
+      "It reduces the quality of answers",
+      "It is required by the LLM API"
+    ],
+    "correct": 1,
+    "explanation": "Without a max_iterations limit, an agent could loop forever — calling tools repeatedly without ever arriving at a final answer. The limit is a safety mechanism that ensures the agent eventually stops, even if it gets stuck in a reasoning cycle."
+  },
+  {
+    "question": "What is the ReAct agent pattern?",
+    "options": [
+      "An agent that only reacts to user input without taking actions",
+      "An agent that alternates between reasoning (thinking) and acting (using tools)",
+      "An agent that only plans but never executes",
+      "An agent designed for reactive programming"
+    ],
+    "correct": 1,
+    "explanation": "ReAct stands for Reasoning + Acting. The agent alternates between generating a thought (reasoning about the problem) and taking an action (calling a tool). The observation from the action feeds into the next reasoning step, creating a chain of thought-action-observation."
+  },
+  {
+    "question": "When should you use an agent instead of direct prompting?",
+    "options": [
+      "For all tasks, agents are always better",
+      "When the task is simple and well-defined",
+      "When the task requires multiple steps, external tools, or adaptive decision-making",
+      "When you want faster responses"
+    ],
+    "correct": 2,
+    "explanation": "Agents add complexity and latency. Use them when the task genuinely requires multiple steps, external tools, or decisions that depend on intermediate results. For simple, well-defined tasks, a single LLM call with a good prompt is faster, cheaper, and more reliable."
+  },
+  {
+    "question": "How does the 'Plan & Execute' agent pattern differ from ReAct?",
+    "options": [
+      "Plan & Execute creates a complete plan of steps before executing any of them",
+      "Plan & Execute does not use tools at all",
+      "Plan & Execute only works with a single step",
+      "Plan & Execute skips the observation phase entirely"
+    ],
+    "correct": 0,
+    "explanation": "In Plan & Execute, the model first creates a complete plan — a list of all steps needed — then executes each step one by one. In contrast, ReAct interleaves reasoning and acting one step at a time, deciding the next action after observing each result."
+  },
+  {
+    "question": "What is the Reflexion agent pattern?",
+    "options": [
+      "An agent that refuses to answer questions it is uncertain about",
+      "An agent that reviews its own output, identifies mistakes, and tries again with self-critique",
+      "An agent that reflects user input back without processing it",
+      "An agent that only works with mirror-image data"
+    ],
+    "correct": 1,
+    "explanation": "Reflexion is an iterative self-improvement pattern. After completing a task, the agent reviews its own output, identifies mistakes or weaknesses, and then tries again with the self-critique in mind, leading to better results on complex reasoning tasks."
+  },
+  {
+    "question": "What is short-term memory in the context of AI agents?",
+    "options": [
+      "A separate database that stores agent preferences",
+      "The conversation history within a single task, including actions taken and results received",
+      "The LLM's pre-trained knowledge from its training data",
+      "A timer that limits how long the agent can run"
+    ],
+    "correct": 1,
+    "explanation": "Short-term memory is the message list that grows during a single task execution. It includes the original query, all actions taken, and all results received. This context allows the agent to make informed decisions at each step without repeating past mistakes."
+  },
+  {
+    "question": "How does action parsing work in a simple agent system?",
+    "options": [
+      "The agent directly executes Python code from the LLM output",
+      "The system looks for a specific pattern like 'ACTION: tool_name(argument)' in the LLM response",
+      "Actions are pre-defined and cannot be changed at runtime",
+      "The LLM sends binary instructions that the system decodes"
+    ],
+    "correct": 1,
+    "explanation": "Action parsing involves scanning the LLM's text output for a defined pattern (e.g., 'ACTION: tool_name(argument)'). When the pattern is found, the system extracts the tool name and argument, executes the tool, and feeds the result back into the loop. If no action pattern is found, the response is treated as the final answer."
+  },
+  {
+    "question": "Why is it recommended to start with direct prompting before building an agent?",
+    "options": [
+      "Direct prompting is always more accurate than agents",
+      "Agents require special hardware that must be purchased first",
+      "Many tasks that seem to need an agent can be solved with a well-crafted single prompt, avoiding unnecessary complexity",
+      "Direct prompting is the only approach that works with local LLMs"
+    ],
+    "correct": 2,
+    "explanation": "Agents add significant complexity, latency, and potential failure points. Many tasks that initially appear to need multi-step reasoning can actually be solved with a single well-crafted prompt. Starting simple and only adding agent capabilities when genuinely needed follows good engineering practice."
+  }
+]

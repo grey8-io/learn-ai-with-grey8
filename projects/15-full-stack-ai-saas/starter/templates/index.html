@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI SaaS App</title>
+    <style>
+        /* TODO: Add your own styles or use a CSS framework */
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: system-ui, sans-serif; background: #f5f5f5; color: #333; }
+        .container { max-width: 900px; margin: 0 auto; padding: 2rem; }
+        h1 { text-align: center; margin-bottom: 2rem; color: #2563eb; }
+
+        .card {
+            background: white; border-radius: 8px; padding: 1.5rem;
+            margin-bottom: 1.5rem; box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+        }
+        .card h2 { margin-bottom: 1rem; font-size: 1.2rem; }
+
+        textarea, input[type="text"] {
+            width: 100%; padding: 0.75rem; border: 1px solid #ddd;
+            border-radius: 4px; font-size: 1rem; margin-bottom: 0.5rem;
+        }
+        textarea { min-height: 80px; resize: vertical; }
+
+        button {
+            background: #2563eb; color: white; border: none; padding: 0.75rem 1.5rem;
+            border-radius: 4px; cursor: pointer; font-size: 1rem;
+        }
+        button:hover { background: #1d4ed8; }
+
+        #chat-messages {
+            max-height: 400px; overflow-y: auto; border: 1px solid #eee;
+            border-radius: 4px; padding: 1rem; margin-bottom: 1rem;
+            background: #fafafa;
+        }
+        .msg { margin-bottom: 0.75rem; padding: 0.5rem; border-radius: 4px; }
+        .msg.user { background: #dbeafe; text-align: right; }
+        .msg.ai { background: #f0fdf4; }
+
+        #search-results { margin-top: 1rem; }
+        .result { background: #fefce8; padding: 0.75rem; border-radius: 4px; margin-bottom: 0.5rem; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>AI SaaS App</h1>
+
+        <!-- Document Upload Section -->
+        <div class="card">
+            <h2>Upload Document</h2>
+            <!-- TODO: Create a file upload form -->
+            <!-- It should POST to /upload with a file input -->
+            <!-- Display a success/error message after upload -->
+            <form id="upload-form">
+                <input type="file" name="file" accept=".txt" required>
+                <button type="submit">Upload</button>
+            </form>
+            <p id="upload-status"></p>
+        </div>
+
+        <!-- Chat Section -->
+        <div class="card">
+            <h2>Chat with AI</h2>
+            <div id="chat-messages"></div>
+            <!-- TODO: Create a chat form -->
+            <!-- It should POST to /chat with the message -->
+            <!-- Append both user message and AI response to the chat area -->
+            <form id="chat-form">
+                <textarea name="message" placeholder="Ask a question..." required></textarea>
+                <button type="submit">Send</button>
+            </form>
+        </div>
+
+        <!-- Search Section -->
+        <div class="card">
+            <h2>Search Knowledge Base</h2>
+            <!-- TODO: Create a search form -->
+            <!-- It should GET /search?query=... -->
+            <!-- Display matching document chunks -->
+            <form id="search-form">
+                <input type="text" name="query" placeholder="Search documents..." required>
+                <button type="submit">Search</button>
+            </form>
+            <div id="search-results"></div>
+        </div>
+    </div>
+
+    <script>
+        // TODO: Implement JavaScript to handle form submissions via fetch()
+        // For each form:
+        //   1. Prevent default form submission
+        //   2. Send the request to the appropriate endpoint
+        //   3. Update the DOM with the response
+
+        // Hint for upload form:
+        //   const formData = new FormData();
+        //   formData.append('file', fileInput.files[0]);
+        //   fetch('/upload', { method: 'POST', body: formData })
+
+        // Hint for chat form:
+        //   const formData = new FormData();
+        //   formData.append('message', textarea.value);
+        //   fetch('/chat', { method: 'POST', body: formData })
+
+        // Hint for search form:
+        //   fetch(`/search?query=${encodeURIComponent(input.value)}`)
+    </script>
+</body>
+</html>

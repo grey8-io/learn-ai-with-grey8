@@ -1,0 +1,112 @@
+{
+  // ==========================================================================
+  // Learn AI With Grey8 — Recommended VS Code Settings
+  // ==========================================================================
+  // Copy this to .vscode/settings.json or use it as reference.
+  // ==========================================================================
+
+  // -------------------------------------------------------------------------
+  // Python
+  // -------------------------------------------------------------------------
+  "python.defaultInterpreterPath": ".venv/bin/python",
+  "python.formatting.provider": "none",
+  "[python]": {
+    "editor.defaultFormatter": "ms-python.black-formatter",
+    "editor.formatOnSave": true,
+    "editor.codeActionsOnSave": {
+      "source.organizeImports": "explicit"
+    }
+  },
+  "black-formatter.args": ["--line-length", "100"],
+  "ruff.enable": true,
+  "ruff.lint.args": ["--line-length", "100"],
+
+  // -------------------------------------------------------------------------
+  // TypeScript / JavaScript (Next.js)
+  // -------------------------------------------------------------------------
+  "[typescript]": {
+    "editor.defaultFormatter": "esbenp.prettier-vscode",
+    "editor.formatOnSave": true
+  },
+  "[typescriptreact]": {
+    "editor.defaultFormatter": "esbenp.prettier-vscode",
+    "editor.formatOnSave": true
+  },
+  "[javascript]": {
+    "editor.defaultFormatter": "esbenp.prettier-vscode",
+    "editor.formatOnSave": true
+  },
+  "typescript.preferences.importModuleSpecifier": "relative",
+  "typescript.tsdk": "platform/web/node_modules/typescript/lib",
+
+  // -------------------------------------------------------------------------
+  // Editor
+  // -------------------------------------------------------------------------
+  "editor.tabSize": 2,
+  "editor.insertSpaces": true,
+  "editor.rulers": [100],
+  "editor.bracketPairColorization.enabled": true,
+  "editor.guides.bracketPairs": "active",
+  "files.trimTrailingWhitespace": true,
+  "files.insertFinalNewline": true,
+  "files.exclude": {
+    "**/__pycache__": true,
+    "**/.pytest_cache": true,
+    "**/node_modules": true,
+    "**/.next": true
+  },
+
+  // -------------------------------------------------------------------------
+  // Terminal
+  // -------------------------------------------------------------------------
+  "terminal.integrated.defaultProfile.linux": "bash",
+  "terminal.integrated.defaultProfile.osx": "zsh",
+  "terminal.integrated.env.linux": {
+    "PYTHONPATH": "${workspaceFolder}"
+  },
+  "terminal.integrated.env.osx": {
+    "PYTHONPATH": "${workspaceFolder}"
+  },
+
+  // -------------------------------------------------------------------------
+  // Docker
+  // -------------------------------------------------------------------------
+  "docker.defaultRegistryPath": "",
+
+  // -------------------------------------------------------------------------
+  // SQL (Supabase migrations)
+  // -------------------------------------------------------------------------
+  "[sql]": {
+    "editor.tabSize": 4
+  },
+
+  // -------------------------------------------------------------------------
+  // Extensions (recommendations — install these for best experience)
+  // -------------------------------------------------------------------------
+  // See also: .vscode/extensions.json for the formal recommendations list.
+  //
+  // Required:
+  //   - ms-python.python
+  //   - ms-python.black-formatter
+  //   - charliermarsh.ruff
+  //   - esbenp.prettier-vscode
+  //   - dbaeumer.vscode-eslint
+  //
+  // Recommended:
+  //   - ms-azuretools.vscode-docker
+  //   - bradlc.vscode-tailwindcss
+  //   - mtxr.sqltools
+  //   - mtxr.sqltools-driver-pg
+  //   - ms-vscode.vscode-typescript-next
+  //   - GitHub.copilot
+
+  // -------------------------------------------------------------------------
+  // Search exclusions (keep search fast on large repos)
+  // -------------------------------------------------------------------------
+  "search.exclude": {
+    "**/node_modules": true,
+    "**/.next": true,
+    "**/ollama_models": true,
+    "**/.venv": true
+  }
+}

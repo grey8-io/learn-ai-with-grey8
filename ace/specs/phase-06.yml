@@ -1,0 +1,78 @@
+# ACE Generation Spec — Phase 6: Embeddings & Semantic Search
+# Run: ace generate --spec specs/phase-06.yml
+
+phase: "06"
+phase_slug: "phase-06-embeddings-and-search"
+
+lessons:
+  - id: lesson-01
+    slug: "lesson-01-what-are-embeddings"
+    title: "What Are Embeddings?"
+    target_audience: "developers learning vector representations for AI applications"
+    prerequisites:
+      - "Phase 5 completed (Prompt Engineering)"
+    objectives:
+      - "Explain what vector embeddings are and why they matter for AI"
+      - "Compute cosine similarity and euclidean distance between vectors"
+      - "Find the most similar item in a collection using vector math"
+    exercises:
+      - title: "Embedding Utilities"
+        description: >
+          Implement cosine_similarity using dot product and magnitude
+          calculations, euclidean_distance using squared differences,
+          and most_similar to find the best-matching vector in a collection
+          by iterating and tracking the highest cosine similarity score.
+        difficulty: medium
+        type: coding
+        objectives:
+          - "Compute dot products and vector magnitudes from scratch"
+          - "Calculate cosine similarity and euclidean distance"
+          - "Search a vector collection for the nearest match"
+
+  - id: lesson-02
+    slug: "lesson-02-vector-databases"
+    title: "Vector Databases"
+    target_audience: "developers building similarity search infrastructure"
+    prerequisites:
+      - "What Are Embeddings? (Phase 6, Lesson 1)"
+    objectives:
+      - "Explain why vector databases are needed for similarity search"
+      - "Build a simple in-memory vector store with CRUD operations"
+      - "Implement nearest-neighbor search using cosine similarity"
+    exercises:
+      - title: "Simple Vector Store"
+        description: >
+          Build a SimpleVectorStore class with add (storing vectors and metadata
+          in a dict), search (computing cosine similarity and returning top_k
+          results sorted by score), and delete (using dict.pop for safe removal)
+          operations.
+        difficulty: medium
+        type: coding
+        objectives:
+          - "Store vectors with associated metadata in a dictionary"
+          - "Implement nearest-neighbor search with scoring and ranking"
+          - "Safely delete entries without raising errors"
+
+  - id: lesson-03
+    slug: "lesson-03-semantic-search"
+    title: "Building Semantic Search"
+    target_audience: "developers building production-quality search systems"
+    prerequisites:
+      - "Vector Databases (Phase 6, Lesson 2)"
+    objectives:
+      - "Build an end-to-end semantic search pipeline with embeddings"
+      - "Implement keyword search as a fallback strategy"
+      - "Combine semantic and keyword scores in a hybrid search approach"
+    exercises:
+      - title: "Semantic Search Engine"
+        description: >
+          Build a SemanticSearchEngine that indexes documents by embedding text,
+          implements keyword_search by counting query term matches per document,
+          and provides hybrid_search that combines alpha-weighted semantic and
+          keyword scores.
+        difficulty: hard
+        type: coding
+        objectives:
+          - "Index documents by generating and storing embeddings"
+          - "Implement term-frequency keyword search"
+          - "Blend semantic and keyword scores with configurable alpha weighting"

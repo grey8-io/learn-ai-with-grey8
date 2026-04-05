@@ -1,0 +1,63 @@
+name: ACE Sync Check
+
+on:
+  pull_request:
+    paths:
+      - "curriculum/**"
+      - "ace/**"
+
+permissions:
+  contents: read
+  pull-requests: write
+
+jobs:
+  sync-check:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up Python 3.11
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Install ACE package
+        run: |
+          cd ace
+          pip install -e .
+
+      - name: Run ACE sync check
+        id: sync
+        run: |
+          set +e
+          ace sync --check --repo-root . > sync-report.txt 2>&1
+          EXIT_CODE=$?
+          echo "exit_code=$EXIT_CODE" >> "$GITHUB_OUTPUT"
+          cat sync-report.txt
+          set -e
+
+      - name: Post sync status as PR comment
+        if: always()
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          REPORT=$(cat sync-report.txt)
+          if [ "${{ steps.sync.outputs.exit_code }}" = "0" ]; then
+            STATUS="All in sync"
+          else
+            STATUS="Drift detected — run \`ace sync\` locally to fix"
+          fi
+          BODY=$(cat <<DELIM
+          ## ACE Sync Status: ${STATUS}
+
+          \`\`\`
+          ${REPORT}
+          \`\`\`
+          DELIM
+          )
+          gh pr comment "${{ github.event.pull_request.number }}" --body "$BODY"
+
+      - name: Fail if out of sync
+        if: steps.sync.outputs.exit_code != '0'
+        run: exit 1

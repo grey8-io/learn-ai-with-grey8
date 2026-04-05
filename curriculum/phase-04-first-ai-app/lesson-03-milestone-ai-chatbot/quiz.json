@@ -1,0 +1,74 @@
+[
+  {
+    "question": "What is the correct format for a message in the Ollama /api/chat conversation history?",
+    "options": [
+      "{\"role\": \"user\", \"content\": \"Hello\"}",
+      "{\"sender\": \"user\", \"text\": \"Hello\"}",
+      "{\"type\": \"message\", \"body\": \"Hello\"}",
+      "{\"from\": \"user\", \"message\": \"Hello\"}"
+    ],
+    "correct": 0
+  },
+  {
+    "question": "What is the difference between Ollama's /api/chat and /api/generate endpoints?",
+    "options": [
+      "/api/chat is faster than /api/generate",
+      "/api/chat accepts a messages array for multi-turn conversation; /api/generate accepts a single prompt string",
+      "/api/generate supports streaming but /api/chat does not",
+      "There is no difference; they are aliases for the same endpoint"
+    ],
+    "correct": 1
+  },
+  {
+    "question": "When you set \"stream\": false in the Ollama API request, what happens?",
+    "options": [
+      "The request fails with an error",
+      "The model generates text faster",
+      "The API returns the complete response in a single JSON object instead of streaming tokens",
+      "The model uses less memory"
+    ],
+    "correct": 2
+  },
+  {
+    "question": "Which role types are valid in Ollama chat messages?",
+    "options": [
+      "\"human\" and \"bot\"",
+      "\"input\" and \"output\"",
+      "\"user\", \"assistant\", and \"system\"",
+      "\"sender\" and \"receiver\""
+    ],
+    "correct": 2
+  },
+  {
+    "question": "Why is conversation history important for a multi-turn chatbot?",
+    "options": [
+      "It makes the responses faster by caching previous answers",
+      "It reduces the model's memory usage",
+      "It allows the LLM to reference earlier messages and maintain context across turns",
+      "It is required by the API or the request will fail"
+    ],
+    "correct": 2
+  },
+  {
+    "question": "Why should you wrap the main input loop in a try/except KeyboardInterrupt block?",
+    "options": [
+      "To prevent the LLM from generating errors",
+      "To catch Ctrl+C and exit gracefully with a goodbye message instead of a traceback",
+      "To automatically restart the chatbot when it crashes",
+      "KeyboardInterrupt is required by the Ollama API"
+    ],
+    "correct": 1,
+    "explanation": "When a user presses Ctrl+C, Python raises a KeyboardInterrupt exception. Without handling it, the program crashes with an ugly traceback. Catching it lets you print a friendly goodbye message and exit cleanly, which is standard practice for interactive CLI applications."
+  },
+  {
+    "question": "What is the expected growth of the history list after each complete conversation turn?",
+    "options": [
+      "It grows by 1 message (the user message only)",
+      "It grows by 2 messages (one user message and one assistant reply)",
+      "It grows by 3 messages (system, user, and assistant)",
+      "It stays the same size because old messages are automatically removed"
+    ],
+    "correct": 1,
+    "explanation": "Each conversation turn adds exactly 2 messages to the history: the user's input and the assistant's reply. The system prompt is added only once at the start. Tracking this growth (e.g., printing len(history)) is a useful debugging technique to verify your chatbot is managing history correctly."
+  }
+]

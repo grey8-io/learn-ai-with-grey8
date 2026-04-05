@@ -1,0 +1,5 @@
+[
+  "Remember that Python variables don't need type declarations — just assign a value with =, like bootcamp_name = \"Learn AI With Grey8\".",
+  "F-strings let you embed variables inside curly braces: f\"Welcome to {bootcamp_name} v{version}!\"",
+  "Your greet function should look like: def greet(name): return f\"Hello, {name}! Let's build something amazing.\""
+]

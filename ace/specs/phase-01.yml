@@ -1,0 +1,71 @@
+# ACE Generation Spec — Phase 1: Dev Environment Setup
+# Run: ace generate --spec specs/phase-01.yml
+
+phase: "01"
+phase_slug: "phase-01-dev-environment"
+
+lessons:
+  - id: lesson-01
+    slug: "lesson-01-terminal-git"
+    title: "Terminal & Git Basics"
+    target_audience: "absolute beginners with no prior command-line or version control experience"
+    prerequisites:
+      - "Basic computer literacy"
+    objectives:
+      - "Navigate the file system using command-line commands"
+      - "Initialize a Git repository and make commits"
+      - "Explain why version control matters for AI development"
+    exercises:
+      - title: "Your First Git Repository"
+        description: >
+          Create a project directory, initialize a Git repository, add a file,
+          and make your first commit — all from the command line.
+        difficulty: easy
+        type: coding
+        objectives:
+          - "Use mkdir, cd, and ls to navigate the file system"
+          - "Run git init, git add, and git commit to create a version-controlled project"
+
+  - id: lesson-02
+    slug: "lesson-02-python-setup"
+    title: "Python Environment Setup"
+    target_audience: "beginners setting up Python for the first time"
+    prerequisites:
+      - "Terminal & Git Basics (Phase 1, Lesson 1)"
+    objectives:
+      - "Install Python 3.11+ and verify the installation"
+      - "Create and activate a virtual environment"
+      - "Install packages with pip and run Python scripts"
+    exercises:
+      - title: "Python Hello World with Functions"
+        description: >
+          Write a Python script that declares variables, uses f-strings for
+          string formatting, and defines a greet function with parameters.
+        difficulty: easy
+        type: coding
+        objectives:
+          - "Assign variables without type declarations"
+          - "Use f-strings to embed variables in strings"
+          - "Define and call a function with parameters"
+
+  - id: lesson-03
+    slug: "lesson-03-vscode-setup"
+    title: "VS Code & AI Tools Setup"
+    target_audience: "beginners ready to configure their AI development environment"
+    prerequisites:
+      - "Python Environment Setup (Phase 1, Lesson 2)"
+    objectives:
+      - "Set up VS Code with essential extensions for AI development"
+      - "Install Ollama and pull a local language model"
+      - "Send a prompt to a local AI model and receive a response"
+    exercises:
+      - title: "Talk to a Local AI"
+        description: >
+          Write a Python script that sends a prompt to the Ollama API using
+          httpx, receives a response from a local LLM, and prints it.
+        difficulty: easy
+        type: coding
+        objectives:
+          - "Use httpx.post() to call the Ollama generate API"
+          - "Structure request bodies with model, prompt, and stream keys"
+          - "Parse and display the AI response"

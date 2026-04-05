@@ -1,0 +1,5 @@
+[
+  "The RAGPipeline class needs __init__, build_context, build_prompt, query, and query_with_sources methods. Store retriever and generator in __init__ with self.retriever and self.generator.",
+  "In build_context(), loop through documents and track the current length. Use '\\n\\n---\\n\\n' as a separator. Before adding each doc, check if current_length + len(doc) + len(separator) would exceed max_chars. Join the collected parts with the separator.",
+  "query(): docs = self.retriever(question, top_k); context = self.build_context(docs); prompt = self.build_prompt(question, context); return self.generator(prompt). query_with_sources() does the same but returns {'answer': answer, 'sources': docs, 'query': question}."
+]

@@ -1,0 +1,5 @@
+[
+  "Start with the three standalone functions. calculator: try ast.literal_eval first, then check if all characters are safe (digits, operators, spaces, parens, dots) before using eval(). word_count: return str(len(text.split())). search_list: filter items with query.lower() in item.lower().",
+  "ToolRegistry stores tools in a dict: self._tools[name] = {\"fn\": fn, \"description\": description, \"parameters\": parameters or {}}. get_tool returns self._tools.get(name). list_tools returns [{\"name\": n, \"description\": info[\"description\"]} for n, info in self._tools.items()].",
+  "format_tools_for_prompt: start with 'Available tools:\\n', then add numbered lines like '1. name — description'. execute: look up the tool, if missing return error, otherwise try tool[\"fn\"](**kwargs) wrapped in try/except, returning str(result) or 'Error: {e}'."
+]

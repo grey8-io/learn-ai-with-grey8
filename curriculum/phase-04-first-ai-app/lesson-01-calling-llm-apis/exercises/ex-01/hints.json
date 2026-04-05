@@ -1,0 +1,5 @@
+[
+  "The OllamaChat class needs __init__, send, and send_with_history methods. Store model and host in __init__ with self.model and self.host. Both send methods use httpx.post().",
+  "In send(), build a messages list: start empty, optionally append a system message, then append the user message. POST to f'{self.host}/api/chat' with json={'model': self.model, 'messages': messages, 'stream': False}.",
+  "send: messages = []; if system_prompt: messages.append({'role':'system','content':system_prompt}); messages.append({'role':'user','content':prompt}); response = httpx.post(f'{self.host}/api/chat', json={'model':self.model,'messages':messages,'stream':False}, timeout=60); response.raise_for_status(); return response.json()['message']['content']."
+]

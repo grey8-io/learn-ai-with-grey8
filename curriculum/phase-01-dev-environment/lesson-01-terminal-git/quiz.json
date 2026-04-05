@@ -1,0 +1,42 @@
+[
+  {
+    "question": "Which command prints your current location in the file system?",
+    "options": ["ls", "cd", "pwd", "cat"],
+    "correct": 2,
+    "explanation": "pwd stands for 'print working directory' and shows the full path to where you are right now."
+  },
+  {
+    "question": "What does 'git init' do?",
+    "options": [
+      "Downloads a repository from the internet",
+      "Creates a new Git repository in the current directory",
+      "Stages all files for commit",
+      "Shows the commit history"
+    ],
+    "correct": 1,
+    "explanation": "git init creates a new .git directory that tracks all version history for the current folder."
+  },
+  {
+    "question": "Before you can commit changes, you need to _____ them first.",
+    "options": ["push", "pull", "stage (git add)", "branch"],
+    "correct": 2,
+    "explanation": "You use git add to stage files, telling Git which changes you want to include in the next commit."
+  },
+  {
+    "question": "Which command shows the differences between your current files and the last commit?",
+    "options": ["git status", "git log", "git diff", "git show"],
+    "correct": 2,
+    "explanation": "git diff displays line-by-line changes — additions and deletions — since the last commit."
+  },
+  {
+    "question": "What is a Git commit?",
+    "options": [
+      "A request to merge code",
+      "A saved snapshot of your staged changes with a message",
+      "A copy of your project sent to the cloud",
+      "A command that deletes old files"
+    ],
+    "correct": 1,
+    "explanation": "A commit is a permanent snapshot of your staged changes, stored in the repository's history with a descriptive message."
+  }
+]

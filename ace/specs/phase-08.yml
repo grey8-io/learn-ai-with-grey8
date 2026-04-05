@@ -1,0 +1,81 @@
+# ACE Generation Spec — Phase 8: AI Agents
+# Run: ace generate --spec specs/phase-08.yml
+
+phase: "08"
+phase_slug: "phase-08-ai-agents"
+
+lessons:
+  - id: lesson-01
+    slug: "lesson-01-agent-concepts"
+    title: "Agent Concepts & Patterns"
+    target_audience: "developers learning autonomous AI agent design"
+    prerequisites:
+      - "Phase 7 completed (RAG Systems)"
+    objectives:
+      - "Explain the agent loop: observe, think, act, and iterate"
+      - "Parse LLM responses for tool actions using structured formats"
+      - "Build a simple agent that uses tools to answer questions"
+    exercises:
+      - title: "Simple Agent Framework"
+        description: >
+          Build Tool, AgentState, and SimpleAgent classes. Tool stores a name,
+          description, and callable. Implement parse_action to extract
+          'ACTION: tool_name(args)' patterns from LLM responses using regex.
+          Build run() to loop through generate, parse, execute cycles until
+          the agent produces a final answer.
+        difficulty: hard
+        type: coding
+        objectives:
+          - "Model tools as callable objects with metadata"
+          - "Parse structured action patterns from LLM text"
+          - "Implement the observe-think-act agent loop"
+
+  - id: lesson-02
+    slug: "lesson-02-tool-use"
+    title: "Tool Use & Function Calling"
+    target_audience: "developers building tool-augmented AI systems"
+    prerequisites:
+      - "Agent Concepts & Patterns (Phase 8, Lesson 1)"
+    objectives:
+      - "Design tool registries that LLMs can understand and use"
+      - "Implement safe tool execution with error handling"
+      - "Format tool descriptions as prompts for LLM-based tool selection"
+    exercises:
+      - title: "Tool Registry System"
+        description: >
+          Build a ToolRegistry that stores tools in a dict with register() saving
+          function, description, and parameters. Implement format_tools_for_prompt()
+          to create numbered tool descriptions for LLM prompts. Build execute()
+          to look up tools and safely call them with kwargs, wrapping in try/except
+          for error handling.
+        difficulty: hard
+        type: coding
+        objectives:
+          - "Register tools with descriptions and parameter schemas"
+          - "Format tool catalogs as LLM-readable prompt text"
+          - "Execute tools safely with error handling"
+
+  - id: lesson-03
+    slug: "lesson-03-multi-agent-systems"
+    title: "Multi-Agent Systems"
+    target_audience: "developers orchestrating multiple AI agents for complex tasks"
+    prerequisites:
+      - "Tool Use & Function Calling (Phase 8, Lesson 2)"
+    objectives:
+      - "Design agent roles with specialized capabilities and system prompts"
+      - "Implement pipeline and debate orchestration patterns"
+      - "Route tasks to the most appropriate agent based on capabilities"
+    exercises:
+      - title: "Multi-Agent Orchestrator"
+        description: >
+          Build AgentRole, Message, and Orchestrator classes. Implement route_task
+          to match task keywords against agent capabilities. Build run_pipeline
+          to chain agents sequentially, passing each output as the next input.
+          Implement run_debate where agents respond to each other's outputs for
+          n rounds, tracking all messages.
+        difficulty: hard
+        type: coding
+        objectives:
+          - "Route tasks to agents by matching keywords to capabilities"
+          - "Chain agents in a sequential pipeline pattern"
+          - "Orchestrate multi-round agent debates"

@@ -1,0 +1,129 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Learn AI With Grey8 — Curriculum Schema",
+  "description": "Defines the content contract for lessons, exercises, and quizzes.",
+  "definitions": {
+    "exercise": {
+      "type": "object",
+      "required": ["id", "title", "difficulty", "starter_file", "solution_file", "test_file", "rubric_file", "hints"],
+      "properties": {
+        "id": {
+          "type": "string",
+          "description": "Unique exercise identifier within the lesson, e.g. 'ex-01'."
+        },
+        "title": {
+          "type": "string"
+        },
+        "difficulty": {
+          "type": "string",
+          "enum": ["easy", "medium", "hard"]
+        },
+        "starter_file": {
+          "type": "string",
+          "description": "Relative path from the lesson directory to the starter file."
+        },
+        "solution_file": {
+          "type": "string",
+          "description": "Relative path from the lesson directory to the solution file."
+        },
+        "test_file": {
+          "type": "string",
+          "description": "Relative path from the lesson directory to the pytest test file."
+        },
+        "rubric_file": {
+          "type": "string",
+          "description": "Relative path from the lesson directory to the grading rubric."
+        },
+        "hints": {
+          "type": "array",
+          "items": { "type": "string" },
+          "minItems": 3,
+          "maxItems": 3,
+          "description": "Three progressive hints, from gentle nudge to near-answer."
+        }
+      },
+      "additionalProperties": false
+    },
+    "quiz_question": {
+      "type": "object",
+      "required": ["question", "options", "correct", "explanation"],
+      "properties": {
+        "question": {
+          "type": "string"
+        },
+        "options": {
+          "type": "array",
+          "items": { "type": "string" },
+          "minItems": 4,
+          "maxItems": 4
+        },
+        "correct": {
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 3,
+          "description": "Zero-based index of the correct option."
+        },
+        "explanation": {
+          "type": "string",
+          "description": "Brief explanation shown after the learner answers."
+        }
+      },
+      "additionalProperties": false
+    },
+    "lesson": {
+      "type": "object",
+      "required": ["id", "title", "phase", "order", "objectives", "prerequisites", "estimated_minutes", "content_file", "exercises"],
+      "properties": {
+        "id": {
+          "type": "string",
+          "pattern": "^phase-\\d{2}/lesson-\\d{2}$",
+          "description": "Unique lesson identifier, e.g. 'phase-01/lesson-01'."
+        },
+        "title": {
+          "type": "string"
+        },
+        "phase": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 12
+        },
+        "order": {
+          "type": "integer",
+          "minimum": 1,
+          "description": "Sort order within the phase."
+        },
+        "objectives": {
+          "type": "array",
+          "items": { "type": "string" },
+          "minItems": 1,
+          "description": "Learning objectives the student will achieve."
+        },
+        "prerequisites": {
+          "type": "array",
+          "items": { "type": "string" },
+          "description": "Array of lesson ids that must be completed first."
+        },
+        "estimated_minutes": {
+          "type": "integer",
+          "minimum": 1
+        },
+        "content_file": {
+          "type": "string",
+          "description": "Relative path from the curriculum root to the lesson Markdown file."
+        },
+        "exercises": {
+          "type": "array",
+          "items": { "$ref": "#/definitions/exercise" }
+        },
+        "quiz_file": {
+          "type": "string",
+          "description": "Optional relative path from the curriculum root to the quiz JSON file."
+        }
+      },
+      "additionalProperties": false
+    }
+  },
+  "type": "object",
+  "required": ["id", "title", "phase", "order", "objectives", "prerequisites", "estimated_minutes", "content_file", "exercises"],
+  "$ref": "#/definitions/lesson"
+}

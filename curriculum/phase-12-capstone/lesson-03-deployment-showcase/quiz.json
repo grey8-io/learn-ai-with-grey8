@@ -1,0 +1,112 @@
+[
+  {
+    "question": "What should you check BEFORE deploying an AI application?",
+    "options": [
+      "Only that the code compiles",
+      "Tests pass, no hardcoded secrets, error handling works, README is updated, Docker builds",
+      "Just that the server is running",
+      "Only that the model downloads correctly"
+    ],
+    "correct": 1,
+    "explanation": "A deployment checklist should verify tests pass, secrets are properly managed, error handling is in place, documentation is current, and containerization works. Skipping these steps leads to production issues that are much harder to fix after deployment."
+  },
+  {
+    "question": "What makes an effective project demo?",
+    "options": [
+      "Showing every file in the codebase",
+      "A scripted walkthrough: start the app, show the happy path, show error handling, highlight a unique feature",
+      "Reading the README aloud",
+      "Running the test suite"
+    ],
+    "correct": 1,
+    "explanation": "An effective demo follows a script: start the application, demonstrate the core use case (happy path), show how it handles errors gracefully, and highlight what makes it unique. Keep it under 2 minutes and have a backup recording in case something goes wrong."
+  },
+  {
+    "question": "Which license is most permissive for open source projects?",
+    "options": [
+      "GPL -- it requires all derivative works to be open source too",
+      "MIT -- it lets anyone do anything with the code as long as they include the license",
+      "No license -- no license means anyone can use it freely",
+      "Apache 2.0 -- it has the fewest restrictions"
+    ],
+    "correct": 1,
+    "explanation": "MIT is the most permissive common license. It allows anyone to use, modify, and distribute the code for any purpose, with the only requirement being to include the original license. No license actually means nobody can legally use your code (copyright defaults to all rights reserved)."
+  },
+  {
+    "question": "What is the purpose of a changelog?",
+    "options": [
+      "To log every git commit message",
+      "To track what changed in each version, helping users and contributors understand the project's evolution",
+      "To change the log level of the application",
+      "To record daily development hours"
+    ],
+    "correct": 1,
+    "explanation": "A changelog documents what changed in each release -- new features, bug fixes, breaking changes. It helps users decide whether to upgrade and shows contributors (and employers) the project's development history and your systematic approach."
+  },
+  {
+    "question": "What is the best way to continue learning after completing this bootcamp?",
+    "options": [
+      "Stop and wait for the next course",
+      "Keep building projects, contribute to open source, stay current with AI developments, and share your knowledge",
+      "Only read papers and books",
+      "Focus on getting certifications"
+    ],
+    "correct": 1,
+    "explanation": "The best way to grow is to keep building real projects, contribute to open source communities, follow AI developments (Hugging Face, Ollama releases, practical papers), and teach others. Hands-on experience and community involvement accelerate learning far more than passive study."
+  },
+  {
+    "question": "According to the lesson, what five questions should good project documentation answer?",
+    "options": [
+      "Who, what, when, where, why",
+      "What does it do, why does it exist, how to set it up, how to use it, and how does it work",
+      "What language, what framework, what database, what API, what license",
+      "How much does it cost, how fast is it, how secure is it, how scalable is it, how maintainable is it"
+    ],
+    "correct": 1,
+    "explanation": "Good documentation answers: (1) What does it do? (one sentence), (2) Why does it exist? (the problem it solves), (3) How do I set it up? (step-by-step instructions), (4) How do I use it? (examples with commands), and (5) How does it work? (architecture overview for developers)."
+  },
+  {
+    "question": "Which security item belongs on the deployment checklist for a public-facing AI application?",
+    "options": [
+      "Disabling all logging to protect user privacy",
+      "Validating user input before sending it to the LLM, mitigating prompt injection, enabling rate limiting, and using HTTPS",
+      "Removing all error messages so attackers cannot learn about the system",
+      "Hardcoding API keys in the source code for faster access"
+    ],
+    "correct": 1,
+    "explanation": "The security section of the deployment checklist includes validating user input before it reaches the LLM, mitigating prompt injection risks, configuring rate limiting to prevent abuse, and enabling HTTPS for public-facing applications. These measures protect both the system and its users."
+  },
+  {
+    "question": "What key elements should an architecture diagram for an AI project show?",
+    "options": [
+      "Only the programming languages used in each file",
+      "What the user interacts with, how data flows through the system, which external services are used, and where data is stored",
+      "The complete class hierarchy of every module",
+      "The git branch strategy and deployment pipeline only"
+    ],
+    "correct": 1,
+    "explanation": "An architecture diagram should show the user-facing interface, the data flow between components, external services (like Ollama or ChromaDB), and data storage locations. It helps people understand the project at a glance. Simple formats like ASCII art or Mermaid diagrams work well."
+  },
+  {
+    "question": "What distinguishes the Apache License 2.0 from the MIT License?",
+    "options": [
+      "Apache 2.0 is not open source while MIT is",
+      "Apache 2.0 adds patent protection -- users of your code cannot sue you for patent infringement",
+      "Apache 2.0 prevents commercial use while MIT allows it",
+      "Apache 2.0 requires derivative works to be open source while MIT does not"
+    ],
+    "correct": 1,
+    "explanation": "Both MIT and Apache 2.0 are permissive open-source licenses, but Apache 2.0 adds an explicit patent grant. This means if someone uses your code, they cannot sue you for patent infringement related to that code. Use MIT for most projects; use Apache 2.0 if patent protection matters."
+  },
+  {
+    "question": "What should a professional GitHub portfolio entry for an AI project include?",
+    "options": [
+      "Only the source code with no documentation",
+      "Project name, one-line description, tech stack, key features (3-5 bullets), a screenshot or demo link, and what you learned",
+      "A copy of your resume and cover letter",
+      "Only the deployment URL with no explanation"
+    ],
+    "correct": 1,
+    "explanation": "A portfolio entry should include the project name and a one-line description, the tech stack (as badges or a list), 3-5 key feature bullet points, a screenshot or demo link, and 1-2 sentences about what you learned. A clean repository with tagged releases and a comprehensive README reinforces professionalism."
+  }
+]

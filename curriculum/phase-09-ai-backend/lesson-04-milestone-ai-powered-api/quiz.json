@@ -1,0 +1,112 @@
+[
+  {
+    "question": "What does inheriting from Pydantic's BaseModel give your request classes?",
+    "options": [
+      "Automatic JSON validation, type checking, and serialization",
+      "Database ORM capabilities for storing requests",
+      "Authentication and authorization for API endpoints",
+      "Automatic retry logic for failed requests"
+    ],
+    "correct": 0,
+    "explanation": "Pydantic's BaseModel provides automatic JSON parsing, type validation, serialization, and clear error messages. FastAPI uses these models to validate every incoming request and serialize every outgoing response without any manual code."
+  },
+  {
+    "question": "What does HTTP status code 503 mean?",
+    "options": [
+      "The request body is malformed or missing required fields",
+      "The client is not authorized to access this resource",
+      "The service is temporarily unavailable (upstream dependency is down)",
+      "The requested resource was not found on the server"
+    ],
+    "correct": 2,
+    "explanation": "HTTP 503 Service Unavailable indicates that the server cannot handle the request because an upstream dependency (like the Ollama LLM service) is down or unreachable. It signals a temporary condition that should resolve when the dependency recovers."
+  },
+  {
+    "question": "Why does each endpoint use a different system prompt when they all call the same chat() helper?",
+    "options": [
+      "Different system prompts are required by the Ollama API for different models",
+      "The system prompt shapes the LLM's behavior, making the same model perform different tasks",
+      "Each endpoint connects to a different LLM model behind the scenes",
+      "System prompts are only used for logging and have no effect on output"
+    ],
+    "correct": 1,
+    "explanation": "The system prompt is what makes each endpoint behave differently. The /summarize endpoint instructs the LLM to condense text, /classify tells it to pick a category, and /generate encourages creative writing. The same model and chat() helper power all three, but the system prompt shapes the output."
+  },
+  {
+    "question": "What does the response_model parameter do in a FastAPI endpoint decorator like @app.post('/summarize', response_model=AIResponse)?",
+    "options": [
+      "It filters the response to only include fields defined in the model and generates API docs",
+      "It automatically caches the response for faster subsequent requests",
+      "It encrypts the response payload before sending it to the client",
+      "It limits the maximum size of the response body in bytes"
+    ],
+    "correct": 0,
+    "explanation": "The response_model parameter tells FastAPI to validate and filter the response data through the specified Pydantic model. It ensures only the declared fields are included in the response and generates accurate API documentation in the Swagger UI."
+  },
+  {
+    "question": "What does the /docs endpoint show when you run a FastAPI application?",
+    "options": [
+      "The application's source code and configuration files",
+      "A log of all previous API requests and responses",
+      "An interactive Swagger UI for testing all API endpoints",
+      "The database schema and migration history"
+    ],
+    "correct": 2,
+    "explanation": "FastAPI automatically generates an interactive Swagger UI at /docs. It shows all endpoints with their request/response models, lets you send test requests directly from the browser, and documents all parameters and expected data shapes."
+  },
+  {
+    "question": "Why is the chat() helper wrapped in a try/except block that raises HTTPException?",
+    "options": [
+      "To convert network errors and LLM failures into clean HTTP error responses instead of crashing the server",
+      "To retry the request automatically until it succeeds",
+      "To log all successful requests to a database",
+      "Because Python requires all functions to have try/except blocks"
+    ],
+    "correct": 0,
+    "explanation": "The chat() helper communicates with an external service (Ollama) that can fail for many reasons — network issues, model not loaded, server overloaded. The try/except block catches these failures and raises an HTTPException with a 503 status code and descriptive message, so the API returns a clean error instead of a stack trace."
+  },
+  {
+    "question": "What is the purpose of setting stream=False in the Ollama API request?",
+    "options": [
+      "It disables SSL encryption for faster responses",
+      "It tells Ollama to return the complete response at once instead of streaming tokens incrementally",
+      "It prevents the model from generating more than one sentence",
+      "It forces Ollama to use CPU instead of GPU"
+    ],
+    "correct": 1,
+    "explanation": "Setting stream=False tells Ollama to generate the entire response before sending it back. This simplifies the code because you receive one complete JSON response instead of having to parse a stream of incremental token chunks. For simple API endpoints, this is the easier approach."
+  },
+  {
+    "question": "Why does the ClassifyRequest model include a categories field of type list[str]?",
+    "options": [
+      "To store the classification results for later retrieval",
+      "To provide the LLM with the allowed categories so it returns one of them instead of making up its own",
+      "To track which categories have been used most frequently",
+      "To limit the number of API calls per category"
+    ],
+    "correct": 1,
+    "explanation": "The categories list defines the valid options the LLM should choose from. The system prompt instructs the model to respond with only one of the provided category names. Without an explicit list, the LLM might invent categories or return inconsistent labels."
+  },
+  {
+    "question": "What is the purpose of the default value max_tokens: int = 200 in GenerateRequest?",
+    "options": [
+      "It sets a hard limit that Ollama enforces on response length",
+      "It provides a sensible default so callers do not need to specify max_tokens unless they want a different value",
+      "It determines the maximum number of words in the prompt",
+      "It controls how many API calls can be made per minute"
+    ],
+    "correct": 1,
+    "explanation": "Default values in Pydantic models make fields optional for API callers. If a client sends a request without max_tokens, it automatically defaults to 200. This improves the developer experience by reducing required fields while still allowing customization when needed."
+  },
+  {
+    "question": "What is the benefit of using a reusable chat() helper instead of writing Ollama API calls directly in each endpoint?",
+    "options": [
+      "It makes the code run faster because Python caches function calls",
+      "It centralizes the LLM communication logic so changes only need to be made in one place",
+      "It is required by the FastAPI framework for all external API calls",
+      "It automatically provides load balancing across multiple LLM instances"
+    ],
+    "correct": 1,
+    "explanation": "A reusable chat() helper follows the DRY (Don't Repeat Yourself) principle. If you need to change the Ollama URL, add error handling, add logging, or switch to a different LLM provider, you only modify one function instead of updating every endpoint. This reduces bugs and simplifies maintenance."
+  }
+]

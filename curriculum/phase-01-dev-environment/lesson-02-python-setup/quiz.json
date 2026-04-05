@@ -1,0 +1,57 @@
+[
+  {
+    "question": "What command creates a new Python virtual environment?",
+    "options": [
+      "pip install venv",
+      "python -m venv .venv",
+      "python --create-env .venv",
+      "virtualenv --init"
+    ],
+    "correct": 1,
+    "explanation": "python -m venv .venv uses Python's built-in venv module to create an isolated environment in the .venv directory."
+  },
+  {
+    "question": "Why should you use a virtual environment for each project?",
+    "options": [
+      "It makes Python run faster",
+      "It prevents different projects from having conflicting package versions",
+      "It is required by Python 3.11+",
+      "It automatically backs up your code"
+    ],
+    "correct": 1,
+    "explanation": "Virtual environments isolate each project's dependencies so that one project's packages don't interfere with another's."
+  },
+  {
+    "question": "What does pip freeze > requirements.txt do?",
+    "options": [
+      "Installs all packages listed in requirements.txt",
+      "Deletes the requirements.txt file",
+      "Saves a list of currently installed packages and their versions to a file",
+      "Locks the Python version to prevent updates"
+    ],
+    "correct": 2,
+    "explanation": "pip freeze outputs all installed packages with their exact versions. The > redirects that output into requirements.txt so others can reproduce your setup."
+  },
+  {
+    "question": "What is the output of: print(f\"Score: {80 + 20}\")?",
+    "options": [
+      "Score: {80 + 20}",
+      "Score: 80 + 20",
+      "Score: 100",
+      "An error"
+    ],
+    "correct": 2,
+    "explanation": "F-strings evaluate expressions inside curly braces. The expression 80 + 20 evaluates to 100, so the output is 'Score: 100'."
+  },
+  {
+    "question": "How do you run a Python script called app.py from the terminal?",
+    "options": [
+      "run app.py",
+      "python app.py",
+      "execute app.py",
+      "start app.py"
+    ],
+    "correct": 1,
+    "explanation": "The python command followed by the filename runs the script. Make sure your virtual environment is activated first!"
+  }
+]

@@ -1,0 +1,59 @@
+#!/usr/bin/env bash
+# post-checkout hook — auto-syncs curriculum context on branch switches.
+# Arguments: $1=prev HEAD, $2=new HEAD, $3=branch flag (1=branch, 0=file)
+
+PREV_HEAD="$1"
+NEW_HEAD="$2"
+IS_BRANCH_CHECKOUT="${3:-0}"
+
+# Only run on branch switches, not file checkouts
+if [ "$IS_BRANCH_CHECKOUT" != "1" ]; then
+    exit 0
+fi
+
+# Skip if both refs are the same (no actual change)
+if [ "$PREV_HEAD" = "$NEW_HEAD" ]; then
+    exit 0
+fi
+
+CHANGED_FILES=$(git diff --name-only "$PREV_HEAD" "$NEW_HEAD" 2>/dev/null || true)
+
+# --- Curriculum sync ---
+CURRICULUM_CHANGED=$(echo "$CHANGED_FILES" | grep '^curriculum/' || true)
+
+if [ -n "$CURRICULUM_CHANGED" ]; then
+    if command -v ace &>/dev/null; then
+        echo "[hook] Curriculum differs between branches — running ace sync..."
+        if ace sync 2>&1; then
+            echo "[hook] Curriculum manifest and README synced."
+        else
+            echo "[hook] WARNING: ace sync failed. Run 'ace sync' manually."
+        fi
+    else
+        echo "[hook] Curriculum files differ but 'ace' CLI not found. Run 'ace sync' manually."
+    fi
+fi
+
+# --- Dependency reminders ---
+DEPS_CHANGED=""
+
+if echo "$CHANGED_FILES" | grep -q '^tutor/pyproject.toml\|^ace/pyproject.toml'; then
+    DEPS_CHANGED="python"
+fi
+
+if echo "$CHANGED_FILES" | grep -q '^platform/web/package.json\|^platform/web/package-lock.json'; then
+    if [ -n "$DEPS_CHANGED" ]; then
+        DEPS_CHANGED="$DEPS_CHANGED and node"
+    else
+        DEPS_CHANGED="node"
+    fi
+fi
+
+if [ -n "$DEPS_CHANGED" ]; then
+    echo ""
+    echo "[hook] Dependency files changed ($DEPS_CHANGED). Consider running:"
+    echo "       make setup"
+    echo ""
+fi
+
+exit 0

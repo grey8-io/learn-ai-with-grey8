@@ -1,0 +1,79 @@
+[
+  {
+    "question": "What is the difference between the 'system' and 'user' roles in a chat API message?",
+    "options": [
+      "System messages are visible to users, user messages are hidden",
+      "System messages set the AI's behavior; user messages are the human's input",
+      "They are interchangeable",
+      "System messages are sent after the conversation; user messages are sent first"
+    ],
+    "correct": 1,
+    "explanation": "The system role sets instructions for how the AI should behave (its personality, constraints, format). The user role contains the actual messages from the human. The AI 'follows' system instructions while 'responding to' user messages."
+  },
+  {
+    "question": "Why do you need to send the full message history with each API request?",
+    "options": [
+      "To make the request slower for better results",
+      "Because the API is stateless — it doesn't remember previous calls",
+      "To increase the token count and cost",
+      "It's optional and not recommended"
+    ],
+    "correct": 1,
+    "explanation": "LLM APIs are stateless — each request is independent. The model has no memory of previous calls. You must send the full conversation history so the model has context for its response."
+  },
+  {
+    "question": "What does setting 'stream: false' do in an Ollama API call?",
+    "options": [
+      "Disables the AI model",
+      "Returns the complete response at once instead of token-by-token",
+      "Makes the response faster",
+      "Prevents the model from generating text"
+    ],
+    "correct": 1,
+    "explanation": "With stream: false, the API waits until the full response is generated and returns it all at once. With streaming enabled, tokens are sent one by one as they're generated, which feels more interactive."
+  },
+  {
+    "question": "Why is a timeout important when calling an LLM API?",
+    "options": [
+      "It makes the model think faster",
+      "It prevents your program from hanging indefinitely if the server is slow or unresponsive",
+      "It limits the length of the response",
+      "It's required by the HTTP protocol"
+    ],
+    "correct": 1,
+    "explanation": "Without a timeout, your program could wait forever if the server is down or the model is taking too long. Setting a reasonable timeout (like 60 seconds) ensures your program fails gracefully instead of freezing."
+  },
+  {
+    "question": "What does response.raise_for_status() do?",
+    "options": [
+      "Prints the HTTP status code to the console",
+      "Returns the status code as an integer",
+      "Raises an exception if the response indicates an error (4xx or 5xx status code)",
+      "Sets the response status to 200 OK"
+    ],
+    "correct": 2,
+    "explanation": "raise_for_status() checks if the HTTP response code indicates an error. If so, it raises an HTTPStatusError exception. If the response is successful (2xx), it does nothing. This is a clean way to catch API errors."
+  },
+  {
+    "question": "What is the advantage of wrapping Ollama API calls in a class like OllamaChat?",
+    "options": [
+      "Classes make API calls faster than standalone functions",
+      "It organizes configuration (model, host) and provides reusable methods, reducing code duplication",
+      "Python requires classes for all HTTP requests",
+      "Classes automatically handle streaming responses"
+    ],
+    "correct": 1,
+    "explanation": "Wrapping API calls in a class keeps configuration (model name, host URL) in one place via instance attributes, and provides reusable methods like send(). This pattern reduces code duplication and makes the client easier to maintain and extend."
+  },
+  {
+    "question": "What is the difference between Ollama's /api/generate and /api/chat endpoints?",
+    "options": [
+      "/api/generate is faster because it uses less memory",
+      "/api/generate takes a single prompt string, while /api/chat takes a messages array supporting multi-turn conversations",
+      "/api/chat only works with streaming enabled",
+      "They are identical endpoints with different names"
+    ],
+    "correct": 1,
+    "explanation": "The /api/generate endpoint accepts a simple prompt string and returns a completion. The /api/chat endpoint accepts an array of messages with roles (system, user, assistant), enabling multi-turn conversations with context. Real applications typically use /api/chat."
+  }
+]

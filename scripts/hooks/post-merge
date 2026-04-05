@@ -1,0 +1,45 @@
+#!/usr/bin/env bash
+# post-merge hook — auto-syncs curriculum context and reminds about deps.
+# Never fails the merge; errors are reported as warnings.
+
+CHANGED_FILES=$(git diff-tree -r --name-only --no-commit-id ORIG_HEAD HEAD 2>/dev/null || true)
+
+# --- Curriculum sync ---
+CURRICULUM_CHANGED=$(echo "$CHANGED_FILES" | grep '^curriculum/' || true)
+
+if [ -n "$CURRICULUM_CHANGED" ]; then
+    if command -v ace &>/dev/null; then
+        echo "[hook] Curriculum files changed — running ace sync..."
+        if ace sync 2>&1; then
+            echo "[hook] Curriculum manifest and README synced."
+        else
+            echo "[hook] WARNING: ace sync failed. Run 'ace sync' manually."
+        fi
+    else
+        echo "[hook] Curriculum files changed but 'ace' CLI not found. Run 'ace sync' manually."
+    fi
+fi
+
+# --- Dependency reminders ---
+DEPS_CHANGED=""
+
+if echo "$CHANGED_FILES" | grep -q '^tutor/pyproject.toml\|^ace/pyproject.toml'; then
+    DEPS_CHANGED="python"
+fi
+
+if echo "$CHANGED_FILES" | grep -q '^platform/web/package.json\|^platform/web/package-lock.json'; then
+    if [ -n "$DEPS_CHANGED" ]; then
+        DEPS_CHANGED="$DEPS_CHANGED and node"
+    else
+        DEPS_CHANGED="node"
+    fi
+fi
+
+if [ -n "$DEPS_CHANGED" ]; then
+    echo ""
+    echo "[hook] Dependency files changed ($DEPS_CHANGED). Consider running:"
+    echo "       make setup"
+    echo ""
+fi
+
+exit 0

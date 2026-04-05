@@ -1,0 +1,47 @@
+[
+  {
+    "question": "What is the type of the value 3.14 in Python?",
+    "options": ["int", "str", "float", "bool"],
+    "correct": 2,
+    "explanation": "3.14 is a decimal number, which Python represents as a float (floating-point number)."
+  },
+  {
+    "question": "What does the -> str part mean in def greet(name: str) -> str?",
+    "options": [
+      "The function takes a string argument",
+      "The function returns a string",
+      "The function converts its input to a string",
+      "The function prints a string"
+    ],
+    "correct": 1,
+    "explanation": "The -> str is a return type hint, indicating that the function returns a string value."
+  },
+  {
+    "question": "What happens if you call power(5) when power is defined as def power(base, exponent=2)?",
+    "options": [
+      "An error because exponent is missing",
+      "It returns 25 because exponent defaults to 2",
+      "It returns 5",
+      "It returns 10"
+    ],
+    "correct": 1,
+    "explanation": "When exponent is not provided, it uses the default value of 2, so power(5) calculates 5 ** 2 = 25."
+  },
+  {
+    "question": "Which of the following is a valid Python variable name?",
+    "options": ["2nd_place", "my-variable", "user_name", "class"],
+    "correct": 2,
+    "explanation": "user_name follows Python naming rules (starts with a letter, uses underscores). 2nd_place starts with a number, my-variable uses a hyphen, and class is a reserved keyword."
+  },
+  {
+    "question": "What is a docstring?",
+    "options": [
+      "A comment that starts with #",
+      "A triple-quoted string at the start of a function that documents its behavior",
+      "A special variable that stores documentation URLs",
+      "A string that gets printed when the function runs"
+    ],
+    "correct": 1,
+    "explanation": "A docstring is a triple-quoted string placed at the beginning of a function (or class/module) that describes what it does. It can be accessed with help()."
+  }
+]

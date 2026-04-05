@@ -1,0 +1,79 @@
+[
+  {
+    "question": "Why is the system prompt important in a conversational AI application?",
+    "options": [
+      "It makes the AI respond faster",
+      "It defines the AI's behavior, personality, and constraints",
+      "It is required by the API and cannot be omitted",
+      "It stores the conversation history"
+    ],
+    "correct": 1,
+    "explanation": "The system prompt is your main tool for controlling how the AI behaves. It sets the personality, defines constraints, specifies response format, and establishes the AI's role — making it the most important design decision in any AI app."
+  },
+  {
+    "question": "What happens when a conversation exceeds the model's context window?",
+    "options": [
+      "The model automatically summarizes the conversation",
+      "The model loses access to the earliest messages",
+      "The API returns an error and refuses to respond",
+      "The conversation resets automatically"
+    ],
+    "correct": 1,
+    "explanation": "When the context window is exceeded, the earliest tokens are dropped — the model literally cannot see them anymore. This is why managing conversation length is important in production applications."
+  },
+  {
+    "question": "What is the best format for saving conversation history?",
+    "options": [
+      "Plain text (.txt)",
+      "CSV (.csv)",
+      "JSON (.json)",
+      "Binary (.bin)"
+    ],
+    "correct": 2,
+    "explanation": "JSON is ideal because conversation messages are structured data (lists of dicts with role and content keys). JSON preserves this structure perfectly and is easy to read, write, and parse in Python."
+  },
+  {
+    "question": "In the main conversation loop, why do we add the assistant's response to the message history?",
+    "options": [
+      "To increase the API cost",
+      "So the model has context of what it said in previous turns",
+      "It's optional and doesn't affect anything",
+      "To prevent the model from repeating itself"
+    ],
+    "correct": 1,
+    "explanation": "Since the API is stateless, we must include the full conversation history with each request. Adding the assistant's response lets the model know what it previously said, enabling coherent multi-turn conversations."
+  },
+  {
+    "question": "Why should special commands (like /save, /help) be handled before sending to the LLM?",
+    "options": [
+      "Because LLMs cannot understand commands",
+      "To save money — commands don't need AI processing",
+      "Because the API rejects messages starting with /",
+      "To avoid confusing the model and wasting tokens on non-chat actions"
+    ],
+    "correct": 3,
+    "explanation": "Commands like /save and /help are application logic, not conversation content. Handling them before the LLM call avoids wasting tokens, prevents confusing the model, and gives instant responses for utility actions."
+  },
+  {
+    "question": "When truncating conversation history to fit within the context window, which message should never be removed?",
+    "options": [
+      "The first user message",
+      "The most recent assistant response",
+      "The system prompt",
+      "The last command the user entered"
+    ],
+    "correct": 2,
+    "explanation": "The system prompt defines the AI's role, personality, and constraints. If it gets truncated, the assistant loses its identity and behavioral guidelines. When trimming old messages to manage context length, always preserve the system prompt at the beginning."
+  },
+  {
+    "question": "Why should system prompt display be skipped when formatting conversation history for the user?",
+    "options": [
+      "System prompts are too long to display",
+      "System prompts contain the API key and must be hidden",
+      "System prompts are internal instructions not meant for the end user to see",
+      "Python cannot format system prompt strings"
+    ],
+    "correct": 2,
+    "explanation": "System prompts are 'backstage' instructions that define how the AI behaves. They are not part of the user-facing conversation and would be confusing to display. When formatting history for display, you show only user and assistant messages."
+  }
+]

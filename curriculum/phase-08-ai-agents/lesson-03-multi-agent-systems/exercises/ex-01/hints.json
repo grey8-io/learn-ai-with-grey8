@@ -1,0 +1,5 @@
+[
+  "Start with the data classes: AgentRole(name, system_prompt, capabilities) and Message(from_agent, to_agent, content, message_type='task'). Then build Orchestrator with agents dict, generate_fn, and self.messages = [].",
+  "For route_task, loop through self.agents.items() and for each agent, check if any capability.lower() appears in task.lower(). Return the first matching agent name. For run_pipeline, loop through pipeline names, build prompt with agent.system_prompt + input, call generate_fn, store Message, pass output to next.",
+  "For run_debate: loop range(rounds), then loop agent_names. First call: prompt = system_prompt + question. All others: add previous response. Call generate_fn, create Message, update last_response. collect_results: return [{\"from\": m.from_agent, \"to\": m.to_agent, \"content\": m.content, \"type\": m.message_type} for m in self.messages]."
+]

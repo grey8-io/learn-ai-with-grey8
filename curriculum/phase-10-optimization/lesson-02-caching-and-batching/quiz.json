@@ -1,0 +1,112 @@
+[
+  {
+    "question": "Why is caching especially valuable for AI applications compared to traditional web apps?",
+    "options": [
+      "AI responses are always the same",
+      "LLM calls are extremely expensive and slow compared to database queries",
+      "Caching is required by all LLM API providers",
+      "AI applications have fewer users"
+    ],
+    "correct": 1,
+    "explanation": "A single LLM call costs 100-1000x more than a typical database query and takes seconds instead of milliseconds. Even a modest cache hit rate saves significant money and improves response times dramatically."
+  },
+  {
+    "question": "What is the benefit of normalizing cache keys (lowercasing, removing punctuation)?",
+    "options": [
+      "It makes the cache faster",
+      "It catches near-duplicate queries that should return the same response",
+      "It reduces the size of cache entries",
+      "It's required for security"
+    ],
+    "correct": 1,
+    "explanation": "Normalization means 'What is Python?', 'what is python', and 'WHAT IS PYTHON??' all map to the same cache entry. Without normalization, these would all be cache misses despite having identical intent."
+  },
+  {
+    "question": "When should you NOT cache AI responses?",
+    "options": [
+      "When the API is expensive",
+      "When users ask frequently repeated questions",
+      "When responses need to be creative, personalized, or time-sensitive",
+      "When you have limited memory"
+    ],
+    "correct": 2,
+    "explanation": "Creative tasks (where users expect variety), personalized responses (where context matters), and time-sensitive queries (where freshness matters) should not be cached because stale or identical responses would be incorrect."
+  },
+  {
+    "question": "What does the index_map in deduplicate_requests allow you to do?",
+    "options": [
+      "Sort the results alphabetically",
+      "Map results from the deduplicated list back to the original request positions",
+      "Count how many duplicates were found",
+      "Encrypt the request data"
+    ],
+    "correct": 1,
+    "explanation": "After processing only the unique requests, the index_map tells you which unique result corresponds to each original request. If requests 0, 3, and 7 were identical, they all map to the same unique index and get the same result."
+  },
+  {
+    "question": "Why does BatchProcessor process items in chunks instead of all at once?",
+    "options": [
+      "To make the code more complex",
+      "To respect API rate limits and memory constraints",
+      "Batching is always slower but more accurate",
+      "Python cannot process large lists"
+    ],
+    "correct": 1,
+    "explanation": "Processing in chunks prevents overwhelming APIs with too many concurrent requests and keeps memory usage bounded. A batch size of 10 is much more manageable than sending 10,000 items at once."
+  },
+  {
+    "question": "What is the difference between an exact match cache and a semantic similarity cache?",
+    "options": [
+      "Exact match is slower but more accurate",
+      "Semantic similarity checks if the meaning is similar using embeddings, while exact match requires identical text",
+      "There is no practical difference between the two approaches",
+      "Semantic similarity only works with English text"
+    ],
+    "correct": 1,
+    "explanation": "An exact match cache only hits when the prompt text is identical (or normalized-identical). A semantic similarity cache uses embeddings to find queries with similar meaning, so 'What is Python?' and 'Tell me about the Python programming language' would both hit the same cache entry."
+  },
+  {
+    "question": "What is a good cache hit rate target for an AI application?",
+    "options": [
+      "Any hit rate above 0% is excellent",
+      "Above 50% saves serious money; below 20% means the cache is barely helping",
+      "100% is the only acceptable hit rate",
+      "Hit rate does not matter as long as the cache is running"
+    ],
+    "correct": 1,
+    "explanation": "A hit rate below 20% means most requests still go to the LLM, so the cache overhead may not be worth it. Above 50%, you are cutting your LLM costs in half or more, which is a significant business impact."
+  },
+  {
+    "question": "In a queue-based architecture for AI requests, what is the role of the background worker?",
+    "options": [
+      "It serves the frontend HTML to users",
+      "It pulls batches from the queue, deduplicates them, processes via the LLM, and caches results",
+      "It monitors server CPU and memory usage",
+      "It encrypts requests before they reach the LLM"
+    ],
+    "correct": 1,
+    "explanation": "In a queue-based architecture, incoming requests are placed into a queue. A background worker pulls batches of requests, deduplicates identical queries, processes them through the LLM, caches results, and returns responses to waiting clients. This smooths out traffic spikes and enables optimal batching."
+  },
+  {
+    "question": "How does the BatchProcessor's flush() method work?",
+    "options": [
+      "It clears the queue without processing any items",
+      "It sends all items to the LLM in a single request",
+      "It processes items from the queue in chunks of batch_size using the process function",
+      "It saves the queue to disk for later processing"
+    ],
+    "correct": 2,
+    "explanation": "The flush() method iterates through the queue, slicing off batch_size items at a time, passing each batch to the process_fn, and collecting all results. This ensures items are processed in manageable groups rather than all at once or one at a time."
+  },
+  {
+    "question": "Why is deduplication performed before sending a batch to the LLM rather than after?",
+    "options": [
+      "The LLM rejects duplicate prompts automatically",
+      "It reduces the number of LLM calls, saving cost and time by not processing the same query multiple times",
+      "Deduplication only works on input text, not output text",
+      "It is a requirement of the batch API endpoint"
+    ],
+    "correct": 1,
+    "explanation": "Deduplicating before the LLM call means you only pay for and wait on unique queries. If 5 users ask the same question in a batch of 10, you make 6 LLM calls instead of 10, then map the shared result back to all requesters using the index_map."
+  }
+]

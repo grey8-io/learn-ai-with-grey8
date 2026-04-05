@@ -1,0 +1,5 @@
+[
+  "For normalize_key: text = text.lower().strip(); text = re.sub(r'[^\\w\\s]', '', text); text = re.sub(r'\\s+', ' ', text); return text. For get(), compute the normalized key and look it up in self.store. Track self.hits and self.misses.",
+  "For BatchProcessor.flush(): results = []; while self.queue: batch = self.queue[:self.batch_size]; self.queue = self.queue[self.batch_size:]; results.extend(self.process_fn(batch)); return results. The queue should be empty after flushing.",
+  "For deduplicate_requests: if key_fn is None: key_fn = lambda x: x. Use a 'seen' dict mapping key -> unique_index. Loop through requests with enumerate. If key not in seen, add to unique list and record its index. Always set index_map[i] = seen[key]. Return (unique, index_map)."
+]

@@ -1,0 +1,79 @@
+[
+  {
+    "question": "What are the four stages of a semantic search pipeline?",
+    "options": [
+      "Tokenize, parse, filter, display",
+      "Embed, index, query (embed), rank",
+      "Download, install, configure, run",
+      "Read, write, update, delete"
+    ],
+    "correct": 1,
+    "explanation": "A semantic search pipeline: (1) embeds documents into vectors, (2) indexes/stores them, (3) embeds the query into a vector, and (4) ranks documents by vector similarity to the query."
+  },
+  {
+    "question": "Why is dependency injection (passing embedding_fn as a parameter) useful?",
+    "options": [
+      "It makes the code slower but more readable",
+      "It allows swapping embedding providers and enables testing with mock functions",
+      "It's required by Python's type system",
+      "It prevents the class from being instantiated"
+    ],
+    "correct": 1,
+    "explanation": "By accepting the embedding function as a parameter, you can use Ollama in production, OpenAI in another environment, or a mock function in tests. This makes the code flexible and testable."
+  },
+  {
+    "question": "What is the main advantage of hybrid search over pure semantic search?",
+    "options": [
+      "It uses less memory",
+      "It's always faster",
+      "It catches exact keyword matches that semantic search might miss",
+      "It doesn't require embeddings"
+    ],
+    "correct": 2,
+    "explanation": "Semantic search excels at understanding meaning but can miss exact keyword matches (like acronyms or proper nouns). Keyword search catches these. Hybrid search combines both, consistently outperforming either alone."
+  },
+  {
+    "question": "What does the alpha parameter control in hybrid search?",
+    "options": [
+      "The number of results returned",
+      "The balance between semantic (alpha) and keyword (1-alpha) scores",
+      "The embedding model dimension",
+      "The maximum document length"
+    ],
+    "correct": 1,
+    "explanation": "Alpha controls the weighting: alpha=1.0 is pure semantic search, alpha=0.0 is pure keyword search, and alpha=0.5 gives equal weight to both. You can tune alpha based on your specific use case."
+  },
+  {
+    "question": "Why is document embedding done once at index time, not at search time?",
+    "options": [
+      "Embeddings change every time you compute them",
+      "It's a requirement of vector databases",
+      "Embedding is expensive -- doing it once and storing the results makes search fast",
+      "Search queries don't need to be embedded"
+    ],
+    "correct": 2,
+    "explanation": "Generating embeddings takes significant computation time. By embedding documents once during indexing and storing the vectors, each search only needs to embed the short query text and compare against pre-computed vectors. This makes search fast regardless of how many documents you have."
+  },
+  {
+    "question": "What types of queries does keyword search handle better than semantic search?",
+    "options": [
+      "Queries about general concepts and abstract ideas",
+      "Queries containing rare terms, acronyms, or proper nouns that need exact matching",
+      "Queries phrased as natural language questions",
+      "Queries that use synonyms instead of exact words"
+    ],
+    "correct": 1,
+    "explanation": "Semantic search can struggle with rare terms, acronyms, and proper nouns because the embedding model may not capture their specific meaning well. Keyword search excels at exact matching — if you search for 'RFC 7231', keyword search finds documents containing that exact string, while semantic search might return documents about HTTP standards generally."
+  },
+  {
+    "question": "How does the term frequency (TF) keyword search method score documents?",
+    "options": [
+      "It measures the cosine similarity between query and document embeddings",
+      "It counts how many query terms appear in the document divided by the total number of query terms",
+      "It ranks documents by their total word count",
+      "It checks if the document title matches the query exactly"
+    ],
+    "correct": 1,
+    "explanation": "The simple TF-based keyword search splits the query into terms, counts how many of those terms appear in each document's text, and divides by the total number of query terms. A score of 1.0 means all query terms were found; 0.0 means none were. This is simpler than TF-IDF or BM25 but effective for catching exact matches."
+  }
+]

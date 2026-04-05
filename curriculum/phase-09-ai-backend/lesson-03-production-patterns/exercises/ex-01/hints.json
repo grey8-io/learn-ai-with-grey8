@@ -1,0 +1,5 @@
+[
+  "For RateLimiter, store requests as a dict mapping client_id to a list of timestamps. In is_allowed(), first clean up old timestamps (keep only those where time.time() - t < window_seconds), then check if the list length is under max_requests.",
+  "For ResponseCache, use hashlib.sha256(f'{prompt}::{model}'.encode()).hexdigest() for make_key(). In get(), check if time.time() - entry['timestamp'] >= ttl_seconds to detect expiry. In set(), if len(cache) >= max_size, remove the entry with the smallest timestamp using min().",
+  "For sanitize_input: if not isinstance(text, str): return ''. Filter characters with ''.join(ch for ch in text if ch in ('\\n', '\\t') or ord(ch) >= 32). Then text[:max_length].strip(). For create_error_response: return {'error': {'message': str(error), 'type': type(error).__name__, 'status_code': status_code}}."
+]

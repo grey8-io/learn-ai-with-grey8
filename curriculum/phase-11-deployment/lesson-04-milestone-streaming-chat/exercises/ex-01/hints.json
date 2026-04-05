@@ -1,0 +1,5 @@
+[
+  "For stream_chat(), you need TWO places where streaming is enabled: (1) in the Ollama JSON payload set \"stream\": True, and (2) in the requests.post() call pass stream=True as a keyword argument. This gives you a response object where you can call response.iter_lines() to get one JSON line at a time. Each line looks like {\"message\": {\"content\": \"token\"}, \"done\": false}.",
+  "The /chat endpoint is surprisingly simple. Import EventSourceResponse from sse_starlette.sse, then return EventSourceResponse(stream_chat(req.message)). That's it -- EventSourceResponse handles the SSE protocol, sets the Content-Type header to text/event-stream, and formats each yielded {\"data\": token} dict as a proper SSE event.",
+  "For the HTML page, use fetch('/chat', {method: 'POST', headers: {'Content-Type': 'application/json'}, body: JSON.stringify({message})}) to send the request. Then read the stream with response.body.getReader() and a TextDecoder. In a while loop, call reader.read() to get chunks. Split each decoded chunk by newlines, and for lines starting with 'data:', extract the token (line.slice(5).trim()) and append it to your message div's textContent."
+]

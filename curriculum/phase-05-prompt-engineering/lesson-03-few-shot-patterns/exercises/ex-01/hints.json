@@ -1,0 +1,5 @@
+[
+  "For build_chain_of_thought_prompt, start with f\"Question: {question}\\n\\nLet's think step by step.\" and if steps_hint is provided, append f\" {steps_hint}\" to the end. For build_few_shot_prompt, loop through examples adding f\"Input: {ex['input']}\\nOutput: {ex['output']}\\n\\n\" then end with f\"Input: {query}\\nOutput:\".",
+  "For extract_final_answer, define markers = ['therefore', 'final answer:', 'the answer is', 'in conclusion']. Loop through reversed(lines). For each line, check if any marker is in line.lower(). If found, get the text after the marker using string slicing: idx = lower.index(marker) + len(marker), then line.strip()[idx:].strip().rstrip('.').",
+  "For build_self_consistency_prompts, create a list of 5 reasoning prefixes like 'Let's think step by step.', 'Let's solve this carefully.', etc. Loop i in range(n), pick prefixes[i % len(prefixes)], and build f\"Question: {question}\\n\\n{prefix}\". Return the list."
+]

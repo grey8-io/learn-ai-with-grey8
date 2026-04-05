@@ -1,0 +1,5 @@
+[
+  "For simple_tokenize, the regex pattern r\"\\w+|[^\\w\\s]\" matches either word characters or individual punctuation. Use re.findall() to get all matches.",
+  "count_tokens just calls simple_tokenize and returns the length with len(). estimate_cost divides the count by 1000, multiplies by price_per_1k, and rounds to 6 places.",
+  "simple_tokenize: return re.findall(r\"\\w+|[^\\w\\s]\", text). count_tokens: return len(simple_tokenize(text)). estimate_cost: return round((count_tokens(text) / 1000) * price_per_1k, 6)."
+]

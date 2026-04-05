@@ -1,0 +1,5 @@
+[
+  "create_system_prompt uses an f-string. format_history loops through messages and checks msg['role']. save_conversation uses json.dump. load_conversation uses json.load with try/except.",
+  "For format_history, build a list of formatted strings, skip messages where role is 'system', then join with '\\n'. For load_conversation, catch FileNotFoundError and return [].",
+  "create_system_prompt: return f'You are {name}, an AI assistant. {personality} Keep responses concise and helpful.'. format_history: lines = []; for msg in messages: if role=='user': lines.append(f'You: {content}'); elif role=='assistant': lines.append(f'AI: {content}'); return '\\n'.join(lines)."
+]

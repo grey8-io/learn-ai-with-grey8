@@ -1,0 +1,79 @@
+[
+  {
+    "question": "What is an embedding?",
+    "options": [
+      "A way to compress images for storage",
+      "A numerical vector representation of text that captures semantic meaning",
+      "A type of database index",
+      "A Python library for machine learning"
+    ],
+    "correct": 1,
+    "explanation": "An embedding is a list of numbers (a vector) that represents text in a way that captures its meaning. Similar texts produce similar vectors, enabling mathematical comparison of semantic similarity."
+  },
+  {
+    "question": "What does a cosine similarity of 1.0 between two vectors mean?",
+    "options": [
+      "The vectors are perpendicular",
+      "The vectors point in opposite directions",
+      "The vectors point in the same direction (most similar)",
+      "The vectors have the same length"
+    ],
+    "correct": 2,
+    "explanation": "A cosine similarity of 1.0 means the two vectors point in exactly the same direction, indicating they are as similar as possible. A value of 0.0 means they are unrelated (perpendicular), and -1.0 means they are opposites."
+  },
+  {
+    "question": "What is the advantage of sentence embeddings over word embeddings?",
+    "options": [
+      "They use less memory",
+      "They are faster to compute",
+      "They capture context, so the same word gets different vectors in different sentences",
+      "They only work with English text"
+    ],
+    "correct": 2,
+    "explanation": "Sentence embeddings capture the full context of a sentence. The word 'bank' in 'river bank' gets a different vector than 'bank' in 'bank account'. Word embeddings give the same vector regardless of context."
+  },
+  {
+    "question": "Why is normalizing a vector useful for similarity search?",
+    "options": [
+      "It makes the vector shorter and saves memory",
+      "It makes cosine similarity equal to the dot product, which is faster to compute",
+      "It converts the vector from floats to integers",
+      "It's required by Python's math library"
+    ],
+    "correct": 1,
+    "explanation": "When vectors are normalized to unit length (magnitude 1), the cosine similarity formula simplifies to just the dot product. This is a significant speedup when computing millions of similarity comparisons."
+  },
+  {
+    "question": "Which Ollama endpoint generates embeddings?",
+    "options": [
+      "/api/chat",
+      "/api/generate",
+      "/api/embeddings",
+      "/api/vectors"
+    ],
+    "correct": 2,
+    "explanation": "Ollama's /api/embeddings endpoint takes a text prompt and returns its embedding vector. This is separate from /api/chat (conversation) and /api/generate (text generation)."
+  },
+  {
+    "question": "How does Euclidean distance differ from cosine similarity when measuring vector similarity?",
+    "options": [
+      "Euclidean distance measures the angle between vectors while cosine similarity measures straight-line distance",
+      "Euclidean distance measures straight-line distance where lower values mean more similar, while cosine similarity measures directional alignment where higher values mean more similar",
+      "They always produce identical results for any pair of vectors",
+      "Euclidean distance only works with 2D vectors while cosine similarity works with any dimension"
+    ],
+    "correct": 1,
+    "explanation": "Euclidean distance calculates the straight-line distance between two points in vector space — a distance of 0 means identical vectors (lower = more similar). Cosine similarity measures the angle between vectors — a value of 1.0 means identical direction (higher = more similar). They capture different aspects of similarity."
+  },
+  {
+    "question": "Why do similar meanings produce similar embedding vectors?",
+    "options": [
+      "Embeddings are manually assigned by human annotators who group related words",
+      "The embedding model is trained on large text corpora so that words appearing in similar contexts end up near each other in vector space",
+      "All embedding vectors are randomly generated, so similarity is coincidental",
+      "Similar words always share the same first few characters, which determines their vectors"
+    ],
+    "correct": 1,
+    "explanation": "Embedding models learn from massive text datasets. During training, words and sentences that appear in similar contexts develop similar vector representations. This is why 'king' and 'queen' have nearby vectors — they appear in similar linguistic contexts — while unrelated words like 'apple' end up far away."
+  }
+]

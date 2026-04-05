@@ -1,0 +1,57 @@
+[
+  {
+    "question": "What is a token in the context of LLMs?",
+    "options": [
+      "A complete sentence",
+      "A small piece of text — a word, part of a word, or punctuation",
+      "A user's login credential",
+      "A unit of computer memory"
+    ],
+    "correct": 1,
+    "explanation": "Tokens are the basic units that LLMs process. They can be whole words, subwords, or punctuation marks. The word 'unbelievable' might be split into tokens like 'un', 'believ', and 'able'."
+  },
+  {
+    "question": "What does the temperature parameter control?",
+    "options": [
+      "How fast the model generates text",
+      "The randomness/creativity of the model's output",
+      "The maximum length of the response",
+      "The model's accuracy"
+    ],
+    "correct": 1,
+    "explanation": "Temperature controls randomness in token selection. Low temperature (near 0) makes output focused and deterministic. Higher temperature makes output more creative and varied."
+  },
+  {
+    "question": "What is the 'context window' of an LLM?",
+    "options": [
+      "The physical screen where you type prompts",
+      "The maximum number of tokens the model can process at once",
+      "The time limit for generating a response",
+      "The number of users who can access the model simultaneously"
+    ],
+    "correct": 1,
+    "explanation": "The context window is the maximum number of tokens (input + output combined) that an LLM can handle in a single interaction. Exceeding it means the model loses the earliest context."
+  },
+  {
+    "question": "What is the fundamental task an LLM performs?",
+    "options": [
+      "Looking up answers in a database",
+      "Predicting the most likely next token given the previous tokens",
+      "Running Google searches and summarizing results",
+      "Executing code to find answers"
+    ],
+    "correct": 1,
+    "explanation": "At its core, an LLM is a next-token predictor. It calculates probabilities for what token should come next based on all the preceding tokens and patterns learned during training."
+  },
+  {
+    "question": "What is the difference between pre-training and fine-tuning?",
+    "options": [
+      "Pre-training is fast and cheap; fine-tuning is slow and expensive",
+      "Pre-training learns from vast general text; fine-tuning adapts the model for specific tasks",
+      "Pre-training is optional; fine-tuning is required",
+      "Pre-training happens after fine-tuning"
+    ],
+    "correct": 1,
+    "explanation": "Pre-training exposes the model to massive amounts of general text to learn language patterns. Fine-tuning then adapts the pre-trained model for specific use cases, like following instructions or being a helpful assistant."
+  }
+]
