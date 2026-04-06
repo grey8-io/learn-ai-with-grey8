@@ -416,9 +416,18 @@ The platform uses a dopamine-driven engagement system to keep students coming ba
 - Circular progress ring on dashboard: "Complete 1 lesson today"
 - Resets daily, satisfying fill animation
 
+### Phase Completion Badges
+- When a learner completes ALL lessons in a phase, a badge modal appears with confetti
+- 12 phase badges + 1 course completion badge stored in `platform/web/public/badges/`
+- Badge naming: `phase-01.png` through `phase-12.png`, plus `course-complete.png`
+- "Share on LinkedIn" button opens LinkedIn share dialog with pre-filled text and repo link
+- Badge display tracked in localStorage (`badges:phases_shown`) — each badge modal shows only once
+- Phase completion also unlocks `phase_crusher` achievement; 5 phases unlocks `five_phases`; all 12 unlocks `full_stack`
+
 ### Key Files
 - `lib/gamification.ts` — XP, levels, achievements, state management
 - `components/GamificationProvider.tsx` — React context, toast/confetti orchestration
+- `components/PhaseBadgeModal.tsx` — phase completion badge modal with LinkedIn share
 - `components/Confetti.tsx` — confetti particle animation
 - `components/GamificationToast.tsx` — sliding toast notifications
 - `app/globals.css` — confetti-fall, goal-fill, fire-pulse keyframes

@@ -52,6 +52,14 @@ Open [http://localhost:3000](http://localhost:3000) to start learning.
 
 For prerequisites and detailed instructions, see the **[Getting Started guide](docs/getting-started.md)**.
 
+## Share This With Your Team
+
+Know a developer who wants to learn AI? Send them this repo. No signup, no API keys, no subscriptions — they can start building in 5 minutes.
+
+If you're a **team lead or engineering manager**, this is a free upskilling path for your developers. Share it in your team Slack, forward it to a colleague, or drop it in your engineering newsletter. The entire course runs locally — no corporate approvals needed.
+
+> **Quick share link:** `https://github.com/grey8-io/learn-ai-with-grey8`
+
 ## Curriculum
 
 <!-- CURRICULUM_TABLE_START -->

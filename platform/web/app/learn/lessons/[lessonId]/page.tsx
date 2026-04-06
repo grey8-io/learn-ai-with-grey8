@@ -8,9 +8,13 @@ import MarkdownRenderer from "@/components/MarkdownRenderer";
 const ChatPanel = dynamic(() => import("@/components/ChatPanel"), {
   ssr: false,
 });
-import { fetchLesson, LessonData } from "@/lib/api";
+import { fetchLesson, fetchManifest, LessonData } from "@/lib/api";
 import { useProgress } from "@/components/ProgressProvider";
 import { useGamification } from "@/components/GamificationProvider";
+import PhaseBadgeModal, {
+  hasShownPhaseBadge,
+  markPhaseBadgeShown,
+} from "@/components/PhaseBadgeModal";
 import type { LessonStatus } from "@/lib/progress";
 
 /** Extract phase number from a lesson URL id like "phase-01--lesson-01" */
@@ -41,8 +45,10 @@ export default function LessonPage({
   const [quizTotal, setQuizTotal] = useState<number>(5);
   const [exerciseScore, setExerciseScore] = useState<number | null>(null);
   const [chatOpen, setChatOpen] = useState(false);
+  const [badgeModalOpen, setBadgeModalOpen] = useState(false);
+  const [completedPhaseTitle, setCompletedPhaseTitle] = useState("");
   const { backend, refreshStats, stats } = useProgress();
-  const { onLessonComplete } = useGamification();
+  const { onLessonComplete, unlock, celebrate } = useGamification();
 
   // Decode lesson ID: URL uses -- separator, canonical uses /
   const canonicalId = params.lessonId.replace(/--/g, "/");
@@ -84,11 +90,46 @@ export default function LessonPage({
       const p = await backend.getLessonProgress(canonicalId);
       setProgress(p);
       refreshStats();
-      if (prev?.status !== "completed") {
+      const wasNewCompletion = prev?.status !== "completed";
+      if (wasNewCompletion) {
         onLessonComplete(stats?.currentStreakDays ?? 0);
+
+        // Check if this completion finishes the entire phase
+        if (!hasShownPhaseBadge(phaseNum)) {
+          try {
+            const manifest = await fetchManifest();
+            const phase = manifest.phases.find((ph) => ph.phase === phaseNum);
+            if (phase) {
+              const allProgress = await backend.getAllLessonProgress();
+              const completedSet = new Set(
+                allProgress.filter((lp) => lp.status === "completed").map((lp) => lp.lessonId)
+              );
+              const allDone = phase.lessons.every((l) => completedSet.has(l.id));
+              if (allDone) {
+                markPhaseBadgeShown(phaseNum);
+                setCompletedPhaseTitle(phase.title);
+                unlock("phase_crusher");
+                if (manifest.phases.filter((ph) =>
+                  ph.lessons.every((l) => completedSet.has(l.id))
+                ).length >= 5) {
+                  unlock("five_phases");
+                }
+                if (manifest.phases.every((ph) =>
+                  ph.lessons.every((l) => completedSet.has(l.id))
+                )) {
+                  unlock("full_stack");
+                }
+                celebrate();
+                setBadgeModalOpen(true);
+              }
+            }
+          } catch {
+            // Manifest fetch failed — skip badge check silently
+          }
+        }
       }
     }
-  }, [backend, params.lessonId, canonicalId, isEasyPhase, refreshStats]);
+  }, [backend, params.lessonId, canonicalId, isEasyPhase, phaseNum, refreshStats, onLessonComplete, stats, unlock, celebrate]);
 
   useEffect(() => {
     async function load() {
@@ -475,6 +516,14 @@ export default function LessonPage({
         open={chatOpen}
         onClose={() => setChatOpen(false)}
         lessonId={params.lessonId}
+      />
+
+      {/* Phase completion badge modal */}
+      <PhaseBadgeModal
+        open={badgeModalOpen}
+        onClose={() => setBadgeModalOpen(false)}
+        phaseNumber={phaseNum}
+        phaseTitle={completedPhaseTitle}
       />
     </div>
   );
