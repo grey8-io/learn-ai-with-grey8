@@ -1,30 +1,10 @@
 # CLAUDE.md — AI Assistant Context
 
-## Business Context
-
-**Learn AI With Grey8** is a two-repo commercial venture:
-
-1. **Public repo** (`learn-ai-with-grey8`, this repo) — Open-source AI bootcamp. Free training platform that serves as the top-of-funnel for candidate acquisition. Licensed under AGPL-3.0 with Grey8 trademark protection.
-2. **Private repo** (`grey8-enterprise`) — Proprietary platform for proctored assessments, candidate certification, employer portal, talent placement, and B2B cohort training.
-
-**Six service lines:** Train → Assess → Proctor → Place + Bootcamp + Consulting.
-
-| Service | Description | Revenue |
-|---------|-------------|---------|
-| **Train** | Free open-source AI bootcamp (this repo) | Lead generation |
-| **Assess** | Technical assessments to evaluate candidate skills | Part of proctoring fee |
-| **Proctor** | Timed, locked-down exams; passing earns a Grey8 certificate | Certification fee ($200-500) |
-| **Place** | Match certified talent with enterprises | 15-25% placement margin |
-| **Bootcamp** | Cohort training for enterprise teams (B2B) | Training contracts |
-| **Consulting** | Remote AI consulting staffed by certified talent | Hourly/project billing |
-
-**Revenue comes from services, not software:** No SaaS paywalls on the learning experience. This repo powers **Train**. The private repo powers **Assess, Proctor, Place, Bootcamp, and Consulting**.
-
-**Licensing strategy:** Public repo is AGPL-3.0 (competitors who modify and serve it must open-source their changes). Grey8 branding is trademarked. Enterprise tooling is proprietary in the private repo.
-
 ## Project Overview
 
 **Learn AI With Grey8** is a self-driving, open-source AI bootcamp powered by a local LLM tutor. Learners build 15 real projects across 12 progressive phases — from Python basics to deploying AI agents — with zero cloud API keys required. A Socratic AI tutor (running locally via Ollama) guides learners, grades exercises, and provides progressive hints.
+
+Licensed under AGPL-3.0.
 
 ### Tech Stack
 
@@ -168,22 +148,6 @@ python scripts/generate_curriculum_index.py  # regenerate curriculum index for A
 
 Documentation is served via Docsify from the `docs/` directory. No build step — Docsify reads `.md` files directly at runtime.
 
-### Documentation Strategy
-
-**One public docs site serves all external audiences.** Enterprise internal docs live in the private repo and link back here — no duplication.
-
-| Section | Audience | File |
-|---------|----------|------|
-| Home | Everyone | `home.md` |
-| Getting Started | Learners | `getting-started.md` |
-| Course Guide | Learners | `course-guide.md` |
-| Services Overview | All audiences | `services.md` |
-| Certification | Candidates | `certification.md` |
-| For Employers | Employers, B2B | `employers.md` |
-| Contributing | Open-source contributors | `contributing.md` |
-
-Enterprise internal docs (dev setup, API reference, deployment, admin guide) live in `grey8-enterprise/docs/` and reference these public docs where concepts overlap.
-
 ### Docs Structure
 
 ```
@@ -193,7 +157,7 @@ docs/
   home.md             Docs landing page (architecture, quick start, navigation)
   getting-started.md  Setup guide (prerequisites, 8 steps, health checks, troubleshooting)
   course-guide.md     Complete course reference (learning cycle, 35 lessons, 15 projects, deps)
-  services.md         Grey8 service lines (train, assess, proctor, place, bootcamp, consulting)
+  services.md         Grey8 service lines overview
   certification.md    Certification path, proctoring, what employers see
   employers.md        Employer guide (search candidates, placements, team bootcamps)
   contributing.md     Contributor guide (code style, PR process, content guidelines)
@@ -388,7 +352,7 @@ Pre-generated during `setup.sh` (Step 9) by `scripts/generate_curriculum_index.p
 
 ## Gamification
 
-The platform uses a dopamine-driven engagement system to keep students coming back. All state is persisted in localStorage via `lib/gamification.ts`.
+The platform uses a gamification system to keep students engaged. All state is persisted in localStorage via `lib/gamification.ts`.
 
 ### XP + Levels
 - XP earned from: quiz scores (up to 100 XP), exercise scores (up to 150 XP), lesson completion (50 XP)
@@ -408,7 +372,7 @@ The platform uses a dopamine-driven engagement system to keep students coming ba
 - `GamificationProvider` context wraps the app and manages all gamification state
 
 ### Streak Escalation
-- Fire emoji scales with streak length (1→🔥, 3→🔥🔥, 7→🔥🔥🔥, 14+→🔥🔥🔥🔥)
+- Fire emoji scales with streak length
 - Pulsing animation at streak 7+
 - "2x XP bonus active!" label at streak 3+
 
@@ -434,29 +398,21 @@ The platform uses a dopamine-driven engagement system to keep students coming ba
 
 ## GitHub & Contribution Workflow
 
-### Organization
-
-- **Org:** `grey8-io` on GitHub (free plan)
-- **Primary account:** `grey8dotio-afk` (grey8dotio@gmail.com) — admin of org, owner of both repos
-- **Public repo:** `grey8-io/learn-ai-with-grey8` — AGPL-3.0, GitHub Pages enabled
-- **Private repo:** `grey8-io/grey8` — proprietary Grey8 Data Platform
-
 ### Branch Protection (`main`)
 
 - All changes require a PR with 1 approving review
 - Stale reviews auto-dismissed on new pushes
-- CODEOWNERS: `@grey8dotio-afk` auto-assigned as reviewer on all PRs
+- CODEOWNERS auto-assigns reviewer on all PRs
 - Force pushes and branch deletion blocked
-- `enforce_admins=false` — org admins can bypass when needed (e.g., initial setup pushes)
 
 ### Contribution Model
 
 Contributors use the **Fork + PR** workflow — they never get direct write access to the repo:
 1. Fork the repo to their own account
 2. Create a branch, make changes, push to their fork
-3. Open a PR to `grey8-io/learn-ai-with-grey8:main`
+3. Open a PR to `main`
 4. PR template auto-fills with checklist (type, testing, `ace sync`, docs)
-5. CODEOWNERS triggers review request to `@grey8dotio-afk`
+5. CODEOWNERS triggers review request
 6. Maintainer reviews, requests changes or approves, then merges
 
 ### Issue Templates
@@ -467,16 +423,9 @@ Contributors use the **Fork + PR** workflow — they never get direct write acce
 
 ### Key Files
 
-- `.github/CODEOWNERS` — assigns `@grey8dotio-afk` as reviewer
+- `.github/CODEOWNERS` — assigns reviewer
 - `.github/PULL_REQUEST_TEMPLATE.md` — PR checklist
 - `.github/ISSUE_TEMPLATE/` — bug, feature, content templates
-
-### Lead Generation (GitHub-ToS-Compliant)
-
-- Repo is fully public and free — no email gates, no login requirements
-- README has a Community section with LinkedIn link for voluntary connection
-- Future: grey8.io landing page with signup form for course updates
-- GitHub ToS prohibits scraping user data or sending unsolicited emails to stargazers/forkers
 
 ## Do NOT
 
@@ -663,7 +612,3 @@ The platform is designed to run on machines with as little as 4 GB RAM. Hardware
 ### Override Priority
 
 `TUTOR_OLLAMA_NUM_CTX` env var > `.ollama_hw_profile` values > Ollama model defaults
-
-### TurboQuant (Future)
-
-Google's TurboQuant (ICLR 2026) compresses KV cache to 3 bits with zero accuracy loss — 6x memory reduction. Not yet in Ollama (pending llama.cpp merge). When available, it will allow low-end machines to run much longer context windows. Track: [llama.cpp #20969](https://github.com/ggml-org/llama.cpp/discussions/20969).

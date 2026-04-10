@@ -73,6 +73,9 @@ models/
 .running_pids
 .logs/
 
+# ===== Claude Code (local AI context) =====
+.claude/
+
 # ===== Misc =====
 tmp/
 temp/
