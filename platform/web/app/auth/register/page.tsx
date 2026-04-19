@@ -4,15 +4,20 @@ import { useState } from "react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
 import { signUp } from "@/lib/auth";
+import { useAuth } from "@/components/AuthProvider";
+import AuthDisabledNotice from "@/components/AuthDisabledNotice";
 
 export default function RegisterPage() {
   const router = useRouter();
+  const { isConfigured } = useAuth();
 
   const [displayName, setDisplayName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
+
+  if (!isConfigured) return <AuthDisabledNotice />;
 
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();

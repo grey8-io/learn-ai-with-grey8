@@ -13,7 +13,7 @@ const STREAK_LABELS = ["Start today!", "Warming up!", "On fire!", "Unstoppable!"
 
 export default function DashboardPage() {
   const { stats, isReady } = useProgress();
-  const { user } = useAuth();
+  const { user, isConfigured: authConfigured } = useAuth();
   const { totalXP, level, nextLevel, levelProgress, state, dailyProgress } = useGamification();
   const [totalLessons, setTotalLessons] = useState(0);
 
@@ -73,7 +73,7 @@ export default function DashboardPage() {
       </section>
 
       {/* Sign-in prompt */}
-      {!user && isReady && (
+      {!user && isReady && authConfigured && (
         <div className="flex items-center gap-3 rounded-xl border border-primary-500/20 bg-primary-600/5 p-4">
           <svg className="h-5 w-5 shrink-0 text-primary-400" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor">
             <path strokeLinecap="round" strokeLinejoin="round" d="M12 9v3.75m9-.75a9 9 0 1 1-18 0 9 9 0 0 1 18 0Zm-9 3.75h.008v.008H12v-.008Z" />

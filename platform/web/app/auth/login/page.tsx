@@ -4,16 +4,21 @@ import { useState } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import Link from "next/link";
 import { signIn } from "@/lib/auth";
+import { useAuth } from "@/components/AuthProvider";
+import AuthDisabledNotice from "@/components/AuthDisabledNotice";
 
 export default function LoginPage() {
   const router = useRouter();
   const searchParams = useSearchParams();
   const redirect = searchParams.get("redirect") || "/";
+  const { isConfigured } = useAuth();
 
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
+
+  if (!isConfigured) return <AuthDisabledNotice />;
 
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();

@@ -66,7 +66,7 @@ supabase/.branches
 supabase/.temp
 
 # ===== Ollama Models (local cache) =====
-models/
+/models/
 *.gguf
 .ollama_model
 .ollama_hw_profile

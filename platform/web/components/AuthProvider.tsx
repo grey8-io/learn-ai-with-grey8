@@ -14,6 +14,7 @@ interface AuthContextType {
   user: User | null;
   session: Session | null;
   loading: boolean;
+  isConfigured: boolean;
   signOut: () => Promise<void>;
 }
 
@@ -21,6 +22,7 @@ const AuthContext = createContext<AuthContextType>({
   user: null,
   session: null,
   loading: false,
+  isConfigured: false,
   signOut: async () => {},
 });
 
@@ -28,6 +30,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   const [session, setSession] = useState<Session | null>(null);
   const [loading, setLoading] = useState(true);
   const supabase = createBrowserClient();
+  const isConfigured = supabase !== null;
 
   useEffect(() => {
     // If Supabase is not configured, skip auth entirely
@@ -66,6 +69,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
         user: session?.user ?? null,
         session,
         loading,
+        isConfigured,
         signOut: handleSignOut,
       }}
     >

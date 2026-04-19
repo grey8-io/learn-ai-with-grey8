@@ -38,7 +38,7 @@ const navItems = [
 export default function Navigation() {
   const pathname = usePathname();
   const [mobileOpen, setMobileOpen] = useState(false);
-  const { user, loading, signOut } = useAuth();
+  const { user, loading, isConfigured, signOut } = useAuth();
 
   // Hide sidebar on auth pages
   if (pathname.startsWith("/auth")) return null;
@@ -135,7 +135,7 @@ export default function Navigation() {
                 Sign out
               </button>
             </div>
-          ) : (
+          ) : isConfigured ? (
             <div className="space-y-2">
               <p className="text-xs text-slate-500 mb-2">
                 Progress saved locally
@@ -152,6 +152,12 @@ export default function Navigation() {
               >
                 Create account
               </Link>
+            </div>
+          ) : (
+            <div className="rounded-lg bg-slate-800/50 p-3">
+              <p className="text-xs text-slate-400">
+                Progress saved locally in this browser.
+              </p>
             </div>
           )}
         </div>
