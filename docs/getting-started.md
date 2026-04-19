@@ -172,9 +172,52 @@ Your progress is saved automatically as you learn:
 
 **Without an account**, your progress is stored in the browser's local storage. This means it persists across page refreshes and service restarts, but is tied to your browser.
 
-**With an account** (optional), your progress is stored in the Supabase database. This enables multi-device access, multi-user tracking (for teams/classrooms), and enterprise reporting. If you've been learning anonymously and then create an account, your existing progress is automatically migrated.
+**With an account** (optional, requires extra setup -- see [Enabling Sign-In](#enabling-sign-in-optional) below), your progress is stored in the Supabase database. This enables multi-device access, multi-user tracking (for teams/classrooms), and enterprise reporting. If you've been learning anonymously and then create an account, your existing progress is automatically migrated.
 
-> **Tip:** You don't need to create an account to start learning. Sign up whenever you're ready -- your progress won't be lost.
+> **Tip:** Sign-in is **off by default**. The free single-user experience is complete without it -- the sign-in/create-account UI only appears once you enable Supabase. Skip the next section unless you actually need multi-device sync or team tracking.
+
+---
+
+## Enabling Sign-In (Optional)
+
+Sign-in is **not required** to use the bootcamp. Anonymous local progress works for one learner on one browser. Enable sign-in only if you need:
+
+- **Multi-device sync** -- continue your progress across laptop, desktop, etc.
+- **Team / classroom tracking** -- multiple learners under one deployment
+- **Migration of local progress** -- carry your existing anonymous progress into an account
+
+### Steps
+
+1. **Install the Supabase CLI** (one-time):
+   - macOS: `brew install supabase/tap/supabase`
+   - Windows: `scoop bucket add supabase https://github.com/supabase/scoop-bucket.git && scoop install supabase`
+   - Linux: see [supabase.com/docs/guides/cli](https://supabase.com/docs/guides/cli/getting-started)
+
+2. **Start the local Supabase stack** from the project root:
+   ```bash
+   supabase start
+   ```
+   First run downloads container images (~1 GB) and may take several minutes. The CLI prints API URL, anon key, and service role key when ready.
+
+3. **Copy the printed values into your `.env`**:
+   ```
+   NEXT_PUBLIC_SUPABASE_URL=http://localhost:54321
+   NEXT_PUBLIC_SUPABASE_ANON_KEY=<anon key from supabase start output>
+   SUPABASE_URL=http://localhost:54321
+   SUPABASE_ANON_KEY=<same anon key>
+   SUPABASE_SERVICE_KEY=<service role key from supabase start output>
+   ```
+
+4. **Restart the web app** so it picks up the new env vars:
+   ```bash
+   bash scripts/start.sh
+   ```
+
+5. **Open http://localhost:3000** -- the sidebar now shows **Sign in to sync** and **Create account** buttons. The home page shows a "Create an account" prompt for anonymous users.
+
+To stop Supabase later: `supabase stop`. To reset its data: `supabase stop --no-backup && supabase start`.
+
+> **Note:** The `docker/docker-compose.yml` file includes Postgres, GoTrue, and PostgREST containers, but these are a partial setup intended for advanced/CI use -- they don't expose the unified `localhost:54321` API gateway that the app expects. Use the Supabase CLI for local development.
 
 ---
 
@@ -299,7 +342,8 @@ Google's [TurboQuant](https://research.google/blog/turboquant-redefining-ai-effi
 | Port conflicts | Another app on 3000, 8000, or 11434 | Stop the conflicting app, or change ports in `.env` |
 | Windows: "bash not found" | Not using Git Bash or WSL | Open **Git Bash** (comes with Git for Windows) instead of cmd.exe or PowerShell |
 | Docker won't start | Docker Desktop not running | Start Docker Desktop, wait for it to initialize, then retry |
-| Supabase auth errors | Missing or wrong Supabase keys | Check `.env` has correct `SUPABASE_ANON_KEY` from Docker logs |
+| "Sign-in is not enabled" notice on /auth/login | Supabase not configured (this is by design) | See [Enabling Sign-In](#enabling-sign-in-optional) above. Anonymous local progress works without sign-in. |
+| Supabase auth errors after enabling | Wrong anon key in `.env` | Re-run `supabase status` to print the current anon key, then update `.env` and restart `scripts/start.sh` |
 | "CUDA out of memory" | GPU memory insufficient for model | Use CPU-only mode (default) or try a smaller model |
 | AI tutor is very slow (<3 tok/s) | Low RAM or slow CPU | Switch to `llama3.2:1b` (see Hardware Guide above). Close other apps. Ensure SSD is used |
 | High RAM usage / swapping | Model + context too large for RAM | Lower `TUTOR_OLLAMA_NUM_CTX` in `.env` (try 1024). Or switch to 1B model |

@@ -102,29 +102,35 @@ async def run_tests(code: str, test_dir: Path) -> TestResult:
             stdout_bytes = proc_result.stdout
             stderr_bytes = proc_result.stderr
         except subprocess.TimeoutExpired:
-            return TestResult(
-                passed=False,
-                total=0,
-                passed_count=0,
-                failed_count=0,
-                items=[],
-                raw_output="Test execution timed out after 30 seconds.",
+            return _failure_result(
+                "Test execution timed out after 30 seconds.",
+                "Your code may have an infinite loop or a very slow operation. "
+                "Check for unbounded `while` loops or expensive recursion.",
             )
         except FileNotFoundError:
-            return TestResult(
-                passed=False,
-                total=0,
-                passed_count=0,
-                failed_count=0,
-                items=[],
-                raw_output="pytest not found. Ensure it is installed.",
+            return _failure_result(
+                "pytest not found. Ensure it is installed.",
+                "This is a server-side configuration problem, not a problem with your code.",
+            )
+        except Exception as exc:  # noqa: BLE001 — surface unexpected errors to the student
+            return _failure_result(
+                f"Test runner crashed: {type(exc).__name__}: {exc}",
+                "This is unexpected. Try resubmitting; if it persists, report it.",
             )
 
         output = stdout_bytes.decode(errors="replace")
+        stderr_output = stderr_bytes.decode(errors="replace")
         items = _parse_pytest_output(output)
         passed_count = sum(1 for i in items if i.passed)
         failed_count = sum(1 for i in items if not i.passed)
         total = len(items)
+
+        # When pytest emitted no per-test status lines we can parse, surface the
+        # raw error so the student isn't stuck staring at "0/0 Tests Passed".
+        # This handles collection failures, bad pytest output, exotic errors, etc.
+        if total == 0:
+            extracted = _extract_pytest_error(output, stderr_output)
+            return _failure_result(extracted, raw_output=output or stderr_output)
 
         return TestResult(
             passed=failed_count == 0 and total > 0,
@@ -134,6 +140,189 @@ async def run_tests(code: str, test_dir: Path) -> TestResult:
             items=items,
             raw_output=output,
         )
+
+
+def _failure_result(message: str, hint: str = "", raw_output: str = "") -> "TestResult":
+    """Build a TestResult with a single synthetic failure item.
+
+    Used when pytest can't run or produces no parseable output, so the student
+    sees a real explanation instead of an empty "0/0 Tests Passed" panel.
+    """
+    translated = _humanize_error(message)
+    full_message = f"{translated}\n\n{hint}".strip() if hint else translated
+    return TestResult(
+        passed=False,
+        total=1,
+        passed_count=0,
+        failed_count=1,
+        items=[
+            TestResultItem(
+                name="Test setup",
+                passed=False,
+                message=full_message,
+            )
+        ],
+        raw_output=raw_output or message,
+    )
+
+
+# ---------------------------------------------------------------------------
+# Beginner-friendly error translation
+# ---------------------------------------------------------------------------
+# Maps common Python error patterns to clearer, instructive messages.
+# Order matters: the first matching pattern wins, so list specific patterns
+# (like the dunder typos) BEFORE their generic counterparts.
+_TRANSLATIONS: list[tuple[str, str]] = [
+    # Dunder typos — the exact case that prompted this layer
+    (
+        r"NameError: name '_name_' is not defined",
+        "'_name_' is not defined. You probably meant '__name__' (Python's special variables use TWO underscores on each side, not one).",
+    ),
+    (
+        r"NameError: name '_main_' is not defined",
+        "'_main_' is not defined. You probably meant '__main__' (double underscores on each side).",
+    ),
+    (
+        r"NameError: name '_init_' is not defined",
+        "'_init_' is not defined. You probably meant '__init__' (double underscores on each side).",
+    ),
+    # Generic NameError — captures the variable name
+    (
+        r"NameError: name '(\w+)' is not defined",
+        "'{0}' is not defined. Check the spelling, or make sure you defined this variable/function before using it.",
+    ),
+    # SyntaxError variants
+    (
+        r"SyntaxError: expected ':'",
+        "Missing colon. Lines starting with 'if', 'for', 'while', 'def', or 'class' must end with ':'.",
+    ),
+    (
+        r"SyntaxError: '(\w+)' was never closed",
+        "Unclosed '{0}'. Every opening bracket / paren / quote needs a matching close.",
+    ),
+    (
+        r"SyntaxError: unterminated string literal",
+        "A string is missing its closing quote. Check that every opening ' or \" has a matching close on the same line.",
+    ),
+    (
+        r"SyntaxError: invalid syntax",
+        "Python can't parse this line. Common causes: missing colon, mismatched parentheses/brackets, unclosed strings, missing comma between items.",
+    ),
+    # IndentationError variants
+    (
+        r"IndentationError: expected an indented block",
+        "Python expects code inside if/for/while/def/class blocks to be indented (4 spaces is standard).",
+    ),
+    (
+        r"IndentationError: unexpected indent",
+        "There's an unexpected indent here. Indentation should only increase after a line ending in ':'.",
+    ),
+    (
+        r"IndentationError: unindent does not match",
+        "Indentation doesn't line up with the surrounding code. This usually means tabs and spaces are mixed — pick one (4 spaces is standard).",
+    ),
+    (
+        r"TabError",
+        "Tabs and spaces are mixed in this file. Pick one (4 spaces is the Python convention) and use it everywhere.",
+    ),
+    # ModuleNotFoundError / ImportError
+    (
+        r"ModuleNotFoundError: No module named '([^']+)'",
+        "Module '{0}' isn't installed. Check the spelling, or install it: `pip install {0}`",
+    ),
+    (
+        r"ImportError: cannot import name '(\w+)' from",
+        "'{0}' isn't available from that module. Check the spelling — Python is case-sensitive — or look at what the module actually exports.",
+    ),
+    # TypeError — common beginner forms
+    (
+        r"TypeError: '(\w+)' object is not callable",
+        "Tried to call a '{0}' as if it were a function. You're using parentheses on something that isn't a function — check the variable name.",
+    ),
+    (
+        r"TypeError: (\w+)\(\) missing (\d+) required positional argument",
+        "Function '{0}' needs {1} more argument(s). Check the function signature.",
+    ),
+    (
+        r"TypeError: (\w+)\(\) takes (\d+) positional arguments? but (\d+) were given",
+        "Function '{0}' expects {1} argument(s) but you passed {2}. Check the parameter count.",
+    ),
+    (
+        r"TypeError: unsupported operand type\(s\) for ([+\-*/%]+): '(\w+)' and '(\w+)'",
+        "Can't use '{0}' between a {1} and a {2}. You may need to convert one — e.g. int(my_string) or str(my_number).",
+    ),
+    # AttributeError
+    (
+        r"AttributeError: '(\w+)' object has no attribute '(\w+)'",
+        "'{1}' isn't a valid method or attribute of a {0}. Check spelling, or look up what {0} supports.",
+    ),
+    # Common runtime errors
+    (
+        r"ZeroDivisionError",
+        "Tried to divide by zero. Add a check (e.g. `if denom != 0:`) before the division.",
+    ),
+    (
+        r"IndexError: list index out of range",
+        "Tried to access an item past the end of the list. Use len(my_list) to check the size first, or remember that indexing is 0-based.",
+    ),
+    (
+        r"KeyError: '?(\w+)'?",
+        "The key '{0}' doesn't exist in the dictionary. Use `my_dict.get('{0}')` for safer lookup, or check `if '{0}' in my_dict:` first.",
+    ),
+    (
+        r"ValueError: invalid literal for int\(\) with base 10: '([^']*)'",
+        "Couldn't convert '{0}' to an integer. The string must contain only digits (and an optional leading minus sign).",
+    ),
+]
+
+_COMPILED_TRANSLATIONS: list[tuple[re.Pattern[str], str]] = [
+    (re.compile(pattern), template) for pattern, template in _TRANSLATIONS
+]
+
+
+def _humanize_error(message: str) -> str:
+    """Translate common Python error patterns into beginner-friendly messages.
+
+    Returns the original message if no translation matches. Safe to call on
+    any string — non-error text passes through unchanged.
+    """
+    if not message:
+        return message
+    for pattern, template in _COMPILED_TRANSLATIONS:
+        match = pattern.search(message)
+        if match:
+            try:
+                return template.format(*match.groups())
+            except (IndexError, KeyError):
+                return template
+    return message
+
+
+def _extract_pytest_error(stdout: str, stderr: str) -> str:
+    """Pull the most useful error line from pytest output for an unparseable run.
+
+    Priority: E-lines (assertion / exception details) > short summary > last
+    non-empty stderr line > generic fallback.
+    """
+    e_lines = [
+        line.strip()[2:].strip()
+        for line in stdout.splitlines()
+        if line.strip().startswith("E ")
+    ]
+    if e_lines:
+        return " | ".join(e_lines[:3])
+
+    # Pytest short summary lines (FAILED / ERROR / collection errors)
+    for line in stdout.splitlines():
+        s = line.strip()
+        if s.startswith(("FAILED", "ERROR", "INTERNALERROR")):
+            return s
+
+    stderr_tail = [line for line in stderr.splitlines() if line.strip()]
+    if stderr_tail:
+        return stderr_tail[-1].strip()
+
+    return "Tests did not run. The submission may have a syntax error or pytest produced unexpected output."
 
 
 def _parse_pytest_output(output: str) -> list[TestResultItem]:
@@ -207,9 +396,11 @@ def _parse_pytest_output(output: str) -> list[TestResultItem]:
 
             # Clean up common noise
             message = message.replace("AssertionError: ", "").replace("AssertError: ", "")
+            # Translate common Python errors into beginner-friendly hints
+            message = _humanize_error(message)
             # Truncate very long messages
-            if len(message) > 200:
-                message = message[:197] + "..."
+            if len(message) > 240:
+                message = message[:237] + "..."
 
         items.append(
             TestResultItem(

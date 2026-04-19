@@ -220,6 +220,23 @@
       "estimated_minutes": 45
     },
     {
+      "id": "phase-04/lesson-03",
+      "phase": 4,
+      "title": "Milestone Project: AI Chatbot",
+      "summary": "Congratulations on completing Phase 4! You have learned how to connect to a local LLM, send prompts, parse responses, and work with the Ollama API....",
+      "concepts": [
+        "What You'll Build",
+        "Architecture",
+        "Step-by-Step Guide",
+        "Step 1: Implement `chat()`",
+        "Step 2: Implement `main()`",
+        "Step 3: Handle Edge Cases",
+        "Tips"
+      ],
+      "prerequisites": [],
+      "estimated_minutes": 30
+    },
+    {
       "id": "phase-05/lesson-01",
       "phase": 5,
       "title": "Role Prompting & System Messages",
@@ -397,6 +414,24 @@
       "estimated_minutes": 60
     },
     {
+      "id": "phase-07/lesson-04",
+      "phase": 7,
+      "title": "Milestone Project: RAG Knowledge Base",
+      "summary": "Congratulations on completing Phase 7! You now understand embeddings, vector databases, retrieval strategies, and how to combine them with an LLM to build intelligent applications....",
+      "concepts": [
+        "What You'll Build",
+        "Architecture",
+        "Step-by-Step Guide",
+        "Step 1: Implement `chunk_text()`",
+        "Step 2: Implement `ingest_folder()`",
+        "Step 3: Implement `ask()`",
+        "Step 4: Implement `main()`",
+        "Tips"
+      ],
+      "prerequisites": [],
+      "estimated_minutes": 30
+    },
+    {
       "id": "phase-08/lesson-01",
       "phase": 8,
       "title": "Agent Concepts & Patterns",
@@ -517,6 +552,24 @@
       "estimated_minutes": 50
     },
     {
+      "id": "phase-09/lesson-04",
+      "phase": 9,
+      "title": "Milestone Project: AI-Powered API",
+      "summary": "Congratulations on completing Phase 9! You have learned how to build backend services with FastAPI, connect to a local LLM through Ollama, and structure your...",
+      "concepts": [
+        "What You'll Build",
+        "Architecture",
+        "Step-by-Step Guide",
+        "Step 1: Implement the `chat()` Helper",
+        "Step 2: Define Pydantic Models",
+        "Step 3: Implement the Endpoints",
+        "Step 4: Test with curl",
+        "Tips"
+      ],
+      "prerequisites": [],
+      "estimated_minutes": 30
+    },
+    {
       "id": "phase-10/lesson-01",
       "phase": 10,
       "title": "Token & Cost Management",
@@ -635,6 +688,23 @@
         "phase-11/lesson-02"
       ],
       "estimated_minutes": 55
+    },
+    {
+      "id": "phase-11/lesson-04",
+      "phase": 11,
+      "title": "Milestone Project: Streaming Chat App",
+      "summary": "Congratulations on completing Phase 11! You have learned about deployment strategies, environment management, and how to ship your applications to production. Now it is time...",
+      "concepts": [
+        "What You'll Build",
+        "Architecture",
+        "Step-by-Step Guide",
+        "Step 1: Implement the `stream_chat()` Generator",
+        "Step 2: Implement the `/chat` SSE Endpoint",
+        "Step 3: Implement the `/` HTML Page",
+        "Tips"
+      ],
+      "prerequisites": [],
+      "estimated_minutes": 30
     },
     {
       "id": "phase-12/lesson-01",

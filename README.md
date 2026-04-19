@@ -140,6 +140,12 @@ npx docsify-cli serve docs --port 4000   # Serve docs locally
 - **Star this repo** to bookmark it and help others discover it
 - **Follow [Nagaraju Mudunuri](https://www.linkedin.com/in/nagaraju-mudunuri-42a05b25/) on LinkedIn** for AI career tips and course updates
 
+## About Grey8
+
+This bootcamp is built and maintained by Grey8, an AI talent and training company. The curriculum, code, and tutor are free and open-source under AGPL-3.0 — and will stay that way.
+
+Grey8 has plans to offer paid services for learners and teams who want them: proctored certification, candidate placement with hiring partners, enterprise cohort training, and AI consulting. None will be required to use this bootcamp — the free experience is complete on its own.
+
 ## Contributing
 
 We welcome contributions of all kinds -- curriculum content, platform features, bug fixes, and translations.
