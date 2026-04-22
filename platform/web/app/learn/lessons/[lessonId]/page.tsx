@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState, useCallback } from "react";
+import { useEffect, useState, useCallback, useRef } from "react";
 import Link from "next/link";
 import dynamic from "next/dynamic";
 import MarkdownRenderer from "@/components/MarkdownRenderer";
@@ -131,27 +131,57 @@ export default function LessonPage({
     }
   }, [backend, params.lessonId, canonicalId, isEasyPhase, phaseNum, refreshStats, onLessonComplete, stats, unlock, celebrate]);
 
+  // Refs keep the latest callback identities without making the main load
+  // effect depend on them — those callbacks re-create on state changes
+  // (e.g. `stats`), which would otherwise re-run the effect unnecessarily.
+  const checkCompletionRef = useRef(checkCompletion);
+  const loadProgressRef = useRef(loadProgress);
+  const refreshStatsRef = useRef(refreshStats);
   useEffect(() => {
+    checkCompletionRef.current = checkCompletion;
+    loadProgressRef.current = loadProgress;
+    refreshStatsRef.current = refreshStats;
+  });
+
+  useEffect(() => {
+    let cancelled = false;
     async function load() {
+      // Primary fetch — only this failing should show "Lesson Not Found".
+      let data: LessonData;
       try {
-        const data = await fetchLesson(params.lessonId);
-        setLesson(data);
-        // Run progress upsert and completion check in parallel
-        await Promise.all([
-          backend.upsertLessonProgress(canonicalId, "in_progress").then(() => loadProgress()),
-          checkCompletion(data),
-        ]);
-        refreshStats();
+        data = await fetchLesson(params.lessonId);
       } catch (err) {
-        setError(
-          err instanceof Error ? err.message : "Failed to load lesson"
-        );
-      } finally {
-        setLoading(false);
+        if (!cancelled) {
+          setError(
+            err instanceof Error ? err.message : "Failed to load lesson"
+          );
+          setLoading(false);
+        }
+        return;
       }
+      if (cancelled) return;
+      setLesson(data);
+
+      // Side-effects — failures here must not surface as "Lesson Not Found".
+      try {
+        await Promise.all([
+          backend
+            .upsertLessonProgress(canonicalId, "in_progress")
+            .then(() => loadProgressRef.current()),
+          checkCompletionRef.current(data),
+        ]);
+        if (!cancelled) refreshStatsRef.current();
+      } catch (sideEffectErr) {
+        console.warn("Lesson side effects failed:", sideEffectErr);
+      }
+
+      if (!cancelled) setLoading(false);
     }
     load();
-  }, [params.lessonId, backend, canonicalId, loadProgress, checkCompletion, refreshStats]);
+    return () => {
+      cancelled = true;
+    };
+  }, [params.lessonId, backend, canonicalId]);
 
   if (loading) {
     return (

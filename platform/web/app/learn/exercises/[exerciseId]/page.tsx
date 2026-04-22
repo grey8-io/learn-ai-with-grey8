@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import Link from "next/link";
 import CodeEditor from "@/components/CodeEditor";
 import ExerciseResult from "@/components/ExerciseResult";
@@ -43,30 +43,61 @@ export default function ExercisePage({
 
   const SOLUTION_REVEAL_THRESHOLD = 5;
 
+  // Track which exerciseId we've already initialized the editor for, so that
+  // backend changes or effect re-runs NEVER overwrite a student's in-progress
+  // typing with the starter or their last submission.
+  const initializedForRef = useRef<string | null>(null);
+
   useEffect(() => {
+    let cancelled = false;
+    const isInitialLoad = initializedForRef.current !== params.exerciseId;
+
     async function load() {
+      // Primary fetch — only this failing should show "not found".
+      let data: ExerciseData;
       try {
-        const data = await fetchExercise(params.exerciseId);
-        setExercise(data);
+        data = await fetchExercise(params.exerciseId);
+      } catch (err) {
+        if (!cancelled) {
+          setError(
+            err instanceof Error ? err.message : "Failed to load exercise"
+          );
+          setLoading(false);
+        }
+        return;
+      }
+      if (cancelled) return;
+      setExercise(data);
+      if (isInitialLoad) {
         setCode(data.starterCode);
-        // Load previous submissions
+      }
+
+      // Side-effects — failures here must not surface as a load error.
+      try {
         const submissions = await backend.getSubmissions(params.exerciseId);
+        if (cancelled) return;
         setAttemptCount(submissions.length);
         const best = await backend.getBestSubmission(params.exerciseId);
+        if (cancelled) return;
         if (best) {
           setBestScore(best.score);
-          // Restore previous code if they had a submission
-          setCode(best.code);
+          if (isInitialLoad) {
+            setCode(best.code);
+          }
         }
-      } catch (err) {
-        setError(
-          err instanceof Error ? err.message : "Failed to load exercise"
-        );
-      } finally {
+      } catch (sideEffectErr) {
+        console.warn("Exercise side effects failed:", sideEffectErr);
+      }
+
+      if (!cancelled) {
+        initializedForRef.current = params.exerciseId;
         setLoading(false);
       }
     }
     load();
+    return () => {
+      cancelled = true;
+    };
   }, [params.exerciseId, backend]);
 
   async function handleSubmit() {

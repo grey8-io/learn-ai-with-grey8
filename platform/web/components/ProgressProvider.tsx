@@ -65,9 +65,17 @@ export function ProgressProvider({ children }: { children: ReactNode }) {
   const refreshStats = useCallback(async () => {
     try {
       const s = await backend.getStats();
-      setStats(s);
+      // Bail out if the new stats are structurally identical to the previous
+      // snapshot. Without this, getStats() returns a fresh object each call,
+      // so setStats(s) triggers a cascade of re-renders in consumers that
+      // have `stats` in a useCallback/useMemo dep list — which ends up
+      // re-running lesson/exercise page useEffects in a loop.
+      setStats(prev => {
+        if (prev && JSON.stringify(prev) === JSON.stringify(s)) return prev;
+        return s;
+      });
     } catch {
-      setStats(defaultStats);
+      setStats(prev => prev ?? defaultStats);
     }
   }, [backend]);
 
