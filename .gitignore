@@ -80,3 +80,4 @@ supabase/.temp
 tmp/
 temp/
 *.bak
+.venv-311/

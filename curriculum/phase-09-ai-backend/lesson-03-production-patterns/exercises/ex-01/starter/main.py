@@ -165,7 +165,8 @@ if __name__ == "__main__":
     print(f"\nCache get: {cache.get(key)}")
 
     # Sanitize demo
-    print(f"\nSanitized: '{sanitize_input('  Hello\x00World  ')}'")
+    sample = "  Hello\x00World  "
+    print(f"\nSanitized: '{sanitize_input(sample)}'")
 
     # Error response demo
     err = create_error_response(ValueError("bad input"), 400)
