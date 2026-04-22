@@ -132,8 +132,17 @@ class TestRefineEmail:
             {"role": "user", "content": "write"},
             {"role": "assistant", "content": "v1"},
         ]
-        with patch.object(mod, "chat", return_value="v2") as mock_chat:
+        # Snapshot at call time — refine_email mutates `conversation` again
+        # after calling chat(), so we can't rely on the mock's captured ref.
+        snapshots = []
+
+        def snapshot(messages):
+            snapshots.append(list(messages))
+            return "v2"
+
+        with patch.object(mod, "chat", side_effect=snapshot):
             mod.refine_email(conversation, "add greeting")
-            sent = mock_chat.call_args[0][0]
-            # The full conversation including the new feedback message
-            assert len(sent) == 4
+
+        sent = snapshots[0]
+        # The full conversation including the new feedback message
+        assert len(sent) == 4

@@ -80,7 +80,7 @@ class TestReadFile:
     def test_read_pdf_file(self, mod, tmp_path):
         """Should read text content from a .pdf file via PyPDF2."""
         pdf_path = str(tmp_path / "test.pdf")
-        with patch("student_main.PdfReader") as mock_reader:
+        with patch("PyPDF2.PdfReader") as mock_reader:
             mock_page = MagicMock()
             mock_page.extract_text.return_value = "PDF content"
             mock_reader.return_value.pages = [mock_page]
@@ -94,7 +94,7 @@ class TestChat:
 
     def test_chat_returns_llm_response(self, mod):
         """chat() should return the LLM's response text."""
-        with patch("student_main.requests.post") as mock_post:
+        with patch("requests.post") as mock_post:
             mock_resp = MagicMock()
             mock_resp.json.return_value = {"message": {"content": "Answer here"}}
             mock_resp.raise_for_status = MagicMock()
@@ -105,7 +105,7 @@ class TestChat:
 
     def test_chat_sends_stream_false(self, mod):
         """chat() should send stream=False to get a complete response."""
-        with patch("student_main.requests.post") as mock_post:
+        with patch("requests.post") as mock_post:
             mock_resp = MagicMock()
             mock_resp.json.return_value = {"message": {"content": "ok"}}
             mock_resp.raise_for_status = MagicMock()
@@ -163,7 +163,7 @@ class TestQuery:
             "documents": [["chunk1", "chunk2", "chunk3"]],
         }
 
-        with patch("student_main.requests.post") as mock_post:
+        with patch("requests.post") as mock_post:
             mock_resp = MagicMock()
             mock_resp.json.return_value = {"message": {"content": "RAG answer"}}
             mock_resp.raise_for_status = MagicMock()

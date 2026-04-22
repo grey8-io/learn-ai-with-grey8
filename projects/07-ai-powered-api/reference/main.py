@@ -34,7 +34,7 @@ def chat(system_prompt: str, user_message: str) -> str:
         )
         response.raise_for_status()
         return response.json()["message"]["content"]
-    except requests.RequestException as e:
+    except Exception as e:
         raise HTTPException(status_code=503, detail=f"Ollama unavailable: {e}")
 
 

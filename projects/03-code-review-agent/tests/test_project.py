@@ -68,7 +68,7 @@ class TestChat:
 
     def test_chat_returns_response(self, mod):
         """chat() should return the LLM response content."""
-        with patch("student_main.requests.post") as mock_post:
+        with patch("requests.post") as mock_post:
             mock_resp = MagicMock()
             mock_resp.json.return_value = {
                 "message": {"content": "Looks good!"}
@@ -81,7 +81,7 @@ class TestChat:
 
     def test_chat_sends_correct_model(self, mod):
         """chat() should use the configured MODEL."""
-        with patch("student_main.requests.post") as mock_post:
+        with patch("requests.post") as mock_post:
             mock_resp = MagicMock()
             mock_resp.json.return_value = {"message": {"content": "ok"}}
             mock_resp.raise_for_status = MagicMock()
@@ -97,7 +97,7 @@ class TestReviewCode:
 
     def test_review_code_calls_chat(self, mod):
         """review_code() should call chat() with a prompt containing the code."""
-        with patch("student_main.requests.post") as mock_post:
+        with patch("requests.post") as mock_post:
             mock_resp = MagicMock()
             mock_resp.json.return_value = {
                 "message": {"content": "## Issues\n- None"}
@@ -114,7 +114,7 @@ class TestReviewCode:
 
     def test_review_code_uses_review_prompt_template(self, mod):
         """review_code() should use the REVIEW_PROMPT template."""
-        with patch("student_main.requests.post") as mock_post:
+        with patch("requests.post") as mock_post:
             mock_resp = MagicMock()
             mock_resp.json.return_value = {"message": {"content": "feedback"}}
             mock_resp.raise_for_status = MagicMock()
@@ -147,7 +147,7 @@ class TestReviewFile:
         py_file = tmp_path / "sample.py"
         py_file.write_text("def foo():\n    return 42\n", encoding="utf-8")
 
-        with patch("student_main.requests.post") as mock_post:
+        with patch("requests.post") as mock_post:
             mock_resp = MagicMock()
             mock_resp.json.return_value = {
                 "message": {"content": "## Issues\n- No issues"}

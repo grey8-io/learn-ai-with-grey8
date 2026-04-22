@@ -135,7 +135,7 @@ class TestAsk:
             ],
         }
 
-        with patch("student_main.requests.post") as mock_post:
+        with patch("requests.post") as mock_post:
             mock_resp = MagicMock()
             mock_resp.json.return_value = {
                 "message": {"content": "Python is a programming language."}
@@ -155,7 +155,7 @@ class TestAsk:
             "metadatas": [[{"source": "notes.md"}]],
         }
 
-        with patch("student_main.requests.post") as mock_post:
+        with patch("requests.post") as mock_post:
             mock_resp = MagicMock()
             mock_resp.json.return_value = {"message": {"content": "answer"}}
             mock_resp.raise_for_status = MagicMock()
@@ -171,7 +171,7 @@ class TestChat:
     """Tests for chat()."""
 
     def test_chat_returns_string(self, mod):
-        with patch("student_main.requests.post") as mock_post:
+        with patch("requests.post") as mock_post:
             mock_resp = MagicMock()
             mock_resp.json.return_value = {"message": {"content": "reply"}}
             mock_resp.raise_for_status = MagicMock()

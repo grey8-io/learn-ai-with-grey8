@@ -12,7 +12,7 @@ Your tasks:
 import os
 import requests
 import chromadb
-from PyPDF2 import PdfReader
+import PyPDF2
 
 # ---------------------------------------------------------------------------
 # Constants
@@ -49,12 +49,12 @@ def read_file(filepath: str) -> str:
 
     TODO:
     1. Check the file extension (use os.path.splitext)
-    2. If it's a .pdf, use PdfReader to extract text from all pages
+    2. If it's a .pdf, use PyPDF2.PdfReader to extract text from all pages
     3. If it's a .txt (or other), read it as plain text
     4. Return the full text as a string
 
     Hint for PDF:
-      reader = PdfReader(filepath)
+      reader = PyPDF2.PdfReader(filepath)
       text = "".join(page.extract_text() or "" for page in reader.pages)
     """
     pass  # <-- Replace with your implementation

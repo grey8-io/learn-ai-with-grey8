@@ -7,7 +7,7 @@ Ingest text/PDF files into ChromaDB and answer questions via RAG.
 import os
 import requests
 import chromadb
-from PyPDF2 import PdfReader
+import PyPDF2
 
 # ---------------------------------------------------------------------------
 # Constants
@@ -43,7 +43,7 @@ def read_file(filepath: str) -> str:
     ext = os.path.splitext(filepath)[1].lower()
 
     if ext == ".pdf":
-        reader = PdfReader(filepath)
+        reader = PyPDF2.PdfReader(filepath)
         text = "".join(page.extract_text() or "" for page in reader.pages)
     else:
         with open(filepath, "r", encoding="utf-8") as f:

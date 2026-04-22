@@ -38,7 +38,7 @@ class TestChat:
     def test_chat_returns_string(self, mod):
         """chat() should return the assistant's reply as a string."""
         mod.history.clear()
-        with patch("student_main.requests.post") as mock_post:
+        with patch("requests.post") as mock_post:
             mock_resp = MagicMock()
             mock_resp.json.return_value = {
                 "message": {"content": "I am a helpful assistant."}
@@ -53,7 +53,7 @@ class TestChat:
     def test_chat_appends_user_message_to_history(self, mod):
         """chat() should add the user's message to history."""
         mod.history.clear()
-        with patch("student_main.requests.post") as mock_post:
+        with patch("requests.post") as mock_post:
             mock_resp = MagicMock()
             mock_resp.json.return_value = {"message": {"content": "Reply"}}
             mock_resp.raise_for_status = MagicMock()
@@ -68,7 +68,7 @@ class TestChat:
     def test_chat_appends_assistant_reply_to_history(self, mod):
         """chat() should add the assistant's reply to history."""
         mod.history.clear()
-        with patch("student_main.requests.post") as mock_post:
+        with patch("requests.post") as mock_post:
             mock_resp = MagicMock()
             mock_resp.json.return_value = {"message": {"content": "Bot reply"}}
             mock_resp.raise_for_status = MagicMock()
@@ -83,7 +83,7 @@ class TestChat:
     def test_chat_sends_correct_payload(self, mod):
         """chat() should POST to Ollama with the correct model and messages."""
         mod.history.clear()
-        with patch("student_main.requests.post") as mock_post:
+        with patch("requests.post") as mock_post:
             mock_resp = MagicMock()
             mock_resp.json.return_value = {"message": {"content": "ok"}}
             mock_resp.raise_for_status = MagicMock()
@@ -100,7 +100,7 @@ class TestChat:
     def test_chat_multi_turn_history_grows(self, mod):
         """History should accumulate across multiple chat() calls."""
         mod.history.clear()
-        with patch("student_main.requests.post") as mock_post:
+        with patch("requests.post") as mock_post:
             mock_resp = MagicMock()
             mock_resp.json.return_value = {"message": {"content": "r1"}}
             mock_resp.raise_for_status = MagicMock()
@@ -115,7 +115,7 @@ class TestChat:
     def test_chat_raises_on_http_error(self, mod):
         """chat() should propagate HTTP errors via raise_for_status."""
         mod.history.clear()
-        with patch("student_main.requests.post") as mock_post:
+        with patch("requests.post") as mock_post:
             mock_resp = MagicMock()
             mock_resp.raise_for_status.side_effect = Exception("500 Server Error")
             mock_post.return_value = mock_resp

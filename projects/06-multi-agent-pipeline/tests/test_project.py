@@ -37,7 +37,7 @@ class TestChat:
 
     def test_chat_sends_system_and_user(self, mod):
         """chat() should send both a system prompt and user message."""
-        with patch("student_main.requests.post") as mock_post:
+        with patch("requests.post") as mock_post:
             mock_resp = MagicMock()
             mock_resp.json.return_value = {"message": {"content": "response"}}
             mock_resp.raise_for_status = MagicMock()
@@ -54,7 +54,7 @@ class TestChat:
             assert messages[1]["content"] == "Hello"
 
     def test_chat_returns_string(self, mod):
-        with patch("student_main.requests.post") as mock_post:
+        with patch("requests.post") as mock_post:
             mock_resp = MagicMock()
             mock_resp.json.return_value = {"message": {"content": "text"}}
             mock_resp.raise_for_status = MagicMock()
@@ -75,7 +75,7 @@ class TestAgent:
 
     def test_agent_run_calls_chat(self, mod):
         """Agent.run() should call chat() with the system prompt and input."""
-        with patch("student_main.requests.post") as mock_post:
+        with patch("requests.post") as mock_post:
             mock_resp = MagicMock()
             mock_resp.json.return_value = {"message": {"content": "agent output"}}
             mock_resp.raise_for_status = MagicMock()
@@ -91,7 +91,7 @@ class TestAgent:
 
     def test_agent_run_returns_string(self, mod):
         """Agent.run() should return a string."""
-        with patch("student_main.requests.post") as mock_post:
+        with patch("requests.post") as mock_post:
             mock_resp = MagicMock()
             mock_resp.json.return_value = {"message": {"content": "result"}}
             mock_resp.raise_for_status = MagicMock()
@@ -136,7 +136,7 @@ class TestRunPipeline:
         call_count = 0
         responses = ["research notes", "draft article", "polished article"]
 
-        with patch("student_main.requests.post") as mock_post:
+        with patch("requests.post") as mock_post:
             def side_effect(*args, **kwargs):
                 nonlocal call_count
                 mock_resp = MagicMock()
@@ -155,7 +155,7 @@ class TestRunPipeline:
 
     def test_pipeline_returns_final_output(self, mod):
         """run_pipeline() should return the last agent's output."""
-        with patch("student_main.requests.post") as mock_post:
+        with patch("requests.post") as mock_post:
             mock_resp = MagicMock()
             mock_resp.json.return_value = {"message": {"content": "final"}}
             mock_resp.raise_for_status = MagicMock()

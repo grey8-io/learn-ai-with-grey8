@@ -43,7 +43,7 @@ class TestChat:
     """Tests for chat() helper."""
 
     def test_chat_returns_string(self, mod):
-        with patch("student_main.requests.post") as mock_post:
+        with patch("requests.post") as mock_post:
             mock_resp = MagicMock()
             mock_resp.json.return_value = {"message": {"content": "hello"}}
             mock_resp.raise_for_status = MagicMock()
@@ -56,7 +56,7 @@ class TestChat:
         """chat() should raise HTTPException when Ollama is unavailable."""
         from fastapi import HTTPException
 
-        with patch("student_main.requests.post") as mock_post:
+        with patch("requests.post") as mock_post:
             mock_post.side_effect = Exception("connection refused")
 
             with pytest.raises(HTTPException) as exc_info:
@@ -79,7 +79,7 @@ class TestSummarizeEndpoint:
     """Tests for POST /summarize."""
 
     def test_summarize_success(self, mod, client):
-        with patch("student_main.requests.post") as mock_post:
+        with patch("requests.post") as mock_post:
             mock_resp = MagicMock()
             mock_resp.json.return_value = {
                 "message": {"content": "A brief summary."}
@@ -101,7 +101,7 @@ class TestClassifyEndpoint:
     """Tests for POST /classify."""
 
     def test_classify_success(self, mod, client):
-        with patch("student_main.requests.post") as mock_post:
+        with patch("requests.post") as mock_post:
             mock_resp = MagicMock()
             mock_resp.json.return_value = {
                 "message": {"content": "Technology"}
@@ -121,7 +121,7 @@ class TestClassifyEndpoint:
 
     def test_classify_includes_categories_in_prompt(self, mod, client):
         """The classify prompt should include the provided categories."""
-        with patch("student_main.requests.post") as mock_post:
+        with patch("requests.post") as mock_post:
             mock_resp = MagicMock()
             mock_resp.json.return_value = {"message": {"content": "A"}}
             mock_resp.raise_for_status = MagicMock()
@@ -145,7 +145,7 @@ class TestGenerateEndpoint:
     """Tests for POST /generate."""
 
     def test_generate_success(self, mod, client):
-        with patch("student_main.requests.post") as mock_post:
+        with patch("requests.post") as mock_post:
             mock_resp = MagicMock()
             mock_resp.json.return_value = {
                 "message": {"content": "Generated text here."}
