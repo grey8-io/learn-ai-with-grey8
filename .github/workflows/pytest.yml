@@ -32,6 +32,13 @@ jobs:
           python-version: "3.11"
           cache: pip
 
+      - name: Configure git identity
+        # phase-01/lesson-01 runs a solution script that calls `git commit`,
+        # which fails in a fresh CI checkout without an author configured.
+        run: |
+          git config --global user.email "ci@grey8.io"
+          git config --global user.name "Grey8 CI"
+
       - name: Install tutor + ace + exercise deps
         run: |
           pip install --upgrade pip
