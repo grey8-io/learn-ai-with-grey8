@@ -6,7 +6,7 @@ Ingest a folder of Markdown notes and answer questions using RAG.
 
 import os
 from pathlib import Path
-import requests
+import httpx
 import chromadb
 
 # ---------------------------------------------------------------------------
@@ -25,7 +25,7 @@ collection = chroma_client.get_or_create_collection(name="knowledge_base")
 
 def chat(prompt: str) -> str:
     """Send a single prompt to Ollama and return the response."""
-    response = requests.post(
+    response = httpx.post(
         f"{OLLAMA_URL}/api/chat",
         json={
             "model": MODEL,

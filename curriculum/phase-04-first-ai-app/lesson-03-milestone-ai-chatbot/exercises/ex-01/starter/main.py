@@ -9,7 +9,7 @@ Your tasks:
   3. Add the /quit command to exit gracefully
 """
 
-import requests
+import httpx
 from rich.console import Console
 from rich.markdown import Markdown
 

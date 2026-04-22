@@ -3,6 +3,9 @@ Project 08: Streaming Chat App (Starter)
 
 SSE streaming from Ollama via FastAPI with a simple HTML chat client.
 
+Setup (run once before this exercise):
+    pip install requests sse-starlette
+
 Your task: implement the streaming generator, SSE endpoint, and HTML client.
 """
 

@@ -5,7 +5,7 @@ A FastAPI REST API with /summarize, /classify, and /generate endpoints,
 all powered by a local Ollama LLM.
 """
 
-import requests
+import httpx
 from fastapi import FastAPI, HTTPException
 from pydantic import BaseModel
 import uvicorn
@@ -21,7 +21,7 @@ app = FastAPI(title="AI-Powered API", version="1.0.0")
 def chat(system_prompt: str, user_message: str) -> str:
     """Send a chat request to Ollama and return the assistant's response."""
     try:
-        response = requests.post(
+        response = httpx.post(
             f"{OLLAMA_URL}/api/chat",
             json={
                 "model": MODEL,
@@ -31,10 +31,11 @@ def chat(system_prompt: str, user_message: str) -> str:
                 ],
                 "stream": False,
             },
+            timeout=120,
         )
         response.raise_for_status()
         return response.json()["message"]["content"]
-    except requests.RequestException as e:
+    except Exception as e:
         raise HTTPException(status_code=503, detail=f"Ollama unavailable: {e}")
 
 

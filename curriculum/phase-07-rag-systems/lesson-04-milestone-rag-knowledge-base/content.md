@@ -29,6 +29,14 @@ graph TD
 
 The pipeline has two phases: **ingestion** (files to vectors) and **retrieval** (question to answer). You will implement both.
 
+## Setup
+
+This project uses ChromaDB, which is not installed by default with the tutor. Install it once before starting:
+
+```bash
+pip install chromadb
+```
+
 ## Step-by-Step Guide
 
 ### Step 1: Implement `chunk_text()`

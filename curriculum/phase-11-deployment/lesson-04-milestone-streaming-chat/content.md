@@ -24,6 +24,16 @@ graph TD
 
 The key difference from your previous API project is **streaming**. Instead of waiting for the entire response and sending it all at once, your server sends each token to the browser the moment it arrives from Ollama. This creates the smooth, word-by-word typing effect users expect from modern chat applications.
 
+## Setup
+
+This project uses two libraries not installed by default with the tutor. Install them once before starting:
+
+```bash
+pip install requests sse-starlette
+```
+
+The `requests` library is used here (instead of `httpx`) because its `stream=True` + `iter_lines()` pattern is the standard way to consume line-delimited JSON streams in Python — and it is what you will encounter in most real-world Ollama / OpenAI / Anthropic streaming examples.
+
 ## Step-by-Step Guide
 
 ### Step 1: Implement the `stream_chat()` Generator

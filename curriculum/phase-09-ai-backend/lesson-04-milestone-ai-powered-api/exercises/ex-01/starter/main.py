@@ -7,7 +7,7 @@ all powered by a local Ollama LLM.
 Your task: implement the chat helper, Pydantic models, and endpoint logic.
 """
 
-import requests
+import httpx
 from fastapi import FastAPI, HTTPException
 from pydantic import BaseModel
 import uvicorn

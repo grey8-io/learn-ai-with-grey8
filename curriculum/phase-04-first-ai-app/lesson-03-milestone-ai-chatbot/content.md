@@ -59,7 +59,7 @@ The `main()` function ties everything together with a user-friendly interface.
 Robust software handles the unexpected:
 
 - **`KeyboardInterrupt` (Ctrl+C):** Catch it and print "Goodbye!" instead of crashing.
-- **Connection errors:** If Ollama is not running, catch `requests.exceptions.ConnectionError` and print a helpful message telling the user to start Ollama.
+- **Connection errors:** If Ollama is not running, catch `httpx.ConnectError` and print a helpful message telling the user to start Ollama.
 - **Empty input:** Skip blank lines instead of sending them to the model.
 
 ## Tips

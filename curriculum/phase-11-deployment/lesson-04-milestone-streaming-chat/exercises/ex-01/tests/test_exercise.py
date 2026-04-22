@@ -8,7 +8,7 @@ import pytest
 from unittest.mock import patch, MagicMock
 
 SOLUTION_PATH = os.path.join(
-    os.path.dirname(__file__), "..", "reference", "main.py"
+    os.path.dirname(__file__), "..", "solution", "main.py"
 )
 
 
@@ -64,7 +64,7 @@ class TestStreamChat:
             json.dumps({"message": {"content": ""}, "done": True}).encode(),
         ]
 
-        with patch("student_main.requests.post") as mock_post:
+        with patch("requests.post") as mock_post:
             mock_resp = MagicMock()
             mock_resp.raise_for_status = MagicMock()
             mock_resp.iter_lines.return_value = lines
@@ -84,7 +84,7 @@ class TestStreamChat:
             json.dumps({"message": {"content": "Ignored"}, "done": False}).encode(),
         ]
 
-        with patch("student_main.requests.post") as mock_post:
+        with patch("requests.post") as mock_post:
             mock_resp = MagicMock()
             mock_resp.raise_for_status = MagicMock()
             mock_resp.iter_lines.return_value = lines
@@ -101,7 +101,7 @@ class TestStreamChat:
             json.dumps({"message": {"content": ""}, "done": True}).encode(),
         ]
 
-        with patch("student_main.requests.post") as mock_post:
+        with patch("requests.post") as mock_post:
             mock_resp = MagicMock()
             mock_resp.raise_for_status = MagicMock()
             mock_resp.iter_lines.return_value = lines
@@ -119,7 +119,7 @@ class TestStreamChat:
             json.dumps({"message": {"content": ""}, "done": True}).encode(),
         ]
 
-        with patch("student_main.requests.post") as mock_post:
+        with patch("requests.post") as mock_post:
             mock_resp = MagicMock()
             mock_resp.raise_for_status = MagicMock()
             mock_resp.iter_lines.return_value = lines
@@ -173,7 +173,7 @@ class TestChatEndpoint:
             json.dumps({"message": {"content": ""}, "done": True}).encode(),
         ]
 
-        with patch("student_main.requests.post") as mock_post:
+        with patch("requests.post") as mock_post:
             mock_resp = MagicMock()
             mock_resp.raise_for_status = MagicMock()
             mock_resp.iter_lines.return_value = lines

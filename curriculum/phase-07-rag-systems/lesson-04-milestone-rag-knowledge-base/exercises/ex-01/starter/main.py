@@ -3,6 +3,9 @@ Project 05: RAG Knowledge Base — Starter Code
 ===============================================
 Ingest a folder of Markdown notes and answer questions using RAG.
 
+Setup (run once before this exercise):
+    pip install chromadb
+
 Your tasks:
   1. Implement ingest_folder() to read all .md files, chunk them, store in ChromaDB
   2. Implement ask() to retrieve relevant chunks and generate an answer
@@ -11,7 +14,7 @@ Your tasks:
 
 import os
 from pathlib import Path
-import requests
+import httpx
 import chromadb
 
 # ---------------------------------------------------------------------------
@@ -30,7 +33,7 @@ collection = chroma_client.get_or_create_collection(name="knowledge_base")
 
 def chat(prompt: str) -> str:
     """Send a single prompt to Ollama and return the response."""
-    response = requests.post(
+    response = httpx.post(
         f"{OLLAMA_URL}/api/chat",
         json={
             "model": MODEL,

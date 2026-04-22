@@ -46,7 +46,7 @@ Each endpoint sends a carefully crafted system prompt to Ollama's local LLM and 
 
 The `chat()` function is the core of your API. It sends a request to Ollama and returns the LLM's response as a string. This is the single function that all three endpoints will call.
 
-Use `requests.post()` to send a POST request to `OLLAMA_URL/api/chat`. The JSON payload needs three fields: `model` (the model name), `messages` (a list with a system message and a user message), and `stream` set to `False` so you get the complete response at once.
+Use `httpx.post()` to send a POST request to `OLLAMA_URL/api/chat`. The JSON payload needs three fields: `model` (the model name), `messages` (a list with a system message and a user message), and `stream` set to `False` so you get the complete response at once.
 
 Wrap the entire call in a `try/except` block. If anything goes wrong -- the network is down, Ollama is not running, the model is not loaded -- raise an `HTTPException` with status code `503` (Service Unavailable) and a descriptive error message. This tells API consumers that the upstream LLM service is temporarily unavailable.
 

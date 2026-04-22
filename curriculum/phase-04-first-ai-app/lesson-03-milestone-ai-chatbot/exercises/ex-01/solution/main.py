@@ -4,7 +4,7 @@ Project 01: AI Chatbot — Reference Solution
 A multi-turn CLI chatbot using Ollama's /api/chat endpoint with rich formatting.
 """
 
-import requests
+import httpx
 from rich.console import Console
 from rich.markdown import Markdown
 from rich.panel import Panel
@@ -27,7 +27,7 @@ def chat(user_message: str) -> str:
     history.append({"role": "user", "content": user_message})
 
     # Call Ollama chat API
-    response = requests.post(
+    response = httpx.post(
         f"{OLLAMA_URL}/api/chat",
         json={"model": MODEL, "messages": history, "stream": False},
         timeout=120,
@@ -79,7 +79,7 @@ def main() -> None:
         except KeyboardInterrupt:
             console.print("\n[dim]Goodbye![/dim]")
             break
-        except requests.exceptions.ConnectionError:
+        except httpx.ConnectError:
             console.print(
                 "[bold red]Error:[/bold red] Cannot connect to Ollama. "
                 "Is it running at {url}?".format(url=OLLAMA_URL)

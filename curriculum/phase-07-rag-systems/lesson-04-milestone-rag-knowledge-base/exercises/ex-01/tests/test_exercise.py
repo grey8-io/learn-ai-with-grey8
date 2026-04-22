@@ -8,7 +8,7 @@ from pathlib import Path
 from unittest.mock import patch, MagicMock
 
 SOLUTION_PATH = os.path.join(
-    os.path.dirname(__file__), "..", "reference", "main.py"
+    os.path.dirname(__file__), "..", "solution", "main.py"
 )
 
 
@@ -22,7 +22,7 @@ def _load_module(path: str):
 @pytest.fixture(scope="module")
 def mod():
     with patch("chromadb.Client") as mock_chroma, \
-         patch("requests.post") as mock_post:
+         patch("httpx.post") as mock_post:
         mock_collection = MagicMock()
         mock_collection.count.return_value = 0
         mock_chroma.return_value.get_or_create_collection.return_value = mock_collection
@@ -135,7 +135,7 @@ class TestAsk:
             ],
         }
 
-        with patch("student_main.requests.post") as mock_post:
+        with patch("httpx.post") as mock_post:
             mock_resp = MagicMock()
             mock_resp.json.return_value = {
                 "message": {"content": "Python is a programming language."}
@@ -155,7 +155,7 @@ class TestAsk:
             "metadatas": [[{"source": "notes.md"}]],
         }
 
-        with patch("student_main.requests.post") as mock_post:
+        with patch("httpx.post") as mock_post:
             mock_resp = MagicMock()
             mock_resp.json.return_value = {"message": {"content": "answer"}}
             mock_resp.raise_for_status = MagicMock()
@@ -171,7 +171,7 @@ class TestChat:
     """Tests for chat()."""
 
     def test_chat_returns_string(self, mod):
-        with patch("student_main.requests.post") as mock_post:
+        with patch("httpx.post") as mock_post:
             mock_resp = MagicMock()
             mock_resp.json.return_value = {"message": {"content": "reply"}}
             mock_resp.raise_for_status = MagicMock()
