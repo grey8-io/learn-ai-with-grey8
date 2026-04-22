@@ -1,0 +1,89 @@
+name: Pytest
+
+on:
+  pull_request:
+    paths:
+      - "curriculum/**"
+      - "projects/**"
+      - "tutor/**"
+      - "ace/**"
+      - ".github/workflows/pytest.yml"
+  push:
+    branches: [main]
+    paths:
+      - "curriculum/**"
+      - "projects/**"
+      - "tutor/**"
+      - "ace/**"
+
+permissions:
+  contents: read
+
+jobs:
+  curriculum-tests:
+    name: Curriculum exercise tests
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up Python 3.11
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+          cache: pip
+
+      - name: Install tutor + ace + exercise deps
+        run: |
+          pip install --upgrade pip
+          pip install -e "./tutor[dev]"
+          pip install -e "./ace[dev]"
+          # Student-install libs that specific lesson solutions import at load.
+          # requests is kept for phase-11/lesson-04 (streaming pattern with
+          # iter_lines); everything else uses httpx from tutor deps.
+          pip install chromadb sse-starlette requests
+
+      - name: Run curriculum exercise tests
+        run: |
+          pytest curriculum --tb=short -q --import-mode=importlib
+
+  project-tests:
+    name: Capstone project tests
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up Python 3.11
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+          cache: pip
+
+      - name: Install aggregate project deps
+        run: |
+          pip install --upgrade pip
+          # Union of every projects/*/starter/requirements.txt + pytest.
+          pip install \
+            pytest \
+            requests rich \
+            fastapi uvicorn pydantic \
+            flask \
+            chromadb PyPDF2 \
+            sse-starlette \
+            streamlit pandas \
+            jinja2 python-multipart
+
+      - name: Run capstone project tests
+        run: |
+          failed=""
+          for dir in projects/*/; do
+            name=$(basename "$dir")
+            echo "::group::$name"
+            if ! (cd "$dir" && pytest tests/ --tb=short -q); then
+              failed="$failed $name"
+            fi
+            echo "::endgroup::"
+          done
+          if [ -n "$failed" ]; then
+            echo "Failed projects:$failed"
+            exit 1
+          fi

@@ -421,12 +421,12 @@
       "concepts": [
         "What You'll Build",
         "Architecture",
+        "Setup",
         "Step-by-Step Guide",
         "Step 1: Implement `chunk_text()`",
         "Step 2: Implement `ingest_folder()`",
         "Step 3: Implement `ask()`",
-        "Step 4: Implement `main()`",
-        "Tips"
+        "Step 4: Implement `main()`"
       ],
       "prerequisites": [],
       "estimated_minutes": 30
@@ -697,6 +697,7 @@
       "concepts": [
         "What You'll Build",
         "Architecture",
+        "Setup",
         "Step-by-Step Guide",
         "Step 1: Implement the `stream_chat()` Generator",
         "Step 2: Implement the `/chat` SSE Endpoint",

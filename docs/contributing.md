@@ -118,6 +118,39 @@ ace reflect --output reports/             # Analyze curriculum coverage
 ace sync                                  # Update manifest.json
 ```
 
+### Writing Exercise Tests
+
+Exercise tests run through the tutor's grading sandbox. The sandbox writes the student's submission to `solution.py` in a temp dir and rewrites `SOLUTION_PATH` in the test file so tests import the student's code. Two conventions the sandbox requires — violating either causes every test in the file to fail:
+
+**1. `SOLUTION_PATH` must be a multi-line `os.path.join(...)` ending with `)` on its own line.** The runner's regex rewriter only matches this shape:
+
+```python
+# Correct — closing paren on its own line
+SOLUTION_PATH = os.path.join(
+    os.path.dirname(__file__), "..", "solution", "main.py"
+)
+
+# WRONG — regex can't rewrite this, tests load the curriculum solution
+# instead of the student's code
+SOLUTION_PATH = os.path.join(os.path.dirname(__file__), "..", "solution", "main.py")
+```
+
+**2. Patch at the module level, not via `student_main.*`.** The helper loads the solution with `importlib.util.spec_from_file_location("student_main", ...)`, which does NOT register the module in `sys.modules`. Any patch referencing `student_main.X` will fail with `ModuleNotFoundError: No module named 'student_main'` and every test will fail. Patch the library directly instead:
+
+```python
+# Correct — patches the library globally, affects the student's imports too
+with patch("httpx.post") as mock_post:
+    ...
+
+# WRONG — student_main isn't registered in sys.modules
+with patch("student_main.httpx.post") as mock_post:
+    ...
+```
+
+When the student uses `from X import Y` style (e.g. `from PyPDF2 import PdfReader`), `patch("X.Y")` won't reach the local binding. Either change the solution to use attribute-style access (`import PyPDF2; PyPDF2.PdfReader(...)`) or use `patch.object(mod, "Y")` inside the test.
+
+**3. Match starter imports to what the tests patch.** If tests patch `httpx.post`, the starter must import `httpx` (not `requests`). The student fills in the TODOs; they shouldn't have to rewrite imports to make tests pass.
+
 ---
 
 ## Adding Platform Features
