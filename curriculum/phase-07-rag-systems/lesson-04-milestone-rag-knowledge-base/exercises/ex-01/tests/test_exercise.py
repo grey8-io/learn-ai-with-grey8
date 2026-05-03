@@ -21,11 +21,15 @@ def _load_module(path: str):
 
 @pytest.fixture(scope="module")
 def mod():
-    with patch("chromadb.Client") as mock_chroma, \
-         patch("httpx.post") as mock_post:
-        mock_collection = MagicMock()
-        mock_collection.count.return_value = 0
-        mock_chroma.return_value.get_or_create_collection.return_value = mock_collection
+    # Stub chromadb in sys.modules so `import chromadb` in the student code
+    # works without the real package installed in the grading environment.
+    fake_chromadb = MagicMock()
+    fake_collection = MagicMock()
+    fake_collection.count.return_value = 0
+    fake_chromadb.Client.return_value.get_or_create_collection.return_value = fake_collection
+    sys.modules["chromadb"] = fake_chromadb
+
+    with patch("httpx.post"):
         module = _load_module(SOLUTION_PATH)
     return module
 
