@@ -130,7 +130,6 @@ Universities typically engage with **Train + Proctor + Place**.
 - Curriculum schema documented (`curriculum/schema.json`) — faculty add, edit, remove lessons via the ACE CLI
 - One platform deployment serves a full department (Docker Compose stack)
 - **No per-student or per-seat fee · no API consumption charges**
-- AICTE / UGC AIML model-curriculum mapping document available on request — *in progress, shared as-is*
 
 ---
 
