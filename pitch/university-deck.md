@@ -23,6 +23,7 @@ style: |
   section.title h2 { font-size: 1.3em; color: #475569; font-weight: 400; border: none; margin-top: 0; }
   section.title strong { color: #0c4a6e; }
   ul li { margin: 6px 0; }
+  section img { max-width: 100%; max-height: 420px; height: auto; display: block; margin: 8px auto; }
 ---
 
 <!-- _class: title -->
@@ -75,6 +76,7 @@ No vendor API keys · Runs on lab hardware · AGPL-3.0
 ## Department Deployment View
 
 ```mermaid
+%%{init: {'flowchart': {'curve': 'step', 'nodeSpacing': 40, 'rankSpacing': 50}, 'themeVariables': {'fontFamily': 'Segoe UI, Arial, sans-serif'}}}%%
 flowchart TB
     subgraph Inst["INSTITUTION NETWORK BOUNDARY"]
         Student[Student Browser]
@@ -83,9 +85,9 @@ flowchart TB
             Web[Next.js Web :3000]
             API[FastAPI Tutor :8000]
             Ollama[Ollama Local LLM :11434]
-            Store[(Progress Store)]
+            Store[Progress Store]
         end
-        Curriculum[(Curriculum Git Repo)]
+        Curriculum[Curriculum Git Repo]
         Student --> Web
         Faculty --> Web
         Web --> API
@@ -93,13 +95,13 @@ flowchart TB
         API --> Store
         Curriculum -.feeds.-> API
     end
-    CDN((Ollama Model CDN))
+    CDN[Ollama Model CDN]
     Server -. initial model pull only .-> CDN
-    classDef user fill:#dbeafe,stroke:#3b82f6,color:#1e3a8a
-    classDef api fill:#ccfbf1,stroke:#14b8a6,color:#134e4a
-    classDef ai fill:#ede9fe,stroke:#8b5cf6,color:#4c1d95
-    classDef data fill:#fef3c7,stroke:#f59e0b,color:#78350f
-    classDef ext fill:#fee2e2,stroke:#ef4444,color:#7f1d1d
+    classDef user fill:#dbeafe,stroke:#3b82f6,stroke-width:2px,color:#1e3a8a
+    classDef api fill:#ccfbf1,stroke:#14b8a6,stroke-width:2px,color:#134e4a
+    classDef ai fill:#ede9fe,stroke:#8b5cf6,stroke-width:2px,color:#4c1d95
+    classDef data fill:#fef3c7,stroke:#f59e0b,stroke-width:2px,color:#78350f
+    classDef ext fill:#fee2e2,stroke:#ef4444,stroke-width:2px,color:#7f1d1d
     class Student,Faculty user
     class Web,API api
     class Ollama ai
