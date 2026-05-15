@@ -15,23 +15,25 @@ GitHub renders both `.md` files natively, including the Mermaid diagrams. For ex
 
 ## Rendering
 
-Decks are authored in [Marp](https://marp.app/) markdown. Because the architecture slide uses Mermaid, you need Marp's Mermaid integration for the PDF export to render the diagram (rather than show raw markdown).
+Decks are authored in [Marp](https://marp.app/) markdown. The architecture slide in each deck uses Mermaid, which Marp CLI does not render natively. The build script handles this: it pre-renders each Mermaid block to an SVG, substitutes the image reference, and runs Marp on the processed file.
 
-```bash
-# HTML preview (live reload) — uses default Marp renderer; Mermaid renders only if you've added the plugin
-npx @marp-team/marp-cli --watch pitch/university-deck.md
-
-# PDF export — recommended via Marp's Mermaid-enabled engine
-npx @marp-team/marp-cli pitch/university-deck.md --pdf --mermaid
-npx @marp-team/marp-cli pitch/enterprise-deck.md --pdf --mermaid
+```powershell
+# Build HTML + PDF for both decks (output in pitch/build/, gitignored)
+pwsh scripts/build-pitch.ps1
 ```
 
-If your Marp CLI version doesn't support `--mermaid`, the fallback is to pre-render the Mermaid block to an SVG / PNG and replace the code block with an `<img>` reference before exporting. The Mermaid source in the `.md` files remains the source of truth.
+First run downloads Puppeteer's Chromium (~150 MB) for both `mermaid-cli` and `marp-cli`. Subsequent runs reuse the cached browser.
 
 Exported PDFs are **attached as assets on GitHub Releases**, not committed to the repo. This keeps history light and gives outreach a clean download URL like:
 
 ```
 github.com/grey8-io/learn-ai-with-grey8/releases/download/pitch-v1/grey8-university.pdf
+```
+
+To create the release after building:
+
+```powershell
+gh release create pitch-v1 pitch/build/*.pdf --title 'Pitch decks v1' --notes 'Stakeholder decks for universities and enterprises.'
 ```
 
 ## What's NOT in this directory

@@ -78,7 +78,7 @@ supabase/.temp
 
 # ===== Pitch Decks (drafting scaffolding only — final decks are committed) =====
 pitch/*-outline.md
-pitch/*.pdf
+pitch/build/
 
 # ===== Misc =====
 tmp/
