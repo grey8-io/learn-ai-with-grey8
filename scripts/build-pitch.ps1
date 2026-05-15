@@ -74,7 +74,9 @@ foreach ($name in $decks) {
         continue
     }
 
-    $content = Get-Content -Path $src -Raw
+    # Force UTF-8 read: PowerShell 5.1's default is the ANSI code page, which mangles em-dashes,
+    # middle dots, and other non-ASCII Unicode characters that the source decks rely on.
+    $content = Get-Content -Path $src -Raw -Encoding UTF8
 
     $mermaidRegex = [regex]::new('(?ms)```mermaid\r?\n(.*?)\r?\n```')
     $matches = $mermaidRegex.Matches($content)
