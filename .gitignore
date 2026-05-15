@@ -76,6 +76,10 @@ supabase/.temp
 # ===== Claude Code (local AI context) =====
 .claude/
 
+# ===== Pitch Decks (drafting scaffolding only — final decks are committed) =====
+pitch/*-outline.md
+pitch/*.pdf
+
 # ===== Misc =====
 tmp/
 temp/
