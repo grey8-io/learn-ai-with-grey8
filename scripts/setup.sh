@@ -224,27 +224,52 @@ fi
 section "Step 8/8: Setting up Ollama model"
 
 SELECTED_MODEL=""
+MODEL_READY=false
 
-# Check if Ollama is running
+# Ollama must be serving before we can pull a model. Rather than probing once
+# and giving up (which silently skips the model download), actively start it
+# and wait — the server often isn't up yet right after a fresh install.
+if ! curl -sf http://localhost:11434/api/tags &>/dev/null; then
+    if command -v ollama &>/dev/null; then
+        if [[ "$IS_WINDOWS" == true ]]; then
+            warn "Ollama is installed but not serving yet."
+            echo "      If you just installed it, open Ollama from the Start menu / system tray."
+            echo "      Waiting up to 30s for it to come online..."
+        else
+            warn "Ollama is not running. Starting it..."
+            ollama serve &>/dev/null &
+        fi
+        for _ in {1..30}; do
+            if curl -sf http://localhost:11434/api/tags &>/dev/null; then
+                break
+            fi
+            sleep 1
+        done
+    else
+        error "Ollama is not installed. Install from https://ollama.com/download"
+    fi
+fi
+
+# Pull the hardware-appropriate model if Ollama is now up
 if curl -sf http://localhost:11434/api/tags &>/dev/null; then
     info "Ollama server is running"
-
-    # Run the hardware-aware setup script (detects GPU/VRAM, pulls the right model)
     info "Detecting hardware and selecting best model..."
-    bash "$PROJECT_ROOT/local-dev/scripts/setup-ollama.sh"
+    # Guarded so a failed pull doesn't abort setup (set -e) — we report it honestly below
+    bash "$PROJECT_ROOT/local-dev/scripts/setup-ollama.sh" \
+        || warn "Hardware-aware model setup did not complete."
 
-    # Read the model that setup-ollama.sh selected
     if [[ -f "$PROJECT_ROOT/.ollama_model" ]]; then
         SELECTED_MODEL=$(cat "$PROJECT_ROOT/.ollama_model" | tr -d '[:space:]')
         info "Hardware-selected model: $SELECTED_MODEL"
     fi
+
+    # Confirm a model is actually present before we claim success
+    if curl -sf http://localhost:11434/api/tags | grep -q '"name"'; then
+        MODEL_READY=true
+    fi
 else
-    warn "Ollama server is not running."
-    echo "      Start Ollama first, then re-run this script:"
-    echo ""
-    echo "        ollama serve          # In a separate terminal (skip on Windows if in system tray)"
-    echo "        bash scripts/setup.sh"
-    echo ""
+    warn "Ollama server is not running — skipping model download."
+    echo "      The rest of setup will finish, but the AI tutor needs a model."
 fi
 
 # Update .env with the selected model so the tutor engine uses the right one
@@ -273,15 +298,37 @@ info "Curriculum index generated — tutor will have cross-lesson awareness"
 # Done
 # ---------------------------------------------------------------------------
 echo ""
-echo "============================================="
-echo -e "  ${GREEN}${BOLD}Setup Complete!${NC}"
-echo "============================================="
-echo ""
-echo "  To start learning, run:"
-echo ""
-echo "    bash scripts/start.sh"
-echo ""
-echo "  Then open http://localhost:3000 in your browser."
-echo ""
-echo "============================================="
-echo ""
+if [[ "$MODEL_READY" == true ]]; then
+    echo "============================================="
+    echo -e "  ${GREEN}${BOLD}Setup Complete!${NC}"
+    echo "============================================="
+    echo ""
+    echo "  To start learning, run:"
+    echo ""
+    echo "    bash scripts/start.sh"
+    echo ""
+    echo "  Then open http://localhost:3000 in your browser."
+    echo ""
+    echo "============================================="
+    echo ""
+else
+    echo "============================================="
+    echo -e "  ${YELLOW}${BOLD}Setup finished — but NO AI model is installed${NC}"
+    echo "============================================="
+    echo ""
+    echo "  Everything else is ready (Python env, web app, hooks, config)."
+    echo "  The AI tutor, grading, and hints will NOT work until a model is pulled."
+    echo ""
+    echo "  Easiest fix — just run start, it will download the model for you:"
+    echo ""
+    echo "    bash scripts/start.sh"
+    echo ""
+    echo "  Or pull it manually now:"
+    echo ""
+    echo "    ollama pull llama3.2:3b      # use llama3.2:1b on a 4 GB machine"
+    echo ""
+    echo "============================================="
+    echo ""
+    # Non-zero exit so 'make setup' / automation see this as incomplete
+    exit 1
+fi

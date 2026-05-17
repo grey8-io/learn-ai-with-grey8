@@ -191,11 +191,37 @@ else
     fi
 fi
 
-# Verify model is available
+# Verify a model is available. Ollama is up at this point (we just started it
+# or confirmed it's running), so if no model exists we can pull it right here —
+# this self-heals the common case where setup.sh skipped the pull.
 if curl -sf http://localhost:11434/api/tags &>/dev/null; then
     MODEL_COUNT=$(curl -sf http://localhost:11434/api/tags | grep -o '"name"' | wc -l | tr -d ' ')
     if [[ "$MODEL_COUNT" -eq 0 ]]; then
-        warn "No models found. Run: bash scripts/setup.sh"
+        warn "No model installed yet — downloading the right one for your hardware now."
+        warn "This is a one-time download (~2 GB) and may take several minutes."
+        warn "Do NOT close this window — it is not stuck."
+        bash "$PROJECT_ROOT/local-dev/scripts/setup-ollama.sh" \
+            || warn "Model download did not complete. Run manually: ollama pull llama3.2:3b"
+        # Sync .env to the model that was actually pulled (matters on low-end
+        # machines where setup-ollama.sh picks llama3.2:1b, not the 3b default).
+        if [[ -f "$PROJECT_ROOT/.ollama_model" && -f "$PROJECT_ROOT/.env" ]]; then
+            PULLED_MODEL=$(tr -d '[:space:]' < "$PROJECT_ROOT/.ollama_model")
+            CURRENT_MODEL=$(grep '^TUTOR_OLLAMA_MODEL=' "$PROJECT_ROOT/.env" | cut -d= -f2)
+            if [[ -n "$PULLED_MODEL" && "$CURRENT_MODEL" != "$PULLED_MODEL" ]]; then
+                sed "s|^TUTOR_OLLAMA_MODEL=.*|TUTOR_OLLAMA_MODEL=$PULLED_MODEL|" \
+                    "$PROJECT_ROOT/.env" > "$PROJECT_ROOT/.env.tmp" \
+                    && mv "$PROJECT_ROOT/.env.tmp" "$PROJECT_ROOT/.env"
+                info "Updated .env: TUTOR_OLLAMA_MODEL=$PULLED_MODEL"
+            fi
+        fi
+        # Re-check after the pull attempt
+        MODEL_COUNT=$(curl -sf http://localhost:11434/api/tags | grep -o '"name"' | wc -l | tr -d ' ')
+        if [[ "$MODEL_COUNT" -gt 0 ]]; then
+            info "$MODEL_COUNT model(s) now available"
+        else
+            warn "Still no model installed — the AI tutor will not respond until one is pulled."
+            warn "Fix: ollama pull llama3.2:3b   (use llama3.2:1b on a 4 GB machine)"
+        fi
     else
         info "$MODEL_COUNT model(s) available"
     fi
