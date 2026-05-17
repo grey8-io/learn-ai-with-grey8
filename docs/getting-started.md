@@ -87,12 +87,11 @@ bash scripts/setup.sh
 | Installs the **Web Platform** (`platform/web/`) | Next.js frontend — the browser UI where you read lessons, write code, and interact with the tutor |
 | Installs **Git hooks** | Auto-syncs the curriculum manifest when you commit or switch branches — you never need to update `manifest.json` manually |
 | Creates your **`.env` config** from the template | Tells all services how to find each other on localhost (defaults work out of the box) |
-| Pulls the **Ollama LLM model** | Downloads the AI model (~2 GB) that powers the tutor, grading, and all AI exercises |
+| Starts Ollama if needed, then pulls the **hardware-matched model** | Downloads the AI model (~2 GB) that powers the tutor, grading, and all AI exercises |
 
-> **Note:** If Ollama is not running when you run setup, the script will skip the model pull and tell you how to do it manually:
+> **Note:** Setup starts Ollama for you if it isn't already running (on Windows, open it from the Start menu / system tray if prompted — setup waits up to 30 seconds for it). If a model still can't be downloaded, setup stops with a clear message instead of falsely reporting success. Either way you're covered: the first time you run `bash scripts/start.sh` it automatically pulls the right model for your hardware (a one-time ~2 GB download). To pull it yourself instead:
 > ```bash
-> ollama serve          # Start Ollama (skip on Windows if it's in the system tray)
-> ollama pull llama3.2:3b
+> ollama pull llama3.2:3b      # or llama3.2:1b on a 4 GB machine
 > ```
 
 ## Step 3: Start Learning
