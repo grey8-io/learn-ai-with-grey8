@@ -1,6 +1,7 @@
 """Sandboxed test runner: executes student code against pytest test suites."""
 
 import asyncio
+import os
 import re
 import subprocess
 import sys
@@ -9,6 +10,32 @@ from concurrent.futures import ThreadPoolExecutor
 from pathlib import Path
 
 from tutor.models.schemas import TestResultItem
+
+# Environment overlaid on the sandboxed pytest subprocess. Two concerns:
+#
+# 1. Ephemeral Git identity for shell exercises (e.g. the Phase 1 "first Git
+#    repository" exercise). Beginners whose very first lesson is learning Git
+#    typically have not run `git config --global user.email/.name`; without an
+#    identity an otherwise-correct `git commit` aborts with rc 128 ("Author
+#    identity unknown"), surfacing downstream as a cryptic "no commits yet"
+#    failure. Injecting GIT_AUTHOR_*/GIT_COMMITTER_* makes the grader
+#    self-contained — it never reads or writes the learner's real Git config,
+#    and Python exercises (which don't shell out to git) are unaffected.
+#
+# 2. Force UTF-8 stdio in the child. On Windows/Python the subprocess pipe
+#    otherwise defaults to cp1252; non-ASCII in assertion messages or
+#    tracebacks (em-dashes, arrows) then round-trips through a codec mismatch
+#    and reaches the learner as U+FFFD. PYTHONUTF8/PYTHONIOENCODING make the
+#    child emit UTF-8 so it matches the parent's UTF-8 decode below.
+_SANDBOX_ENV = {
+    "GIT_AUTHOR_NAME": "Learn AI Learner",
+    "GIT_AUTHOR_EMAIL": "learner@learn-ai-with-grey8.local",
+    "GIT_COMMITTER_NAME": "Learn AI Learner",
+    "GIT_COMMITTER_EMAIL": "learner@learn-ai-with-grey8.local",
+    "GIT_TERMINAL_PROMPT": "0",
+    "PYTHONUTF8": "1",
+    "PYTHONIOENCODING": "utf-8",
+}
 
 
 class TestResult:
@@ -93,6 +120,7 @@ async def run_tests(code: str, test_dir: Path) -> TestResult:
                     capture_output=True,
                     cwd=str(tmp_path),
                     timeout=30,
+                    env={**os.environ, **_SANDBOX_ENV},
                 )
 
             loop = asyncio.get_event_loop()
@@ -118,8 +146,11 @@ async def run_tests(code: str, test_dir: Path) -> TestResult:
                 "This is unexpected. Try resubmitting; if it persists, report it.",
             )
 
-        output = stdout_bytes.decode(errors="replace")
-        stderr_output = stderr_bytes.decode(errors="replace")
+        # pytest emits UTF-8; decode explicitly so non-ASCII in assertion
+        # messages / tracebacks survives for Windows learners (the platform
+        # default codec is cp1252 there, which mangles em-dashes etc.).
+        output = stdout_bytes.decode("utf-8", errors="replace")
+        stderr_output = stderr_bytes.decode("utf-8", errors="replace")
         items = _parse_pytest_output(output)
         passed_count = sum(1 for i in items if i.passed)
         failed_count = sum(1 for i in items if not i.passed)

@@ -107,6 +107,11 @@ def test_at_least_one_commit(project_dir):
         capture_output=True,
         text=True,
     )
-    assert result.returncode == 0, "git log failed — no commits found"
+    no_commit_hint = (
+        "No Git commit was found in 'my-project'. The most common cause is an "
+        "empty commit message — Git rejects `git commit -m \"\"`. Make sure "
+        "TODO 6 commits with a real message, e.g. git commit -m \"Initial commit\"."
+    )
+    assert result.returncode == 0, no_commit_hint
     commits = result.stdout.strip().splitlines()
-    assert len(commits) >= 1, "Expected at least one commit"
+    assert len(commits) >= 1, no_commit_hint
