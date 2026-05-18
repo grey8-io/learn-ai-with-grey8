@@ -9,7 +9,11 @@
 #   ./local-dev/scripts/setup-ollama.sh
 # =============================================================================
 
-set -euo pipefail
+# NOTE: deliberately NO `-e`. Hardware detection is best-effort across an
+# unknowable range of OS/hardware; a missing or renamed probe (e.g. `wmic` is
+# gone on modern Windows 11) must degrade to a safe-bet model, never abort
+# before the model is pulled. The few truly critical failures exit explicitly.
+set -uo pipefail
 
 # ---------------------------------------------------------------------------
 # Helpers
@@ -96,18 +100,20 @@ fi
 info "Ollama server is running."
 
 # ---------------------------------------------------------------------------
-# Step 3: Detect GPU and available VRAM
+# Step 3: Detect GPU and available VRAM (best-effort — never fatal)
 # ---------------------------------------------------------------------------
 VRAM_GB=0
 GPU_NAME="none"
 
 if command -v nvidia-smi &>/dev/null; then
-    # Parse total VRAM from nvidia-smi (in MiB), convert to GB
-    VRAM_MIB=$(nvidia-smi --query-gpu=memory.total --format=csv,noheader,nounits 2>/dev/null | head -1 | tr -d ' ')
+    # Parse total VRAM from nvidia-smi (in MiB), convert to GB. Tolerant of
+    # any unexpected output: stays at 0 (-> RAM-based selection) on failure.
+    VRAM_MIB=$(nvidia-smi --query-gpu=memory.total --format=csv,noheader,nounits 2>/dev/null \
+        | head -1 | tr -cd '0-9' || true)
     if [[ -n "$VRAM_MIB" && "$VRAM_MIB" =~ ^[0-9]+$ ]]; then
         VRAM_GB=$((VRAM_MIB / 1024))
-        GPU_NAME=$(nvidia-smi --query-gpu=name --format=csv,noheader 2>/dev/null | head -1)
-        info "NVIDIA GPU detected: $GPU_NAME ($VRAM_GB GB VRAM)"
+        GPU_NAME=$(nvidia-smi --query-gpu=name --format=csv,noheader 2>/dev/null | head -1 || true)
+        info "NVIDIA GPU detected: ${GPU_NAME:-unknown} ($VRAM_GB GB VRAM)"
     fi
 else
     warn "nvidia-smi not found. Assuming CPU-only or non-NVIDIA GPU."
@@ -115,117 +121,145 @@ else
 fi
 
 # ---------------------------------------------------------------------------
-# Step 3b: Detect system RAM
+# Step 3b: Detect system RAM (best-effort — never fatal)
 # ---------------------------------------------------------------------------
+# Every probe is forced to exit 0 (|| true) so a missing/renamed tool degrades
+# to the safe-bet failover below instead of aborting setup. RAM_DETECTED stays
+# false when we genuinely cannot tell — we then refuse to guess "8 GB" (which
+# would wrongly pick a heavy model on a tiny machine).
 RAM_GB=0
+RAM_DETECTED=false
+RAM_RAW=""
 
 case "$OS" in
     linux)
-        RAM_KB=$(grep MemTotal /proc/meminfo 2>/dev/null | awk '{print $2}')
-        if [[ -n "$RAM_KB" && "$RAM_KB" =~ ^[0-9]+$ ]]; then
-            RAM_GB=$((RAM_KB / 1024 / 1024))
+        RAM_RAW=$(grep -i MemTotal /proc/meminfo 2>/dev/null | awk '{print $2}' || true)   # kB
+        if [[ -n "$RAM_RAW" && "$RAM_RAW" =~ ^[0-9]+$ ]]; then
+            RAM_GB=$((RAM_RAW / 1024 / 1024))
+        else
+            # Containers/minimal images may lack /proc/meminfo — try `free`.
+            RAM_RAW=$(free -k 2>/dev/null | awk '/^Mem:/ {print $2}' || true)              # kB
+            [[ -n "$RAM_RAW" && "$RAM_RAW" =~ ^[0-9]+$ ]] && RAM_GB=$((RAM_RAW / 1024 / 1024))
         fi
         ;;
     macos)
-        RAM_BYTES=$(sysctl -n hw.memsize 2>/dev/null)
-        if [[ -n "$RAM_BYTES" && "$RAM_BYTES" =~ ^[0-9]+$ ]]; then
-            RAM_GB=$((RAM_BYTES / 1024 / 1024 / 1024))
-        fi
+        RAM_RAW=$(sysctl -n hw.memsize 2>/dev/null | tr -cd '0-9' || true)                 # bytes
+        [[ -n "$RAM_RAW" && "$RAM_RAW" =~ ^[0-9]+$ ]] && RAM_GB=$((RAM_RAW / 1024 / 1024 / 1024))
         ;;
     windows)
-        # Git Bash / MSYS: parse from systeminfo or wmic
-        RAM_KB=$(wmic ComputerSystem get TotalPhysicalMemory 2>/dev/null | grep -o '[0-9]*')
-        if [[ -n "$RAM_KB" && "$RAM_KB" =~ ^[0-9]+$ ]]; then
-            RAM_GB=$((RAM_KB / 1024 / 1024 / 1024))
+        # wmic is deprecated and absent on modern Windows 11 builds — prefer
+        # PowerShell CIM (present since Windows 8 / PS 3.0), fall back to wmic.
+        RAM_RAW=$(powershell.exe -NoProfile -Command \
+            "(Get-CimInstance -ClassName Win32_ComputerSystem).TotalPhysicalMemory" \
+            2>/dev/null | tr -cd '0-9' || true)                                            # bytes
+        if [[ -z "$RAM_RAW" ]]; then
+            RAM_RAW=$(wmic ComputerSystem get TotalPhysicalMemory 2>/dev/null \
+                | grep -Eo '[0-9]+' | head -1 || true)                                     # bytes
         fi
+        [[ -n "$RAM_RAW" && "$RAM_RAW" =~ ^[0-9]+$ ]] && RAM_GB=$((RAM_RAW / 1024 / 1024 / 1024))
         ;;
 esac
 
-if [[ $RAM_GB -gt 0 ]]; then
+if [[ "$RAM_GB" -gt 0 ]]; then
+    RAM_DETECTED=true
     info "System RAM detected: ${RAM_GB} GB"
 else
-    warn "Could not detect system RAM. Assuming 8 GB."
-    RAM_GB=8
+    warn "Could not detect system RAM on this '$OS' environment."
 fi
 
 # ---------------------------------------------------------------------------
-# Step 3c: Determine hardware profile (RAM-based Ollama tuning)
+# Step 3c: Hardware profile (RAM-based Ollama tuning). Unknown hardware ->
+# conservative 'low' profile so we never over-allocate context on a small box.
+# These values land in .ollama_hw_profile and drive tutor request options.
 # ---------------------------------------------------------------------------
-# These values are written to .ollama_hw_profile so the tutor engine
-# can send optimal options (num_ctx, num_batch, num_gpu) with each request.
-
-if [[ $RAM_GB -le 4 ]]; then
-    HW_TIER="low"
-    OPT_NUM_CTX=1024
-    OPT_NUM_BATCH=128
-    OPT_NUM_GPU=0
+if [[ "$RAM_DETECTED" != true ]]; then
+    HW_TIER="low"; OPT_NUM_CTX=1024; OPT_NUM_BATCH=128; OPT_NUM_GPU=0
+    warn "Using conservative tuning (tier=LOW) until hardware is known."
+elif [[ $RAM_GB -le 4 ]]; then
+    HW_TIER="low"; OPT_NUM_CTX=1024; OPT_NUM_BATCH=128; OPT_NUM_GPU=0
     info "Hardware tier: LOW (${RAM_GB}GB RAM) — num_ctx=$OPT_NUM_CTX, num_batch=$OPT_NUM_BATCH, num_gpu=$OPT_NUM_GPU"
 elif [[ $RAM_GB -le 8 ]]; then
-    HW_TIER="medium"
-    OPT_NUM_CTX=2048
-    OPT_NUM_BATCH=256
-    OPT_NUM_GPU=0   # safe default; GPU users with 4GB+ VRAM can override
+    HW_TIER="medium"; OPT_NUM_CTX=2048; OPT_NUM_BATCH=256; OPT_NUM_GPU=0
     info "Hardware tier: MEDIUM (${RAM_GB}GB RAM) — num_ctx=$OPT_NUM_CTX, num_batch=$OPT_NUM_BATCH"
 elif [[ $RAM_GB -le 16 ]]; then
-    HW_TIER="high"
-    OPT_NUM_CTX=4096
-    OPT_NUM_BATCH=512
-    OPT_NUM_GPU=-1   # auto-detect (let Ollama decide)
+    HW_TIER="high"; OPT_NUM_CTX=4096; OPT_NUM_BATCH=512; OPT_NUM_GPU=-1
     info "Hardware tier: HIGH (${RAM_GB}GB RAM) — num_ctx=$OPT_NUM_CTX, num_batch=$OPT_NUM_BATCH"
 else
-    HW_TIER="ultra"
-    OPT_NUM_CTX=8192
-    OPT_NUM_BATCH=512
-    OPT_NUM_GPU=-1
+    HW_TIER="ultra"; OPT_NUM_CTX=8192; OPT_NUM_BATCH=512; OPT_NUM_GPU=-1
     info "Hardware tier: ULTRA (${RAM_GB}GB RAM) — num_ctx=$OPT_NUM_CTX, num_batch=$OPT_NUM_BATCH"
 fi
 
 # ---------------------------------------------------------------------------
-# Step 4: Select model based on VRAM and system RAM
+# Step 4: Select model — GPU VRAM first, then system RAM, then a universal
+# safe bet. The safe bet (llama3.2:1b) runs CPU-only on ~4 GB and is the
+# "learner is never blocked" guarantee.
 # ---------------------------------------------------------------------------
-# GPU-capable machines use VRAM for selection; CPU-only machines use RAM.
-if [[ $VRAM_GB -ge 16 ]]; then
-    MODEL="llama3.1:8b"
-    info "16+ GB VRAM detected — selecting $MODEL"
-elif [[ $VRAM_GB -ge 12 ]]; then
-    MODEL="llama3.1:8b"
-    info "12-16 GB VRAM detected — selecting $MODEL"
+SAFE_MODEL="llama3.2:1b"
+DETECTION_FAILED=false
+
+if [[ $VRAM_GB -ge 12 ]]; then
+    MODEL="llama3.1:8b"; info "${VRAM_GB} GB VRAM detected — selecting $MODEL"
 elif [[ $VRAM_GB -ge 8 ]]; then
-    MODEL="llama3.2:3b"
-    info "8-12 GB VRAM detected — selecting $MODEL"
+    MODEL="llama3.2:3b"; info "${VRAM_GB} GB VRAM detected — selecting $MODEL"
 elif [[ $VRAM_GB -gt 0 ]]; then
-    MODEL="llama3.2:1b"
-    info "<8 GB VRAM detected — selecting $MODEL"
-else
-    # CPU-only: use system RAM to pick the model
-    if [[ $RAM_GB -ge 16 ]]; then
-        MODEL="llama3.2:3b"
-        info "No GPU, 16+ GB RAM — selecting $MODEL (CPU mode)"
-    elif [[ $RAM_GB -ge 8 ]]; then
-        MODEL="llama3.2:3b"
-        info "No GPU, 8+ GB RAM — selecting $MODEL (CPU mode)"
-    elif [[ $RAM_GB -ge 6 ]]; then
-        MODEL="llama3.2:3b"
-        info "No GPU, 6+ GB RAM — selecting $MODEL (CPU mode, may be tight)"
+    MODEL="$SAFE_MODEL";  info "${VRAM_GB} GB VRAM detected — selecting $MODEL"
+elif [[ "$RAM_DETECTED" == true ]]; then
+    if [[ $RAM_GB -ge 6 ]]; then
+        MODEL="llama3.2:3b"; info "No GPU, ${RAM_GB} GB RAM — selecting $MODEL (CPU mode)"
     else
-        MODEL="llama3.2:1b"
-        info "No GPU, <6 GB RAM — selecting $MODEL (CPU mode, lightweight)"
+        MODEL="$SAFE_MODEL"; info "No GPU, ${RAM_GB} GB RAM — selecting $MODEL (CPU mode, lightweight)"
     fi
+else
+    # Nothing detected anywhere — guarantee a working tutor with the safe bet.
+    MODEL="$SAFE_MODEL"
+    DETECTION_FAILED=true
+    warn "Hardware could not be detected — using the safe-bet model: $MODEL"
+    warn "On a machine with >=6 GB RAM you can later run:  ollama pull llama3.2:3b"
+    warn "then set TUTOR_OLLAMA_MODEL=llama3.2:3b in your .env"
 fi
 
 # ---------------------------------------------------------------------------
-# Step 5: Pull the model
+# Step 5: Pull the model — retry once, then last-resort to the safe bet so a
+# learner is never left with no model at all.
 # ---------------------------------------------------------------------------
-info "Pulling model: $MODEL (this may take a few minutes on first run)..."
-ollama pull "$MODEL"
+pull_model() {
+    local m="$1"
+    info "Pulling model: $m (first run can take several minutes)..."
+    if ollama pull "$m"; then return 0; fi
+    warn "First attempt to pull '$m' failed — retrying once..."
+    ollama pull "$m"
+}
 
-info "Model $MODEL is ready."
+PULLED=""
+if pull_model "$MODEL"; then
+    PULLED="$MODEL"
+elif [[ "$MODEL" != "$SAFE_MODEL" ]]; then
+    warn "Could not pull '$MODEL'. Falling back to the safe-bet model: $SAFE_MODEL"
+    if pull_model "$SAFE_MODEL"; then
+        PULLED="$SAFE_MODEL"
+        MODEL="$SAFE_MODEL"
+        # We downshifted the model — pin conservative tuning to match it.
+        HW_TIER="low"; OPT_NUM_CTX=1024; OPT_NUM_BATCH=128; OPT_NUM_GPU=0
+    fi
+fi
+
+if [[ -z "$PULLED" ]]; then
+    error "Could not download any model (likely a network or disk-space issue)."
+    echo ""
+    echo "  Fix it manually, then re-run this script or 'bash scripts/start.sh':"
+    echo ""
+    echo "    ollama pull llama3.2:3b      # or llama3.2:1b on a 4 GB machine"
+    echo ""
+    exit 1
+fi
+
+info "Model $PULLED is ready."
 
 # ---------------------------------------------------------------------------
-# Step 6: Verify with a test prompt
+# Step 6: Verify with a test prompt (informational — never fatal)
 # ---------------------------------------------------------------------------
 info "Verifying model with a test prompt..."
-RESPONSE=$(ollama run "$MODEL" "Say 'hello' in one word." 2>/dev/null | head -5)
+RESPONSE=$(ollama run "$MODEL" "Say 'hello' in one word." 2>/dev/null | head -5 || true)
 
 if [[ -n "$RESPONSE" ]]; then
     info "Model responded successfully."
@@ -233,19 +267,23 @@ if [[ -n "$RESPONSE" ]]; then
     echo "  Test response: $RESPONSE"
     echo ""
 else
-    warn "Model did not return a response. It may still be loading."
+    warn "Model did not return a test response yet (it may still be loading)."
     warn "Try running:  ollama run $MODEL \"Hello\""
 fi
 
 # ---------------------------------------------------------------------------
-# Done
+# Done — record what ACTUALLY happened so .env / tutor stay in sync.
 # ---------------------------------------------------------------------------
 echo ""
 echo "============================================="
 echo "  Ollama Setup Complete"
 echo "============================================="
 echo "  OS:     $OS"
-echo "  RAM:    ${RAM_GB} GB"
+if [[ "$RAM_DETECTED" == true ]]; then
+    echo "  RAM:    ${RAM_GB} GB"
+else
+    echo "  RAM:    unknown (conservative defaults)"
+fi
 echo "  GPU:    $GPU_NAME"
 echo "  VRAM:   ${VRAM_GB} GB"
 echo "  Tier:   $HW_TIER"
@@ -254,7 +292,8 @@ echo "  Tuning: num_ctx=$OPT_NUM_CTX  num_batch=$OPT_NUM_BATCH  num_gpu=$OPT_NUM
 echo "  API:    http://localhost:11434"
 echo "============================================="
 echo ""
-# Write selected model to a file so setup.sh can read it
+
+# Write the model that was actually pulled so setup.sh / start.sh can sync .env
 REPO_ROOT="$(cd "$(dirname "$0")/../.." && pwd)"
 echo "$MODEL" > "$REPO_ROOT/.ollama_model"
 
@@ -271,4 +310,9 @@ NUM_GPU=$OPT_NUM_GPU
 HWEOF
 info "Hardware profile written to .ollama_hw_profile (tier=$HW_TIER)"
 
-info "You can now start the tutor with:  docker compose -f docker/docker-compose.yml up"
+if [[ "$DETECTION_FAILED" == true ]]; then
+    warn "Hardware detection failed; '$MODEL' is a conservative safe bet."
+    warn "On a stronger machine, pull a bigger model and update TUTOR_OLLAMA_MODEL in .env."
+fi
+
+info "You can now start the tutor with:  bash scripts/start.sh"
