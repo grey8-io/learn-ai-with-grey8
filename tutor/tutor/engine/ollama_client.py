@@ -26,7 +26,11 @@ class OllamaClient:
         if self._client is None or self._client.is_closed:
             self._client = httpx.AsyncClient(
                 base_url=self.host,
-                timeout=httpx.Timeout(connect=5.0, read=120.0, write=10.0, pool=10.0),
+                # read is generous: on a cold CPU model the first streamed
+                # token can lag while Ollama loads/prefills. With the prompt
+                # budget fixed this is rarely hit, but it must not abort a
+                # legitimately slow first response on low-end hardware.
+                timeout=httpx.Timeout(connect=5.0, read=300.0, write=10.0, pool=10.0),
             )
         return self._client
 
@@ -90,6 +94,8 @@ class OllamaClient:
             payload["system"] = system
         if self._options:
             payload["options"] = {**self._options}
+        if settings.ollama_keep_alive:
+            payload["keep_alive"] = settings.ollama_keep_alive
 
         if stream:
             return self._stream_generate(payload)
@@ -134,6 +140,8 @@ class OllamaClient:
         }
         if self._options:
             payload["options"] = {**self._options}
+        if settings.ollama_keep_alive:
+            payload["keep_alive"] = settings.ollama_keep_alive
 
         if stream:
             return self._stream_chat(payload)

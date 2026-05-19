@@ -15,6 +15,8 @@ class Settings(BaseSettings):
     ollama_num_ctx: int = 0      # 0 = auto-detect from .ollama_hw_profile or use model default
     ollama_num_batch: int = 0    # 0 = use Ollama default (512)
     ollama_num_gpu: int = -1     # -1 = auto-detect, 0 = CPU-only
+    ollama_num_predict: int = 512  # cap generated tokens (0 = Ollama default/unbounded)
+    ollama_keep_alive: str = "30m"  # keep the model resident between questions
     tutor_host: str = "127.0.0.1"
     tutor_port: int = 8000
     cors_origins: list[str] = ["http://localhost:3000", "http://localhost:5173"]
@@ -84,7 +86,31 @@ def get_ollama_options() -> dict[str, int]:
     elif hw.get("num_gpu", -1) >= 0:
         options["num_gpu"] = hw["num_gpu"]
 
+    # num_predict: cap output length so Socratic replies don't run away on
+    # CPU (unbounded generation is a large, avoidable latency cost).
+    if settings.ollama_num_predict > 0:
+        options["num_predict"] = settings.ollama_num_predict
+
     return options
+
+
+def get_effective_num_ctx(default: int = 4096) -> int:
+    """Return the context window Ollama will *actually* use.
+
+    Priority: env (TUTOR_OLLAMA_NUM_CTX) > .ollama_hw_profile > Ollama default.
+
+    This is deliberately NOT the model's native window. llama3.2 advertises
+    131072 via /api/show, but Ollama only allocates ``num_ctx`` tokens. Sizing
+    the prompt budget off 131072 makes the tutor stuff a maximal prompt
+    (full curriculum index + unbounded history) and forces a huge CPU prefill
+    every request — the root cause of multi-minute responses on CPU machines.
+    """
+    if settings.ollama_num_ctx > 0:
+        return settings.ollama_num_ctx
+    hw = _load_hw_profile()
+    if hw.get("num_ctx", 0) > 0:
+        return hw["num_ctx"]
+    return default
 
 
 def resolve_curriculum_path() -> Path:
