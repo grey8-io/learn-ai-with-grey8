@@ -5,6 +5,7 @@ import json
 from fastapi import APIRouter
 from fastapi.responses import StreamingResponse
 
+from tutor.config import get_effective_num_ctx
 from tutor.engine.context import build_context
 from tutor.engine.ollama_client import ollama_client
 from tutor.models.schemas import ChatRequest
@@ -21,8 +22,13 @@ async def chat(req: ChatRequest) -> StreamingResponse:
     - Medium+ models (8K+): adds curriculum index for cross-lesson awareness
     - Exercise mode: adds TODO comments, test names, submission context
     """
-    # Detect model context window at runtime
-    context_length = await ollama_client.get_context_length()
+    # Size the context budget off the window Ollama will ACTUALLY use, not
+    # the model's native 128K. llama3.2 reports 131072 via /api/show, but
+    # Ollama only allocates num_ctx (hw-profile/env). Budgeting off 131072
+    # injects the full curriculum index + unbounded history and forces a
+    # maximal CPU prefill every request (multi-minute responses on CPU).
+    native_ctx = await ollama_client.get_context_length()
+    effective_ctx = min(native_ctx, get_effective_num_ctx())
 
     # Build tiered context
     system_prompt, trimmed_history = await build_context(
@@ -30,7 +36,7 @@ async def chat(req: ChatRequest) -> StreamingResponse:
         student_code="",
         history=[{"role": m.role, "content": m.content} for m in req.history],
         student_profile=req.student_profile,
-        model_context_length=context_length,
+        model_context_length=effective_ctx,
     )
 
     # Assemble messages for the chat API

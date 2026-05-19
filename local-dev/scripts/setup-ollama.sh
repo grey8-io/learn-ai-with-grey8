@@ -189,6 +189,17 @@ else
     info "Hardware tier: ULTRA (${RAM_GB}GB RAM) — num_ctx=$OPT_NUM_CTX, num_batch=$OPT_NUM_BATCH"
 fi
 
+# CPU-only machines: a large num_ctx makes prompt prefill painfully slow on
+# CPU (the dominant latency cost — far more than model size). Cap context and
+# batch and force CPU regardless of the RAM tier so the tutor stays usable.
+# GPU machines keep the bigger window since GPU prefill is cheap.
+if [[ "$VRAM_GB" -eq 0 ]]; then
+    OPT_NUM_GPU=0
+    [[ $OPT_NUM_CTX -gt 2048 ]] && OPT_NUM_CTX=2048
+    [[ $OPT_NUM_BATCH -gt 256 ]] && OPT_NUM_BATCH=256
+    info "CPU-only — capping num_ctx=$OPT_NUM_CTX, num_batch=$OPT_NUM_BATCH for responsiveness"
+fi
+
 # ---------------------------------------------------------------------------
 # Step 4: Select model — GPU VRAM first, then system RAM, then a universal
 # safe bet. The safe bet (llama3.2:1b) runs CPU-only on ~4 GB and is the
@@ -204,11 +215,11 @@ elif [[ $VRAM_GB -ge 8 ]]; then
 elif [[ $VRAM_GB -gt 0 ]]; then
     MODEL="$SAFE_MODEL";  info "${VRAM_GB} GB VRAM detected — selecting $MODEL"
 elif [[ "$RAM_DETECTED" == true ]]; then
-    if [[ $RAM_GB -ge 6 ]]; then
-        MODEL="llama3.2:3b"; info "No GPU, ${RAM_GB} GB RAM — selecting $MODEL (CPU mode)"
-    else
-        MODEL="$SAFE_MODEL"; info "No GPU, ${RAM_GB} GB RAM — selecting $MODEL (CPU mode, lightweight)"
-    fi
+    # No usable GPU. 3b is too slow on CPU even on 16 GB / i7 boxes (real
+    # learner feedback), so CPU-only always uses the lightweight model.
+    # 3b is reserved for machines with a capable GPU (VRAM >= 8 GB).
+    MODEL="$SAFE_MODEL"
+    info "No usable GPU, ${RAM_GB} GB RAM — selecting $MODEL (CPU mode; 3b is too slow on CPU)"
 else
     # Nothing detected anywhere — guarantee a working tutor with the safe bet.
     MODEL="$SAFE_MODEL"
