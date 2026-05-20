@@ -163,6 +163,20 @@ async def run_tests(code: str, test_dir: Path) -> TestResult:
             extracted = _extract_pytest_error(output, stderr_output)
             return _failure_result(extracted, raw_output=output or stderr_output)
 
+        # Load-time errors (SyntaxError/IndentationError/TabError) prevent
+        # Python from importing the student's file, so every test errors with
+        # the same root cause. Without this short-circuit, learners see N
+        # identical failures and don't realise their "correct" TODOs were
+        # never evaluated — collapse to one clear explanation.
+        if passed_count == 0:
+            load_error = _detect_load_failure(output)
+            if load_error:
+                return _failure_result(
+                    load_error,
+                    "No tests ran — Python couldn't load your file. Fix this first; the rest of your code is evaluated once the file parses cleanly.",
+                    raw_output=output,
+                )
+
         return TestResult(
             passed=failed_count == 0 and total > 0,
             total=total,
@@ -234,6 +248,26 @@ _TRANSLATIONS: list[tuple[str, str]] = [
     (
         r"SyntaxError: unterminated string literal",
         "A string is missing its closing quote. Check that every opening ' or \" has a matching close on the same line.",
+    ),
+    # f-string errors — common in early lessons (lesson 2 teaches f-strings).
+    # Python emits "SyntaxError: f-string: ..." which the generic 'invalid
+    # syntax' pattern below doesn't catch; without these entries learners see
+    # the raw cryptic message.
+    (
+        r"SyntaxError: f-string: expecting '\}'",
+        "Unbalanced braces in an f-string. Every '{' inside f\"...\" needs a matching '}'. To include a literal brace, double it: '{{' or '}}'.",
+    ),
+    (
+        r"SyntaxError: f-string: expecting a valid expression after '\{'",
+        "Empty or invalid expression inside an f-string. After '{' you need a Python expression like a variable name — not the whole string.",
+    ),
+    (
+        r"SyntaxError: f-string expression part cannot include a backslash",
+        "Backslashes aren't allowed inside f-string '{...}' expressions. Assign the value to a variable first, then reference it.",
+    ),
+    (
+        r"SyntaxError: f-string:",
+        "Problem with an f-string. Inside f\"...\" only the parts in '{...}' are evaluated as Python — the rest is literal text. Common mistakes: wrapping the whole string in '{...}', mismatched braces, or putting backslashes inside '{...}'.",
     ),
     (
         r"SyntaxError: invalid syntax",
@@ -327,6 +361,23 @@ def _humanize_error(message: str) -> str:
             except (IndexError, KeyError):
                 return template
     return message
+
+
+_LOAD_FAILURE_PATTERN = re.compile(
+    r"^E\s+((?:SyntaxError|IndentationError|TabError):.*?)$",
+    re.MULTILINE,
+)
+
+
+def _detect_load_failure(output: str) -> str | None:
+    """Return the first SyntaxError/IndentationError/TabError E-line in pytest
+    output, stripped of the "E " prefix. None if not present.
+
+    Used to short-circuit per-test reporting when one of these is the root
+    cause under every test (Python couldn't import the student's file).
+    """
+    match = _LOAD_FAILURE_PATTERN.search(output)
+    return match.group(1).strip() if match else None
 
 
 def _extract_pytest_error(stdout: str, stderr: str) -> str:
