@@ -49,6 +49,7 @@ class TestResult:
         failed_count: int,
         items: list[TestResultItem],
         raw_output: str = "",
+        load_failed: bool = False,
     ) -> None:
         self.passed = passed
         self.total = total
@@ -56,6 +57,8 @@ class TestResult:
         self.failed_count = failed_count
         self.items = items
         self.raw_output = raw_output
+        # File couldn't be imported (SyntaxError/IndentationError/TabError) — no code ran.
+        self.load_failed = load_failed
 
     @property
     def score(self) -> int:
@@ -160,6 +163,14 @@ async def run_tests(code: str, test_dir: Path) -> TestResult:
         # raw error so the student isn't stuck staring at "0/0 Tests Passed".
         # This handles collection failures, bad pytest output, exotic errors, etc.
         if total == 0:
+            load_error = _detect_load_failure(output)
+            if load_error:
+                return _failure_result(
+                    load_error,
+                    "No tests ran — Python couldn't load your file. Fix this first; the rest of your code is evaluated once the file parses cleanly.",
+                    raw_output=output,
+                    load_failed=True,
+                )
             extracted = _extract_pytest_error(output, stderr_output)
             return _failure_result(extracted, raw_output=output or stderr_output)
 
@@ -175,6 +186,7 @@ async def run_tests(code: str, test_dir: Path) -> TestResult:
                     load_error,
                     "No tests ran — Python couldn't load your file. Fix this first; the rest of your code is evaluated once the file parses cleanly.",
                     raw_output=output,
+                    load_failed=True,
                 )
 
         return TestResult(
@@ -187,7 +199,9 @@ async def run_tests(code: str, test_dir: Path) -> TestResult:
         )
 
 
-def _failure_result(message: str, hint: str = "", raw_output: str = "") -> "TestResult":
+def _failure_result(
+    message: str, hint: str = "", raw_output: str = "", load_failed: bool = False
+) -> "TestResult":
     """Build a TestResult with a single synthetic failure item.
 
     Used when pytest can't run or produces no parseable output, so the student
@@ -208,6 +222,7 @@ def _failure_result(message: str, hint: str = "", raw_output: str = "") -> "Test
             )
         ],
         raw_output=raw_output or message,
+        load_failed=load_failed,
     )
 
 

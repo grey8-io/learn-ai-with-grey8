@@ -17,6 +17,7 @@ async def grade(req: GradeRequest) -> GradeResponse:
     test_score = 0
     test_items = []
     tests_ran = False
+    load_failed = False
 
     # Run pytest tests if available
     tests_dir = get_tests_dir(req.exercise_id)
@@ -25,6 +26,21 @@ async def grade(req: GradeRequest) -> GradeResponse:
         test_score = result.score
         test_items = result.items
         tests_ran = True
+        load_failed = result.load_failed
+
+    # File didn't import — nothing ran, so skip the rubric and score 0
+    # rather than award partial credit for reading dead code.
+    if load_failed:
+        return GradeResponse(
+            passed=False,
+            score=0,
+            test_results=test_items,
+            feedback=(
+                "Your file couldn't be loaded, so no part of it was evaluated. "
+                "Fix the error shown above first — once the file parses cleanly, "
+                "your code is graded against the tests and rubric."
+            ),
+        )
 
     # Build a concise test summary for the LLM rubric grader
     test_summary_lines = []
