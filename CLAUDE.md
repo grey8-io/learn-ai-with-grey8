@@ -457,6 +457,7 @@ The platform has a layered system to ensure students are never permanently block
   - Human-readable test name (e.g. "greet returns correct string" instead of `test_exercise.py::test_greet_returns_correct_string`)
   - Assertion details in monospace font (what was expected, what was received)
   - Failed tests shown first with red cards, passed tests collapsed below
+- When the file fails to import (SyntaxError/IndentationError/TabError), the N identical per-test errors collapse into one clear explanation, and the exercise scores **0** — the LLM rubric is skipped so dead code can't earn partial credit
 
 ### Layer 2: Smart Failure Guidance
 - After a failed submission, contextual tips appear based on the failure pattern:
@@ -484,7 +485,8 @@ The platform has a layered system to ensure students are never permanently block
 - Attempt count tracked per exercise in the progress backend
 
 ### Key Files
-- `tutor/tutor/grading/runner.py` — `_parse_pytest_output()` extracts assertion details
+- `tutor/tutor/grading/runner.py` — `_parse_pytest_output()` extracts assertion details; `TestResult.load_failed` flags unimportable files
+- `tutor/tutor/routers/grade.py` — short-circuits to score 0 (skips rubric) when `load_failed`
 - `components/ExerciseResult.tsx` — failure display, smart guidance, attempt count
 - `app/learn/exercises/[exerciseId]/page.tsx` — solution reveal gate, attempt tracking
 - `app/api/content/[...path]/route.ts` — `handleSolutionRequest()` serves solution code
@@ -497,7 +499,7 @@ The platform has a layered system to ensure students are never permanently block
 |--------|------|---------|----------|---------|
 | GET | `/health` | — | `HealthResponse` | Health check + Ollama status |
 | POST | `/chat` | `ChatRequest` (lesson_id, message, history, student_profile) | SSE stream | Socratic tutoring |
-| POST | `/grade` | `GradeRequest` (exercise_id, code) | `GradeResponse` (score, tests, feedback) | Grade exercises (60% tests + 40% rubric) |
+| POST | `/grade` | `GradeRequest` (exercise_id, code) | `GradeResponse` (score, tests, feedback) | Grade exercises (60% tests + 40% rubric; score 0 if the file won't import) |
 | POST | `/hint` | `HintRequest` (exercise_id, code, hint_level 1-3) | `HintResponse` (hint, level) | Progressive hints |
 
 ### Next.js Proxy Routes (port 3000)
