@@ -14,6 +14,7 @@
 ## Checklist
 
 - [ ] I have read [CONTRIBUTING.md](docs/contributing.md)
+- [ ] I have read and agree to the [Contributor License Agreement](CLA.md) (the CLA bot will prompt me to sign on this PR)
 - [ ] My code follows the project's style (ruff/eslint pass)
 - [ ] I have tested my changes locally (`make test` or relevant subset)
 - [ ] I have updated documentation if needed
