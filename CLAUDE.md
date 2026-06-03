@@ -400,7 +400,7 @@ The platform uses a gamification system to keep students engaged. All state is p
 
 ### Branch Protection (`main`)
 
-- All changes require a PR with 1 approving review
+- All changes require a PR with 1 approving review (repository **admins may bypass** — Option B — since the project currently has a single maintainer who cannot self-approve; tighten when a second maintainer joins)
 - Stale reviews auto-dismissed on new pushes
 - CODEOWNERS auto-assigns reviewer on all PRs
 - Force pushes and branch deletion blocked
@@ -411,9 +411,19 @@ Contributors use the **Fork + PR** workflow — they never get direct write acce
 1. Fork the repo to their own account
 2. Create a branch, make changes, push to their fork
 3. Open a PR to `main`
-4. PR template auto-fills with checklist (type, testing, `ace sync`, docs)
-5. CODEOWNERS triggers review request
-6. Maintainer reviews, requests changes or approves, then merges
+4. PR template auto-fills with checklist (type, testing, `ace sync`, docs, CLA)
+5. **First-time contributors sign the CLA** by commenting on their PR (enforced by the CLA Assistant bot — see below)
+6. CODEOWNERS triggers review request
+7. Maintainer reviews, requests changes or approves, then merges
+
+### Contributor License Agreement (CLA)
+
+All contributions are covered by a CLA (`CLA.md`) so the project can stay open under AGPL-3.0 **and** Grey8 can use community contributions in its commercial offerings (certification, cohorts, placement). The CLA grants relicensing rights; a DCO alone would not, so there is **no separate DCO** — the Developer Certificate of Origin v1.1 is embedded as Section 7 of the CLA.
+
+- Enforced by **CLA Assistant Lite** (`.github/workflows/cla.yml`) — contributors sign by commenting `I have read the CLA Document and I hereby sign the CLA` on their PR
+- Signatures are stored **in-repo** at `signatures/version1/cla.json` (no external SaaS)
+- Requires a repo secret `PERSONAL_ACCESS_TOKEN` (Contents + Pull requests read/write) so the bot can record signatures under branch protection
+- Inbound license: contributions are provided under both AGPL-3.0 and the CLA unless the contributor states otherwise in writing
 
 ### Issue Templates
 
@@ -424,8 +434,12 @@ Contributors use the **Fork + PR** workflow — they never get direct write acce
 ### Key Files
 
 - `.github/CODEOWNERS` — assigns reviewer
-- `.github/PULL_REQUEST_TEMPLATE.md` — PR checklist
+- `.github/PULL_REQUEST_TEMPLATE.md` — PR checklist (includes CLA acknowledgment)
 - `.github/ISSUE_TEMPLATE/` — bug, feature, content templates
+- `CLA.md` — Contributor License Agreement (Apache/Harmony-based, embedded DCO 1.1)
+- `.github/workflows/cla.yml` — CLA Assistant Lite signing check
+- `signatures/version1/cla.json` — in-repo CLA signature store
+- `docs/contributing.md` — contributor guide (CLA section + inbound-license clause)
 
 ## Do NOT
 
