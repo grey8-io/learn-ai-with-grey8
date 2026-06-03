@@ -4,6 +4,34 @@ Thanks for your interest in Learn AI With Grey8! Here is how to get involved.
 
 ---
 
+## Contributor License Agreement (CLA)
+
+Before your first contribution can be merged, you must sign our
+**[Contributor License Agreement](../CLA.md)**. It takes one comment on your
+pull request and you only do it once.
+
+**Why we ask:** the Project is open-source under [AGPL-3.0](../LICENSE), but it
+also powers Grey8's certification, cohort, and placement offerings. The CLA lets
+you keep all rights to your own work while granting Grey8 the right to use your
+contribution under both the open-source license **and** commercial/proprietary
+licenses. Without it, we could not include community contributions in those
+offerings.
+
+**Inbound license:** unless you state otherwise in writing, every contribution
+you submit is provided under the terms of both the AGPL-3.0 [`LICENSE`](../LICENSE)
+and the [`CLA`](../CLA.md).
+
+**How to sign:** when you open a PR, an automated check posts a comment if you
+haven't signed yet. Reply on the PR with exactly:
+
+```
+I have read the CLA Document and I hereby sign the CLA
+```
+
+Your signature is recorded in [`signatures/version1/cla.json`](../signatures/version1/cla.json).
+
+---
+
 ## Dev Environment Setup
 
 Follow the **[Getting Started](getting-started.md)** guide to install all prerequisites, then:
@@ -202,7 +230,15 @@ The platform has a dual-layer progress persistence system:
 5. Run `ace sync` if you changed curriculum files
 6. Push your branch and open a **Pull Request** against `main`
 7. Fill in the PR template -- describe what changed and why
-8. A maintainer will review and merge
+8. **Sign the [CLA](../CLA.md)** when the bot prompts you (one comment, first PR only)
+9. A maintainer will review and merge
+
+> **Maintainer / repository setup (one-time):** the CLA check
+> (`.github/workflows/cla.yml`) needs a repository secret named
+> `PERSONAL_ACCESS_TOKEN` — a token with `repo` scope (classic) or Contents +
+> Pull requests read/write (fine-grained) — so it can record signatures to
+> `signatures/version1/cla.json` under branch protection. Add it under
+> **Settings → Secrets and variables → Actions**.
 
 ---
 
