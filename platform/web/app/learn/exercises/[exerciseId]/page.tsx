@@ -6,7 +6,7 @@ import CodeEditor from "@/components/CodeEditor";
 import ExerciseResult from "@/components/ExerciseResult";
 import ChatPanel from "@/components/ChatPanel";
 import MarkdownRenderer from "@/components/MarkdownRenderer";
-import { fetchExercise, submitCode, getHint, fetchSolution, ExerciseData } from "@/lib/api";
+import { fetchExercise, submitCode, getHint, fetchSolution, ExerciseData, TutorApiError } from "@/lib/api";
 import { useProgress } from "@/components/ProgressProvider";
 import { useGamification } from "@/components/GamificationProvider";
 import type { Submission } from "@/lib/progress";
@@ -39,7 +39,7 @@ export default function ExercisePage({
   const [showSolution, setShowSolution] = useState(false);
   const [solutionCode, setSolutionCode] = useState<string | null>(null);
   const { backend, refreshStats, stats } = useProgress();
-  const { onExerciseComplete, onHintUsed } = useGamification();
+  const { onExerciseComplete, onHintUsed, onLessonComplete } = useGamification();
 
   const SOLUTION_REVEAL_THRESHOLD = 5;
 
@@ -130,7 +130,14 @@ export default function ExercisePage({
         // Need quiz passed too (70%+ correct)
         const quizTotal = quizResult?.answers?.length ?? 0;
         if (quizResult && quizTotal > 0 && quizResult.score >= Math.ceil(0.7 * quizTotal)) {
+          const prev = await backend.getLessonProgress(canonicalLessonId);
           await backend.upsertLessonProgress(canonicalLessonId, "completed");
+          // Fire the lesson-completion gamification hook (daily goal, lesson
+          // XP, streak/milestone achievements) exactly once — only when this
+          // page is the one that newly completes the lesson.
+          if (prev?.status !== "completed") {
+            onLessonComplete(stats?.currentStreakDays ?? 0);
+          }
         }
       }
 
@@ -142,11 +149,19 @@ export default function ExercisePage({
       }
     } catch (err) {
       const message = err instanceof Error ? err.message : "Unknown error";
+      // Only the new hosted auth/quota states (401/429) get the verbatim
+      // backend message. Everything else — including the tutor being down
+      // (the common local case) — keeps the original "is it running?" nudge,
+      // so existing local behaviour is unchanged.
+      const isBackendMessage =
+        err instanceof TutorApiError && (err.status === 401 || err.status === 429);
       setResult({
         score: 0,
         passed: false,
         tests: [],
-        feedback: `Grading error: ${message}. Make sure the tutor service is running on port 8000.`,
+        feedback: isBackendMessage
+          ? message
+          : `Grading error: ${message}. Make sure the tutor service is running on port 8000.`,
       });
     } finally {
       setSubmitting(false);
@@ -172,8 +187,16 @@ export default function ExercisePage({
       const data = await getHint(params.exerciseId, code, nextLevel);
       setHint(data.hint);
       setHintLevel(nextLevel);
-    } catch {
-      setHint("Unable to load hint. Please try again.");
+    } catch (err) {
+      // Show the backend's message only for the new auth/quota states; keep the
+      // original generic text otherwise (unchanged for local users).
+      const showBackend =
+        err instanceof TutorApiError && (err.status === 401 || err.status === 429);
+      setHint(
+        showBackend
+          ? (err as TutorApiError).message
+          : "Unable to load hint. Please try again."
+      );
     } finally {
       setLoadingHint(false);
     }

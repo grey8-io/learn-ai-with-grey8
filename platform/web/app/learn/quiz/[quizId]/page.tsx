@@ -42,7 +42,7 @@ export default function QuizPage({
   const [previousBest, setPreviousBest] = useState<QuizResult | null>(null);
   const { backend, refreshStats } = useProgress();
   const { stats } = useProgress();
-  const { onQuizComplete } = useGamification();
+  const { onQuizComplete, onLessonComplete } = useGamification();
 
   useEffect(() => {
     async function load() {
@@ -96,16 +96,24 @@ export default function QuizPage({
         const isEasyPhase = phaseNum >= 1 && phaseNum <= 3;
         const canonicalId = params.quizId.replace(/--/g, "/");
 
-        if (isEasyPhase) {
-          // Easy phases: quiz alone is enough
-          await backend.upsertLessonProgress(canonicalId, "completed");
-        } else {
-          // Medium/hard phases: also need exercise passed
+        // Easy phases complete on the quiz alone; medium/hard also need the
+        // exercise passed.
+        let requirementsMet = isEasyPhase;
+        if (!isEasyPhase) {
           // Exercise ID = lessonId--ex-01 (all lessons have one exercise)
           const exerciseId = `${params.quizId}--ex-01`;
           const bestSub = await backend.getBestSubmission(exerciseId);
-          if (bestSub && (bestSub.score ?? 0) >= PASS_PERCENT) {
-            await backend.upsertLessonProgress(canonicalId, "completed");
+          requirementsMet = !!bestSub && (bestSub.score ?? 0) >= PASS_PERCENT;
+        }
+
+        if (requirementsMet) {
+          const prev = await backend.getLessonProgress(canonicalId);
+          await backend.upsertLessonProgress(canonicalId, "completed");
+          // Fire the lesson-completion gamification hook (daily goal, lesson
+          // XP, streak/milestone achievements) exactly once — only when this
+          // page is the one that newly completes the lesson.
+          if (prev?.status !== "completed") {
+            onLessonComplete(stats?.currentStreakDays ?? 0);
           }
         }
       }

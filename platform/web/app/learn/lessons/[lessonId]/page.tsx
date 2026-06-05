@@ -93,39 +93,42 @@ export default function LessonPage({
       const wasNewCompletion = prev?.status !== "completed";
       if (wasNewCompletion) {
         onLessonComplete(stats?.currentStreakDays ?? 0);
+      }
 
-        // Check if this completion finishes the entire phase
-        if (!hasShownPhaseBadge(phaseNum)) {
-          try {
-            const manifest = await fetchManifest();
-            const phase = manifest.phases.find((ph) => ph.phase === phaseNum);
-            if (phase) {
-              const allProgress = await backend.getAllLessonProgress();
-              const completedSet = new Set(
-                allProgress.filter((lp) => lp.status === "completed").map((lp) => lp.lessonId)
-              );
-              const allDone = phase.lessons.every((l) => completedSet.has(l.id));
-              if (allDone) {
-                markPhaseBadgeShown(phaseNum);
-                setCompletedPhaseTitle(phase.title);
-                unlock("phase_crusher");
-                if (manifest.phases.filter((ph) =>
-                  ph.lessons.every((l) => completedSet.has(l.id))
-                ).length >= 5) {
-                  unlock("five_phases");
-                }
-                if (manifest.phases.every((ph) =>
-                  ph.lessons.every((l) => completedSet.has(l.id))
-                )) {
-                  unlock("full_stack");
-                }
-                celebrate();
-                setBadgeModalOpen(true);
+      // Phase-completion badge check. Runs whenever the lesson is complete —
+      // not only on a fresh completion here — because the lesson may have been
+      // completed on the quiz/exercise page, which can't open this page's
+      // modal. Idempotent via hasShownPhaseBadge, so it shows at most once.
+      if (!hasShownPhaseBadge(phaseNum)) {
+        try {
+          const manifest = await fetchManifest();
+          const phase = manifest.phases.find((ph) => ph.phase === phaseNum);
+          if (phase) {
+            const allProgress = await backend.getAllLessonProgress();
+            const completedSet = new Set(
+              allProgress.filter((lp) => lp.status === "completed").map((lp) => lp.lessonId)
+            );
+            const allDone = phase.lessons.every((l) => completedSet.has(l.id));
+            if (allDone) {
+              markPhaseBadgeShown(phaseNum);
+              setCompletedPhaseTitle(phase.title);
+              unlock("phase_crusher");
+              if (manifest.phases.filter((ph) =>
+                ph.lessons.every((l) => completedSet.has(l.id))
+              ).length >= 5) {
+                unlock("five_phases");
               }
+              if (manifest.phases.every((ph) =>
+                ph.lessons.every((l) => completedSet.has(l.id))
+              )) {
+                unlock("full_stack");
+              }
+              celebrate();
+              setBadgeModalOpen(true);
             }
-          } catch {
-            // Manifest fetch failed — skip badge check silently
           }
+        } catch {
+          // Manifest fetch failed — skip badge check silently
         }
       }
     }
