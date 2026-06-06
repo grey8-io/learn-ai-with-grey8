@@ -68,9 +68,27 @@ export default function GamificationProvider({ children }: { children: ReactNode
   const [confettiActive, setConfettiActive] = useState(false);
   const [streakDaysCache, setStreakDaysCache] = useState(0);
 
-  // Reload state from localStorage on mount
+  // Keep in-memory state in sync with localStorage.
+  // - on mount: load persisted state
+  // - on `storage`: another tab wrote new state (cross-tab sync)
+  // - on focus/visibility: re-run loadState() so the daily-goal reset fires
+  //   when the calendar date has rolled over while the tab sat idle.
+  // All mutations call saveState() synchronously, so localStorage is always
+  // the source of truth — re-reading it never clobbers unsaved work.
   useEffect(() => {
-    setState(loadState());
+    const sync = () => setState(loadState());
+    sync();
+    const onVisible = () => {
+      if (document.visibilityState === "visible") sync();
+    };
+    window.addEventListener("storage", sync);
+    window.addEventListener("focus", sync);
+    document.addEventListener("visibilitychange", onVisible);
+    return () => {
+      window.removeEventListener("storage", sync);
+      window.removeEventListener("focus", sync);
+      document.removeEventListener("visibilitychange", onVisible);
+    };
   }, []);
 
   const addToast = useCallback((toast: Omit<ToastData, "id">) => {
