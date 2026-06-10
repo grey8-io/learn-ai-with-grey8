@@ -144,7 +144,12 @@ async def index():
 
                     for (const line of lines) {
                         if (line.startsWith('data:')) {
-                            const token = line.slice(5).trim();
+                            // Strip "data:" and the single SSE separator space only.
+                            // Do NOT trim() — llama streams space-prefixed tokens
+                            // (" world"), and trimming collapses words together.
+                            let token = line.slice(5);
+                            if (token.startsWith(' ')) token = token.slice(1);
+                            token = token.replace(/\r$/, '');
                             if (token) {
                                 assistantDiv.querySelector('.content').textContent += token;
                                 chatBox.scrollTop = chatBox.scrollHeight;
