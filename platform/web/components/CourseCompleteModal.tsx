@@ -4,8 +4,9 @@ import { useEffect } from "react";
 import Image from "next/image";
 import {
   getCourseBadgeSrc,
-  getCourseLinkedInShareUrl,
+  getCourseShareCaption,
 } from "@/lib/course-completion";
+import BadgeShareActions from "./BadgeShareActions";
 
 interface CourseCompleteModalProps {
   open: boolean;
@@ -33,8 +34,6 @@ export default function CourseCompleteModal({
 
   if (!open) return null;
 
-  const shareUrl = getCourseLinkedInShareUrl();
-
   return (
     <div className="fixed inset-0 z-[95] flex items-center justify-center">
       {/* Backdrop */}
@@ -44,7 +43,7 @@ export default function CourseCompleteModal({
       />
 
       {/* Modal */}
-      <div className="relative z-10 mx-4 w-full max-w-md rounded-2xl border border-amber-500/40 bg-surface-800 p-8 text-center shadow-2xl">
+      <div className="relative z-10 mx-4 max-h-[90vh] w-full max-w-md overflow-y-auto rounded-2xl border border-amber-500/40 bg-surface-800 p-8 text-center shadow-2xl">
         {/* Close button */}
         <button
           onClick={onClose}
@@ -77,18 +76,12 @@ export default function CourseCompleteModal({
           bootcamp — all 39 lessons across 12 phases.
         </p>
 
-        {/* Share on LinkedIn */}
-        <a
-          href={shareUrl}
-          target="_blank"
-          rel="noopener noreferrer"
-          className="mt-6 inline-flex items-center gap-2 rounded-xl bg-[#0A66C2] px-6 py-3 text-sm font-semibold text-white transition-all hover:bg-[#004182] hover:scale-105"
-        >
-          <svg className="h-5 w-5" fill="currentColor" viewBox="0 0 24 24">
-            <path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433a2.062 2.062 0 0 1-2.063-2.065 2.064 2.064 0 1 1 2.063 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z" />
-          </svg>
-          Share on LinkedIn
-        </a>
+        {/* Download badge + share instructions */}
+        <BadgeShareActions
+          badgeSrc={getCourseBadgeSrc()}
+          downloadName="grey8-course-complete.png"
+          caption={getCourseShareCaption()}
+        />
 
         {/* Secondary actions */}
         <div className="mt-4 flex items-center justify-center gap-4">

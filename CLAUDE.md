@@ -365,6 +365,8 @@ The platform uses a gamification system to keep students engaged. All state is p
 - **Streak**: On a Roll (3d), Streak Lord (7d), Unstoppable (14d), Iron Will (30d)
 - **Skill**: Perfect Score, No Hints Needed, Speed Learner
 - **Mastery**: Phase Crusher, Halfway Master, Project Starter, Engineer Status, AI Master
+- **How they unlock:** most fire live during quiz/exercise/lesson events. The count/threshold badges (lessons, phases, streak, level, projects-visited) are also backstopped by `reconcileAchievements()`, which runs on the dashboard and retroactively grants any progress-derived badge a learner has already earned — so new badges (or fixes to never-wired ones) apply to existing learners, not just future actions. When adding a badge, wire BOTH a live unlock AND a reconcile rule.
+- **Locked-badge transparency:** the dashboard shows every locked badge's criteria plus a progress bar (`achievementProgress()` returns `{current, target, unit}`, or `null` for single-action badges where a bar is meaningless).
 
 ### Celebrations
 - Confetti animation on lesson completion and level-up (`components/Confetti.tsx`)
@@ -384,14 +386,15 @@ The platform uses a gamification system to keep students engaged. All state is p
 - When a learner completes ALL lessons in a phase, a badge modal appears with confetti
 - 12 phase badges + 1 course completion badge stored in `platform/web/public/badges/`
 - Badge naming: `phase-01.png` through `phase-12.png`, plus `course-complete.png`
-- "Share on LinkedIn" button opens LinkedIn share dialog with pre-filled text and repo link
+- Badge sharing uses a **download + copy-caption + instructions** flow (`BadgeShareActions`), not a one-click link. LinkedIn's share endpoint only renders the Open Graph card of the URL it's handed — it ignores any image/summary we pass — and a badge served from `localhost` is unreachable by LinkedIn's crawler. So learners download the PNG (or grab it from the GitHub raw URL) and attach it to their post. A true one-click share with the badge AS the OG image needs a public per-learner page and is planned for the hosted deployment (see private business context).
 - Badge display tracked in localStorage (`badges:phases_shown`) — each badge modal shows only once
 - Phase completion also unlocks `phase_crusher` achievement; 5 phases unlocks `five_phases`; all 12 unlocks `full_stack`
 
 ### Key Files
-- `lib/gamification.ts` — XP, levels, achievements, state management
-- `components/GamificationProvider.tsx` — React context, toast/confetti orchestration
-- `components/PhaseBadgeModal.tsx` — phase completion badge modal with LinkedIn share
+- `lib/gamification.ts` — XP, levels, achievements, state; `reconcileAchievements()` (retroactive unlock), `achievementProgress()` (locked-badge progress)
+- `components/GamificationProvider.tsx` — React context, toast/confetti orchestration; exposes `reconcile(facts)`
+- `components/PhaseBadgeModal.tsx` / `components/CourseCompleteModal.tsx` — phase + course completion badge modals
+- `components/BadgeShareActions.tsx` — badge download, copy-caption, and LinkedIn posting instructions (shared by both modals)
 - `components/Confetti.tsx` — confetti particle animation
 - `components/GamificationToast.tsx` — sliding toast notifications
 - `app/globals.css` — confetti-fall, goal-fill, fire-pulse keyframes

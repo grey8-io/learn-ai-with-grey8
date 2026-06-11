@@ -269,6 +269,146 @@ export function unlockAchievement(
   return achievement;
 }
 
+/**
+ * Facts about a learner's progress that the count/threshold-based achievements
+ * are derived from. Sourced from the progress backend + curriculum manifest,
+ * NOT from gamification state — so reconciliation works even for learners whose
+ * milestones predate an achievement being wired up.
+ */
+export interface ProgressFacts {
+  lessonsCompleted: number;
+  totalLessons: number;
+  phasesCompleted: number;
+  streakDays: number;
+  /** Whether the learner has opened the projects page (persisted separately). */
+  visitedProjects?: boolean;
+}
+
+/**
+ * Unlock every threshold/count-based achievement the learner has already earned
+ * but may be missing. Idempotent: `unlockAchievement` no-ops (and doesn't save)
+ * for already-unlocked ids, so this is safe to call on every dashboard mount.
+ *
+ * This is the retroactive safety net for achievements that were either never
+ * wired to a live event (e.g. "Halfway There", "Project Starter") or whose live
+ * unlock is fragile (e.g. "Halfway Master" only fired during a phase-badge
+ * celebration). Skill-based badges that can't be reconstructed from progress
+ * alone (perfect_quiz, no_hints, speed_learner, first_quiz/exercise) stay on
+ * their live unlock paths.
+ */
+export function reconcileAchievements(
+  state: GamificationState,
+  facts: ProgressFacts
+): Achievement[] {
+  const { lessonsCompleted, totalLessons, phasesCompleted, streakDays } = facts;
+  const earned: string[] = [];
+
+  if (lessonsCompleted >= 1) earned.push("first_lesson");
+  if (lessonsCompleted >= 10) earned.push("ten_lessons");
+  if (totalLessons > 0 && lessonsCompleted / totalLessons >= 0.5) earned.push("halfway");
+  if (phasesCompleted >= 1) earned.push("phase_crusher");
+  if (phasesCompleted >= 5) earned.push("five_phases");
+  if (phasesCompleted >= 12) earned.push("full_stack");
+  if (streakDays >= 3) earned.push("streak_3");
+  if (streakDays >= 7) earned.push("streak_7");
+  if (streakDays >= 14) earned.push("streak_14");
+  if (streakDays >= 30) earned.push("streak_30");
+  if (facts.visitedProjects) earned.push("project_starter");
+
+  const rank = getLevel(state.totalXP).rank;
+  if (rank >= 5) earned.push("level_5");
+  if (rank >= 7) earned.push("level_7");
+
+  const newly: Achievement[] = [];
+  for (const id of earned) {
+    const a = unlockAchievement(state, id);
+    if (a) newly.push(a);
+  }
+  return newly;
+}
+
+/** Numeric progress toward a measurable achievement. */
+export interface AchievementProgress {
+  current: number;
+  target: number;
+  /** Short unit label for display, e.g. "lessons", "days", "XP". */
+  unit: string;
+}
+
+/**
+ * Progress toward a still-locked achievement, or null for binary/event badges
+ * earned by a single action (first quiz, perfect score, no-hints pass, visiting
+ * the projects page) where a progress bar would be meaningless. Powers the
+ * "how do I earn this?" hints on the dashboard's locked badges.
+ */
+export function achievementProgress(
+  id: string,
+  facts: ProgressFacts,
+  state: GamificationState
+): AchievementProgress | null {
+  const halfwayTarget =
+    facts.totalLessons > 0 ? Math.ceil(facts.totalLessons / 2) : 0;
+  const minXPForRank = (rank: number) =>
+    LEVELS.find((l) => l.rank === rank)?.minXP ?? 0;
+  const clamp = (current: number, target: number, unit: string) => ({
+    current: Math.min(current, target),
+    target,
+    unit,
+  });
+
+  switch (id) {
+    case "ten_lessons":
+      return clamp(facts.lessonsCompleted, 10, "lessons");
+    case "halfway":
+      return halfwayTarget > 0
+        ? clamp(facts.lessonsCompleted, halfwayTarget, "lessons")
+        : null;
+    case "phase_crusher":
+      return clamp(facts.phasesCompleted, 1, "phases");
+    case "five_phases":
+      return clamp(facts.phasesCompleted, 5, "phases");
+    case "full_stack":
+      return clamp(facts.phasesCompleted, 12, "phases");
+    case "streak_3":
+      return clamp(facts.streakDays, 3, "days");
+    case "streak_7":
+      return clamp(facts.streakDays, 7, "days");
+    case "streak_14":
+      return clamp(facts.streakDays, 14, "days");
+    case "streak_30":
+      return clamp(facts.streakDays, 30, "days");
+    case "level_5":
+      return clamp(state.totalXP, minXPForRank(5), "XP");
+    case "level_7":
+      return clamp(state.totalXP, minXPForRank(7), "XP");
+    default:
+      // first_quiz, first_exercise, first_lesson, perfect_quiz, no_hints,
+      // speed_learner, project_starter — single-action badges, no progress bar.
+      return null;
+  }
+}
+
+/** localStorage flag: has the learner ever opened the projects page? */
+const PROJECTS_VISITED_KEY = "gamification:projects_visited";
+
+export function markProjectsVisited(): void {
+  if (typeof window === "undefined") return;
+  try {
+    localStorage.setItem(PROJECTS_VISITED_KEY, "1");
+  } catch {
+    // ignore
+  }
+}
+
+export function hasVisitedProjects(): boolean {
+  if (typeof window === "undefined") return false;
+  try {
+    return localStorage.getItem(PROJECTS_VISITED_KEY) === "1";
+  } catch {
+    return false;
+  }
+}
+
 /** Get streak fire level (0-4) for visual escalation. */
 export function streakFireLevel(days: number): number {
   if (days >= 30) return 4;

@@ -145,7 +145,7 @@ export default function ExercisePage({
 
       // Award XP for passing submissions
       if (data.score >= 70) {
-        onExerciseComplete(data.score, stats?.currentStreakDays ?? 0);
+        onExerciseComplete(data.score, stats?.currentStreakDays ?? 0, params.exerciseId);
       }
     } catch (err) {
       const message = err instanceof Error ? err.message : "Unknown error";

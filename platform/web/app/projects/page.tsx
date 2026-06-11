@@ -1,6 +1,8 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import { useGamification } from "@/components/GamificationProvider";
+import { markProjectsVisited } from "@/lib/gamification";
 
 interface Project {
   id: number;
@@ -42,6 +44,14 @@ type Filter = "all" | "milestone" | "apply" | "systems" | "production";
 
 export default function ProjectsPage() {
   const [filter, setFilter] = useState<Filter>("all");
+  const { unlock } = useGamification();
+
+  // Visiting the projects page earns "Project Starter". Persist a flag too so
+  // the dashboard reconcile pass keeps it unlocked for returning learners.
+  useEffect(() => {
+    markProjectsVisited();
+    unlock("project_starter");
+  }, [unlock]);
 
   const filtered = filter === "all" ? projects : projects.filter((p) => p.tier === filter);
 

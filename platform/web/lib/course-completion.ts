@@ -125,19 +125,24 @@ export function isCourseComplete(
   return phases.every((ph) => ph.lessons.every((l) => completed.has(l.id)));
 }
 
-/** LinkedIn share URL for the whole-bootcamp finale. */
-export function getCourseLinkedInShareUrl(): string {
-  const text =
+/** Suggested caption for a learner to paste into their LinkedIn post. */
+export function getCourseShareCaption(): string {
+  return (
     "I just completed the entire Learn AI With Grey8 bootcamp — a free, " +
     "open-source AI program covering 39 lessons across 12 phases, from Python " +
     "fundamentals to deploying AI agents. Everything runs 100% locally, with " +
     "no cloud API keys or paid subscriptions.\n\n" +
     "If you want to learn to build real AI applications, start here:\n" +
     `${REPO_URL}\n\n` +
-    "#LearnAI #OpenSource #Grey8 #AIBootcamp #ArtificialIntelligence";
+    "#LearnAI #OpenSource #Grey8 #AIBootcamp #ArtificialIntelligence"
+  );
+}
+
+/** LinkedIn share URL for the whole-bootcamp finale. */
+export function getCourseLinkedInShareUrl(): string {
   return `https://www.linkedin.com/sharing/share-offsite/?url=${encodeURIComponent(
     REPO_URL
-  )}&summary=${encodeURIComponent(text)}`;
+  )}&summary=${encodeURIComponent(getCourseShareCaption())}`;
 }
 
 /** localStorage key tracking whether the finale modal has already been shown. */

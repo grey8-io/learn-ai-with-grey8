@@ -14,6 +14,7 @@ import {
   type GamificationState,
   type GamificationResult,
   type Achievement,
+  type ProgressFacts,
   defaultState,
   loadState,
   saveState,
@@ -21,6 +22,7 @@ import {
   recordDailyLesson,
   recordHintUsed,
   unlockAchievement,
+  reconcileAchievements,
   getLevel,
   getNextLevel,
   getLevelProgress,
@@ -35,14 +37,16 @@ interface GamificationContextValue {
   state: GamificationState;
   /** Award XP for a quiz score. */
   onQuizComplete: (score: number, total: number, streakDays: number) => GamificationResult;
-  /** Award XP for an exercise score. */
-  onExerciseComplete: (score: number, streakDays: number) => GamificationResult;
+  /** Award XP for an exercise score. Pass exerciseId to credit "No Hints Needed". */
+  onExerciseComplete: (score: number, streakDays: number, exerciseId?: string) => GamificationResult;
   /** Award XP for lesson completion. */
   onLessonComplete: (streakDays: number) => GamificationResult;
   /** Record a hint used (for "No Hints" achievement tracking). */
   onHintUsed: (exerciseId: string) => void;
   /** Manually unlock an achievement. */
   unlock: (achievementId: string) => void;
+  /** Retroactively unlock any progress-derived achievements already earned. */
+  reconcile: (facts: ProgressFacts) => void;
   /** Trigger confetti. */
   celebrate: () => void;
   /** XP, level, and progress helpers. */
@@ -100,6 +104,18 @@ export default function GamificationProvider({ children }: { children: ReactNode
     setToasts((prev) => prev.filter((t) => t.id !== id));
   }, []);
 
+  const toastAchievement = useCallback(
+    (a: Achievement) => {
+      addToast({
+        type: "achievement",
+        title: `${a.icon} ${a.title}`,
+        subtitle: a.description,
+        icon: "🏅",
+      });
+    },
+    [addToast]
+  );
+
   const celebrate = useCallback(() => {
     setConfettiActive(true);
     setTimeout(() => setConfettiActive(false), 100); // Confetti component handles duration
@@ -152,16 +168,21 @@ export default function GamificationProvider({ children }: { children: ReactNode
   );
 
   const onExerciseComplete = useCallback(
-    (score: number, streakDays: number) => {
+    (score: number, streakDays: number, exerciseId?: string) => {
       setStreakDaysCache(streakDays);
       const xp = exerciseXP(score, streakDays);
       const result = awardXP(state, xp, `Exercise: ${score}%`);
       unlockAchievement(state, "first_exercise");
+      // "No Hints Needed": passed this exercise without ever requesting a hint.
+      if (exerciseId && (state.hintsUsedPerExercise[exerciseId] ?? 0) === 0) {
+        const a = unlockAchievement(state, "no_hints");
+        if (a) toastAchievement(a);
+      }
       setState({ ...state });
       showResult(result);
       return result;
     },
-    [state, showResult]
+    [state, showResult, toastAchievement]
   );
 
   const onLessonComplete = useCallback(
@@ -171,9 +192,17 @@ export default function GamificationProvider({ children }: { children: ReactNode
       const result = awardXP(state, xp, "Lesson completed");
       recordDailyLesson(state);
       unlockAchievement(state, "first_lesson");
-      // Check milestone achievements
+      // Check milestone achievements. The xpLog only retains the last 20 events,
+      // so this can undercount past 10 lessons — the dashboard reconcile pass
+      // (reconcileAchievements, sourced from the progress backend) is the
+      // authoritative backstop. This live check just catches the common case.
       const completed = state.xpLog.filter((e) => e.reason === "Lesson completed").length;
       if (completed >= 10) unlockAchievement(state, "ten_lessons");
+      // "Speed Learner": 3 lessons completed within the same calendar day.
+      if (state.dailyLessonsCompleted >= 3) {
+        const a = unlockAchievement(state, "speed_learner");
+        if (a) toastAchievement(a);
+      }
       // Streak achievements
       if (streakDays >= 3) unlockAchievement(state, "streak_3");
       if (streakDays >= 7) unlockAchievement(state, "streak_7");
@@ -184,7 +213,7 @@ export default function GamificationProvider({ children }: { children: ReactNode
       celebrate();
       return result;
     },
-    [state, showResult, celebrate]
+    [state, showResult, celebrate, toastAchievement]
   );
 
   const onHintUsed = useCallback(
@@ -199,16 +228,22 @@ export default function GamificationProvider({ children }: { children: ReactNode
     (achievementId: string) => {
       const a = unlockAchievement(state, achievementId);
       if (a) {
-        addToast({
-          type: "achievement",
-          title: `${a.icon} ${a.title}`,
-          subtitle: a.description,
-          icon: "🏅",
-        });
+        toastAchievement(a);
         setState({ ...state });
       }
     },
-    [state, addToast]
+    [state, toastAchievement]
+  );
+
+  const reconcile = useCallback(
+    (facts: ProgressFacts) => {
+      const newly = reconcileAchievements(state, facts);
+      if (newly.length > 0) {
+        newly.forEach(toastAchievement);
+        setState({ ...state });
+      }
+    },
+    [state, toastAchievement]
   );
 
   const value: GamificationContextValue = {
@@ -218,6 +253,7 @@ export default function GamificationProvider({ children }: { children: ReactNode
     onLessonComplete,
     onHintUsed,
     unlock,
+    reconcile,
     celebrate,
     totalXP: state.totalXP,
     level: getLevel(state.totalXP),

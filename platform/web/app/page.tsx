@@ -1,22 +1,31 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import Link from "next/link";
 import { useProgress } from "@/components/ProgressProvider";
 import { useAuth } from "@/components/AuthProvider";
 import { useGamification } from "@/components/GamificationProvider";
 import { fetchManifest } from "@/lib/api";
-import { ACHIEVEMENTS, streakFireLevel } from "@/lib/gamification";
+import {
+  ACHIEVEMENTS,
+  streakFireLevel,
+  hasVisitedProjects,
+  achievementProgress,
+  type ProgressFacts,
+} from "@/lib/gamification";
 import CourseCompleteCard from "@/components/CourseCompleteCard";
 
 const STREAK_FIRES = ["", "🔥", "🔥🔥", "🔥🔥🔥", "🔥🔥🔥🔥"];
 const STREAK_LABELS = ["Start today!", "Warming up!", "On fire!", "Unstoppable!", "LEGENDARY!"];
 
 export default function DashboardPage() {
-  const { stats, isReady } = useProgress();
+  const { stats, isReady, backend } = useProgress();
   const { user, isConfigured: authConfigured } = useAuth();
-  const { totalXP, level, nextLevel, levelProgress, state, dailyProgress } = useGamification();
+  const { totalXP, level, nextLevel, levelProgress, state, dailyProgress, reconcile } = useGamification();
   const [totalLessons, setTotalLessons] = useState(0);
+  // Progress facts that drive the locked-badge progress bars. Set once the
+  // reconcile pass below has loaded the manifest + lesson progress.
+  const [facts, setFacts] = useState<ProgressFacts | null>(null);
 
   useEffect(() => {
     fetchManifest()
@@ -29,6 +38,49 @@ export default function DashboardPage() {
       })
       .catch(() => {});
   }, []);
+
+  // Retroactive achievement reconciliation. Runs once per mount after progress
+  // is ready: unlocks any progress-derived badge the learner already earned but
+  // is missing (e.g. "Halfway There", "Halfway Master", "Project Starter") —
+  // covers learners whose milestones predate these badges being wired up.
+  // Purely additive: reconcileAchievements only ever unlocks, never resets.
+  const reconciledRef = useRef(false);
+  useEffect(() => {
+    if (!isReady || reconciledRef.current) return;
+    reconciledRef.current = true;
+    (async () => {
+      try {
+        const [manifest, allProgress] = await Promise.all([
+          fetchManifest(),
+          backend.getAllLessonProgress(),
+        ]);
+        const completed = new Set(
+          allProgress
+            .filter((lp) => lp.status === "completed")
+            .map((lp) => lp.lessonId)
+        );
+        const phasesCompleted = manifest.phases.filter(
+          (p: { lessons: { id: string }[] }) =>
+            p.lessons.length > 0 && p.lessons.every((l) => completed.has(l.id))
+        ).length;
+        const totalLessonCount = manifest.phases.reduce(
+          (sum: number, p: { lessons: unknown[] }) => sum + p.lessons.length,
+          0
+        );
+        const progressFacts: ProgressFacts = {
+          lessonsCompleted: completed.size,
+          totalLessons: totalLessonCount,
+          phasesCompleted,
+          streakDays: stats?.currentStreakDays ?? 0,
+          visitedProjects: hasVisitedProjects(),
+        };
+        setFacts(progressFacts);
+        reconcile(progressFacts);
+      } catch {
+        // Manifest/progress fetch failed — reconciliation is best-effort.
+      }
+    })();
+  }, [isReady, backend, reconcile, stats]);
 
   const lessonsCompleted = stats?.lessonsCompleted ?? 0;
   const streakDays = stats?.currentStreakDays ?? 0;
@@ -214,23 +266,52 @@ export default function DashboardPage() {
         <div className="grid gap-3 grid-cols-2 sm:grid-cols-3 lg:grid-cols-6">
           {ACHIEVEMENTS.map((a) => {
             const unlocked = state.unlockedAchievements.includes(a.id);
+            const prog = !unlocked && facts ? achievementProgress(a.id, facts, state) : null;
+            const pct =
+              prog && prog.target > 0
+                ? Math.min(100, Math.round((prog.current / prog.target) * 100))
+                : 0;
             return (
               <div
                 key={a.id}
-                className={`rounded-xl border p-4 text-center transition-all ${
+                className={`flex flex-col rounded-xl border p-4 text-center transition-all ${
                   unlocked
                     ? "border-amber-500/30 bg-amber-500/5 shadow-lg shadow-amber-500/5"
-                    : "border-slate-700/50 bg-surface-800 opacity-40"
+                    : "border-slate-700/50 bg-surface-800"
                 }`}
                 title={a.description}
               >
-                <div className="text-3xl mb-2">{a.icon}</div>
-                <p className={`text-xs font-medium ${unlocked ? "text-amber-300" : "text-slate-500"}`}>
+                <div className={`text-3xl mb-2 ${unlocked ? "" : "grayscale opacity-60"}`}>
+                  {a.icon}
+                </div>
+                <p className={`text-xs font-medium ${unlocked ? "text-amber-300" : "text-slate-300"}`}>
                   {a.title}
                 </p>
-                {!unlocked && (
-                  <p className="text-[10px] text-slate-600 mt-1">🔒 Locked</p>
-                )}
+                {/* Always show how the badge is earned */}
+                <p className="mt-1 text-[10px] leading-tight text-slate-500">
+                  {a.description}
+                </p>
+
+                {/* Earned / progress / locked footer */}
+                <div className="mt-auto pt-2">
+                  {unlocked ? (
+                    <p className="text-[10px] font-medium text-emerald-400">✓ Earned</p>
+                  ) : prog ? (
+                    <>
+                      <div className="h-1.5 w-full overflow-hidden rounded-full bg-slate-700">
+                        <div
+                          className="h-1.5 rounded-full bg-amber-500/70 transition-all duration-500"
+                          style={{ width: `${pct}%` }}
+                        />
+                      </div>
+                      <p className="mt-1 text-[10px] text-slate-500">
+                        {prog.current.toLocaleString()} / {prog.target.toLocaleString()} {prog.unit}
+                      </p>
+                    </>
+                  ) : (
+                    <p className="text-[10px] text-slate-600">🔒 Locked</p>
+                  )}
+                </div>
               </div>
             );
           })}

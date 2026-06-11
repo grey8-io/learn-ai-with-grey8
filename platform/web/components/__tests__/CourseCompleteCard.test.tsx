@@ -40,7 +40,7 @@ it("renders nothing until the course is fully complete", async () => {
   const { container } = render(<CourseCompleteCard />);
   await waitFor(() => expect(fetchManifest).toHaveBeenCalled());
   expect(
-    screen.queryByRole("link", { name: /share on linkedin/i })
+    screen.queryByRole("button", { name: /share badge/i })
   ).not.toBeInTheDocument();
   expect(container).toBeEmptyDOMElement();
 });
@@ -49,20 +49,19 @@ it("shows a persistent share card once every lesson is complete", async () => {
   mockGetAllLessonProgress.mockResolvedValue(progress(["p1/l1", "p1/l2"]));
   render(<CourseCompleteCard />);
 
-  const link = await screen.findByRole("link", { name: /share on linkedin/i });
-  expect(decodeURIComponent(link.getAttribute("href") ?? "")).toContain(
-    "github.com/grey8-io/learn-ai-with-grey8"
-  );
-  expect(link).toHaveAttribute("target", "_blank");
-  expect(link).toHaveAttribute("rel", expect.stringContaining("noopener"));
+  // The card routes sharing through the badge modal (download + instructions)
+  // rather than a one-click link that LinkedIn would render as a repo card.
+  expect(
+    await screen.findByRole("button", { name: /share badge/i })
+  ).toBeInTheDocument();
   expect(screen.getByText(/completed the entire bootcamp/i)).toBeInTheDocument();
 });
 
-it("opens the full badge modal from 'View badge'", async () => {
+it("opens the full badge modal from 'Share badge'", async () => {
   mockGetAllLessonProgress.mockResolvedValue(progress(["p1/l1", "p1/l2"]));
   render(<CourseCompleteCard />);
 
-  fireEvent.click(await screen.findByText(/view badge/i));
+  fireEvent.click(await screen.findByRole("button", { name: /share badge/i }));
   // Modal heading appears (distinct from the card's copy).
   expect(await screen.findByText(/Course Complete/i)).toBeInTheDocument();
 });

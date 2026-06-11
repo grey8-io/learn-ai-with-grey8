@@ -24,17 +24,25 @@ describe("CourseCompleteModal", () => {
     expect(badge).toHaveAttribute("src", "/badges/course-complete.png");
   });
 
-  it("exposes a correct, safe LinkedIn share link", () => {
+  it("offers a badge download, a LinkedIn link, and a GitHub fallback", () => {
     render(<CourseCompleteModal open onClose={() => {}} />);
-    const link = screen.getByRole("link", { name: /share on linkedin/i });
-    const href = link.getAttribute("href") ?? "";
-    expect(href).toContain("linkedin.com/sharing/share-offsite/");
-    expect(decodeURIComponent(href)).toContain(
-      "github.com/grey8-io/learn-ai-with-grey8"
+
+    // Download the badge image itself (same-origin → forces a save).
+    const download = screen.getByRole("link", { name: /download badge/i });
+    expect(download).toHaveAttribute("href", "/badges/course-complete.png");
+    expect(download).toHaveAttribute("download");
+
+    // Open LinkedIn to compose the post manually.
+    const linkedin = screen.getByRole("link", { name: /open linkedin/i });
+    expect(linkedin.getAttribute("href") ?? "").toContain("linkedin.com");
+    expect(linkedin).toHaveAttribute("target", "_blank");
+    expect(linkedin).toHaveAttribute("rel", expect.stringContaining("noopener"));
+
+    // Off-box fallback: grab the image straight from the public repo.
+    const github = screen.getByRole("link", { name: /github/i });
+    expect(github.getAttribute("href") ?? "").toContain(
+      "grey8-io/learn-ai-with-grey8"
     );
-    // Opens in a new tab without leaking the opener (security).
-    expect(link).toHaveAttribute("target", "_blank");
-    expect(link).toHaveAttribute("rel", expect.stringContaining("noopener"));
   });
 
   it("calls onClose from the Continue button, backdrop, and Escape", () => {
