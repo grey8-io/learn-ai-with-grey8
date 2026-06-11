@@ -15,6 +15,12 @@ import PhaseBadgeModal, {
   hasShownPhaseBadge,
   markPhaseBadgeShown,
 } from "@/components/PhaseBadgeModal";
+import CourseCompleteModal from "@/components/CourseCompleteModal";
+import {
+  hasShownCourseBadge,
+  markCourseBadgeShown,
+  decideCompletionBadges,
+} from "@/lib/course-completion";
 import type { LessonStatus } from "@/lib/progress";
 
 /** Extract phase number from a lesson URL id like "phase-01--lesson-01" */
@@ -47,6 +53,11 @@ export default function LessonPage({
   const [chatOpen, setChatOpen] = useState(false);
   const [badgeModalOpen, setBadgeModalOpen] = useState(false);
   const [completedPhaseTitle, setCompletedPhaseTitle] = useState("");
+  const [courseBadgeOpen, setCourseBadgeOpen] = useState(false);
+  // When the final lesson completes, the phase badge and the course-complete
+  // badge both want to appear. Two modals can't overlap, so we queue the
+  // course finale and open it once the phase badge is dismissed.
+  const [coursePending, setCoursePending] = useState(false);
   const { backend, refreshStats, stats } = useProgress();
   const { onLessonComplete, unlock, celebrate } = useGamification();
 
@@ -95,40 +106,56 @@ export default function LessonPage({
         onLessonComplete(stats?.currentStreakDays ?? 0);
       }
 
-      // Phase-completion badge check. Runs whenever the lesson is complete —
+      // Badge checks (phase + course). Run whenever the lesson is complete —
       // not only on a fresh completion here — because the lesson may have been
       // completed on the quiz/exercise page, which can't open this page's
-      // modal. Idempotent via hasShownPhaseBadge, so it shows at most once.
-      if (!hasShownPhaseBadge(phaseNum)) {
+      // modals. Both are idempotent (shown at most once via localStorage), so
+      // revisiting any completed lesson is the safety net that guarantees a
+      // learner who finished elsewhere still sees the celebration + share.
+      const needPhaseBadge = !hasShownPhaseBadge(phaseNum);
+      const needCourseBadge = !hasShownCourseBadge();
+      if (needPhaseBadge || needCourseBadge) {
         try {
+          // Shared data — fetch once for both checks.
           const manifest = await fetchManifest();
-          const phase = manifest.phases.find((ph) => ph.phase === phaseNum);
-          if (phase) {
-            const allProgress = await backend.getAllLessonProgress();
-            const completedSet = new Set(
-              allProgress.filter((lp) => lp.status === "completed").map((lp) => lp.lessonId)
-            );
-            const allDone = phase.lessons.every((l) => completedSet.has(l.id));
-            if (allDone) {
-              markPhaseBadgeShown(phaseNum);
-              setCompletedPhaseTitle(phase.title);
-              unlock("phase_crusher");
-              if (manifest.phases.filter((ph) =>
-                ph.lessons.every((l) => completedSet.has(l.id))
-              ).length >= 5) {
-                unlock("five_phases");
-              }
-              if (manifest.phases.every((ph) =>
-                ph.lessons.every((l) => completedSet.has(l.id))
-              )) {
-                unlock("full_stack");
-              }
-              celebrate();
-              setBadgeModalOpen(true);
-            }
+          const allProgress = await backend.getAllLessonProgress();
+          const completedSet = new Set(
+            allProgress.filter((lp) => lp.status === "completed").map((lp) => lp.lessonId)
+          );
+
+          // Single source of truth for WHICH badges this completion warrants
+          // (see decideCompletionBadges — covers out-of-order phases and
+          // retroactive finales for already-graduated learners).
+          const decision = decideCompletionBadges({
+            phases: manifest.phases,
+            completedLessonIds: completedSet,
+            currentPhase: phaseNum,
+            phaseBadgeAlreadyShown: !needPhaseBadge,
+            courseBadgeAlreadyShown: !needCourseBadge,
+          });
+
+          if (decision.showPhaseBadge) {
+            markPhaseBadgeShown(phaseNum);
+            setCompletedPhaseTitle(decision.phaseTitle ?? "");
+          }
+          if (decision.showCourseBadge) {
+            markCourseBadgeShown();
+          }
+          decision.achievements.forEach((id) => unlock(id));
+
+          if (decision.showPhaseBadge || decision.showCourseBadge) {
+            celebrate();
+          }
+          if (decision.showPhaseBadge) {
+            setBadgeModalOpen(true);
+            // Defer the finale so it follows the phase badge instead of
+            // stacking on top of it. The phase modal's onClose opens it.
+            if (decision.showCourseBadge) setCoursePending(true);
+          } else if (decision.showCourseBadge) {
+            setCourseBadgeOpen(true);
           }
         } catch {
-          // Manifest fetch failed — skip badge check silently
+          // Manifest/progress fetch failed — skip badge checks silently
         }
       }
     }
@@ -554,9 +581,22 @@ export default function LessonPage({
       {/* Phase completion badge modal */}
       <PhaseBadgeModal
         open={badgeModalOpen}
-        onClose={() => setBadgeModalOpen(false)}
+        onClose={() => {
+          setBadgeModalOpen(false);
+          // If this was the final phase, surface the course finale next.
+          if (coursePending) {
+            setCoursePending(false);
+            setCourseBadgeOpen(true);
+          }
+        }}
         phaseNumber={phaseNum}
         phaseTitle={completedPhaseTitle}
+      />
+
+      {/* Whole-course completion badge modal (all 12 phases done) */}
+      <CourseCompleteModal
+        open={courseBadgeOpen}
+        onClose={() => setCourseBadgeOpen(false)}
       />
     </div>
   );
