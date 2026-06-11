@@ -5,7 +5,50 @@ import json
 import os
 import sys
 import pytest
+from types import ModuleType
 from unittest.mock import patch, MagicMock
+
+# The grading sandbox runs pytest in the tutor's own Python env, which
+# intentionally does NOT install exercise-only libraries (requests,
+# sse-starlette) — students install those into their own project venv. Stub
+# them in sys.modules so the student's module imports cleanly server-side,
+# matching the RAG milestone pattern (chromadb). If the real packages ARE
+# installed (e.g. a learner running `make test` locally), we leave them alone.
+#   - requests: fully mocked by every test via patch("requests.post"), so a
+#     bare MagicMock module is sufficient.
+#   - sse_starlette: given a minimal functional EventSourceResponse (a real
+#     Starlette StreamingResponse with the SSE media type) so the
+#     content-type assertion stays meaningful without the real package.
+try:  # pragma: no cover - import-availability branch
+    import requests  # noqa: F401
+except ModuleNotFoundError:
+    sys.modules["requests"] = MagicMock()
+
+try:  # pragma: no cover - import-availability branch
+    import sse_starlette  # noqa: F401
+except ModuleNotFoundError:
+    from starlette.responses import StreamingResponse
+
+    class _EventSourceResponse(StreamingResponse):
+        media_type = "text/event-stream"
+
+        def __init__(self, content, *args, **kwargs):
+            kwargs.setdefault("media_type", "text/event-stream")
+
+            async def _emit():
+                for chunk in content:
+                    data = chunk.get("data", "") if isinstance(chunk, dict) else str(chunk)
+                    yield f"data: {data}\n\n".encode("utf-8")
+
+            super().__init__(_emit(), *args, **kwargs)
+
+    _sse_pkg = ModuleType("sse_starlette")
+    _sse_sub = ModuleType("sse_starlette.sse")
+    _sse_sub.EventSourceResponse = _EventSourceResponse
+    _sse_pkg.EventSourceResponse = _EventSourceResponse
+    _sse_pkg.sse = _sse_sub
+    sys.modules["sse_starlette"] = _sse_pkg
+    sys.modules["sse_starlette.sse"] = _sse_sub
 
 SOLUTION_PATH = os.path.join(
     os.path.dirname(__file__), "..", "solution", "main.py"
