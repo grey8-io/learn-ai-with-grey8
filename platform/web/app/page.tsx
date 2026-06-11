@@ -7,6 +7,7 @@ import { useAuth } from "@/components/AuthProvider";
 import { useGamification } from "@/components/GamificationProvider";
 import { fetchManifest } from "@/lib/api";
 import { ACHIEVEMENTS, streakFireLevel } from "@/lib/gamification";
+import CourseCompleteCard from "@/components/CourseCompleteCard";
 
 const STREAK_FIRES = ["", "🔥", "🔥🔥", "🔥🔥🔥", "🔥🔥🔥🔥"];
 const STREAK_LABELS = ["Start today!", "Warming up!", "On fire!", "Unstoppable!", "LEGENDARY!"];
@@ -71,6 +72,9 @@ export default function DashboardPage() {
           </div>
         </div>
       </section>
+
+      {/* Persistent course-completion share banner (only once all phases done) */}
+      <CourseCompleteCard />
 
       {/* Sign-in prompt */}
       {!user && isReady && authConfigured && (
