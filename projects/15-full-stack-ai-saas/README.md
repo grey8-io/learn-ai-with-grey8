@@ -66,6 +66,34 @@ starter/
     index.html         # Main page with chat, upload, and search
 ```
 
+## Troubleshooting
+
+**`TypeError: cannot use 'tuple' as a dict key (unhashable type: 'dict')` when loading `/`**
+
+This means your `TemplateResponse` call uses the old argument order. Starlette
+0.29+ made `request` the **first** positional argument:
+
+```python
+# Old (no longer supported — first arg used to be the template name):
+return templates.TemplateResponse("index.html", {"request": request})
+
+# New (correct):
+return templates.TemplateResponse(request, "index.html")
+```
+
+With the old call, Starlette treats your context dict as the template name,
+Jinja2 tries to use it as a cache key, and crashes. The fix is the one-line
+change above — `request` first, and you no longer need `{"request": request}`
+in the context (Starlette injects it for you).
+
+**`pip install` fails to build a package (e.g. chromadb)**
+
+Use **Python 3.11 or 3.12**, the versions this course targets. Very new
+releases like Python 3.14 may not have prebuilt wheels for every pinned
+dependency yet, which causes a build error unrelated to your code. The pinned
+versions in `requirements.txt` are a known-good, mutually-compatible set — don't
+loosen them to work around a Python-version issue; switch Python instead.
+
 ## Extension Ideas
 
 - Add PDF upload support with PyPDF2

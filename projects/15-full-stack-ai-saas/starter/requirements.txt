@@ -1,6 +1,12 @@
-fastapi
-uvicorn
-requests
-chromadb
-jinja2
-python-multipart
+# Pinned, mutually-compatible versions for a reproducible build.
+# fastapi 0.115.x requires starlette>=0.40,<0.42 — pinning starlette explicitly
+# guards against a future Starlette dropping the TemplateResponse compat shim.
+# The code uses the modern `TemplateResponse(request, "index.html")` signature,
+# so it is also correct on any newer Starlette if you choose to upgrade.
+fastapi==0.115.6
+starlette==0.41.3
+uvicorn[standard]==0.34.0
+jinja2==3.1.5
+requests==2.32.3
+chromadb==0.5.23
+python-multipart==0.0.20

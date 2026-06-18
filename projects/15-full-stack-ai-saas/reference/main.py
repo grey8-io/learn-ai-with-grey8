@@ -118,7 +118,8 @@ def chat_with_rag(user_message: str) -> str:
 @app.get("/", response_class=HTMLResponse)
 async def home(request: Request):
     """Serve the main HTML page."""
-    return templates.TemplateResponse("index.html", {"request": request})
+    # Starlette 0.29+ takes `request` as the first positional argument.
+    return templates.TemplateResponse(request, "index.html")
 
 
 @app.post("/upload")
