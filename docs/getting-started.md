@@ -175,6 +175,15 @@ Your progress is saved automatically as you learn:
 
 > **Tip:** Sign-in is **off by default**. The free single-user experience is complete without it -- the sign-in/create-account UI only appears once you enable Supabase. Skip the next section unless you actually need multi-device sync or team tracking.
 
+#### Backing Up & Restoring Progress (no account needed)
+
+Anonymous progress lives in your browser's local storage, so clearing site data or switching to a different browser, computer, or OS would normally lose it. To carry it with you without setting up an account, use the **Your Data** card on the home dashboard:
+
+- **Download backup** -- saves a single JSON file containing *all* your progress (lessons, exercise submissions, quiz results, tutor chats) **and** your gamification state (XP, level, achievements, streak). Keep this file somewhere safe.
+- **Import backup** -- on a fresh browser or after clearing your data, pick that file to restore everything. Importing **overwrites** the current browser's progress with the file's contents, then reloads.
+
+This is a manual, per-browser save file. For automatic cross-device sync instead, enable sign-in (below).
+
 ---
 
 ## Enabling Sign-In (Optional)
