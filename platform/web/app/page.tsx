@@ -14,6 +14,7 @@ import {
   type ProgressFacts,
 } from "@/lib/gamification";
 import CourseCompleteCard from "@/components/CourseCompleteCard";
+import BackupRestore from "@/components/BackupRestore";
 
 const STREAK_FIRES = ["", "🔥", "🔥🔥", "🔥🔥🔥", "🔥🔥🔥🔥"];
 const STREAK_LABELS = ["Start today!", "Warming up!", "On fire!", "Unstoppable!", "LEGENDARY!"];
@@ -362,6 +363,12 @@ export default function DashboardPage() {
             </div>
           </Link>
         </div>
+      </section>
+
+      {/* Backup & Restore — portable save file for local-only learners */}
+      <section>
+        <h2 className="text-xl font-semibold text-slate-100 mb-4">Your Data</h2>
+        <BackupRestore />
       </section>
     </div>
   );
