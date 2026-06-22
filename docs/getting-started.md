@@ -146,15 +146,14 @@ Or check each service manually:
 2. Click **Start Learning** or go to **Phases**
 3. Open **Phase 1, Lesson 1: Terminal & Git Basics**
 4. Read the lesson content
-5. Click **Mark as Complete** when you finish reading
-6. Click on the exercise
-7. Write your solution in the code editor
-8. Click **Submit** to get graded -- your submission is saved automatically
-9. Use **Hints** if you are stuck (three levels of progressive help)
-10. Open the **Tutor chat** for Socratic guidance -- chat history is preserved
-11. Take the **Quiz** to test your understanding -- your best score is tracked
+5. Open the exercise, write your solution in the code editor, and click **Submit** to get graded -- your submission is saved automatically
+6. Use **Hints** if you are stuck (three levels of progressive help)
+7. Open the **Tutor chat** for Socratic guidance -- chat history is preserved
+8. Take the **Quiz** to test your understanding -- your best score is tracked
 
 The curriculum is fully linear -- follow the lesson order from Phase 1 through Phase 12. Each lesson builds on the previous one. See the [Course Guide](course-guide.md) for the complete list of all 35 lessons and 15 projects.
+
+> **Lessons complete automatically -- there's no "Mark as Complete" button.** You earn completion by proving competence: in Phases 1-3 that means passing the **quiz** (70%+); from Phase 4 on it means passing **both** the quiz and the **exercise** (70%+). Already know the material? Skip straight to the quiz (and exercise) -- passing proves it and completes the lesson.
 
 > **Note:** Project 12 (Image Description Service) requires an additional model. Pull it when you reach that project: `ollama pull llava`
 
@@ -164,7 +163,7 @@ Your progress is saved automatically as you learn:
 
 | What | How it's saved | Persists across |
 |------|---------------|-----------------|
-| Lesson completion | Marked when you click "Mark as Complete" | Page refreshes, service restarts |
+| Lesson completion | Earned automatically by passing the quiz (and the exercise in Phases 4-12) | Page refreshes, service restarts |
 | Exercise submissions | Saved after every grading -- your code and score are kept | Page refreshes, service restarts |
 | Quiz results | Best score is recorded | Page refreshes, service restarts |
 | Tutor chat | Messages saved per lesson | Page refreshes, service restarts |
