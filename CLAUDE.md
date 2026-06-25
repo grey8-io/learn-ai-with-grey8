@@ -646,3 +646,8 @@ The platform is designed to run on machines with as little as 4 GB RAM. Hardware
 - **Lane:** open-source the *content* (visibility + funnel). Monetization — certification and
   placement — lives **downstream**, not here. Don't add billing/paywalls.
 - **Layer:** sub-business (talent loop, demand side).
+
+> **Maintenance contract:** if you change this repo's cross-project dependencies or lane, update
+> `grey8-meta/SYSTEM-MAP.md` **and** the affected sibling repo's spoke in the same change. See
+> `grey8-meta/MAINTENANCE.md`. (Requires the sibling repos checked out alongside this one — run
+> the workspace sync script from `grey8-meta`.)
