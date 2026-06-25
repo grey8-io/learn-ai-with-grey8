@@ -22,15 +22,13 @@ Assembles context layers based on the runtime model's context window size:
 import json
 from pathlib import Path
 
-from tutor.config import settings
-
-# Compute curriculum path directly from this file's location — CWD-independent.
-# __file__ is tutor/tutor/engine/context.py → project root is 4 levels up.
-from pathlib import Path as _Path
-_CURRICULUM_DIR = _Path(__file__).resolve().parent.parent.parent.parent / "curriculum"
 from tutor.engine.prompts import TUTOR_SYSTEM_PROMPT
 from tutor.engine.student_profile import profile_to_text
 from tutor.models.schemas import StudentProfile
+
+# Compute curriculum path directly from this file's location — CWD-independent.
+# __file__ is tutor/tutor/engine/context.py → project root is 4 levels up.
+_CURRICULUM_DIR = Path(__file__).resolve().parent.parent.parent.parent / "curriculum"
 
 
 def _estimate_tokens(text: str) -> int:
@@ -245,9 +243,8 @@ async def build_context(
 
     Returns (system_prompt_with_context, trimmed_history).
     """
-    # Determine tier
+    # Determine tier (curriculum index is injected for medium+ models)
     is_medium = model_context_length >= TIER_MEDIUM
-    is_large = model_context_length >= TIER_LARGE
 
     # Reserve tokens for response generation
     response_reserve = min(1024, model_context_length // 4)

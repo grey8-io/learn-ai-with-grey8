@@ -7,7 +7,8 @@ from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 
 from tutor.config import settings
-from tutor.engine.ollama_client import ollama_client
+from tutor.engine.inference import inference_backend
+from tutor.middleware.quota import QuotaMiddleware
 from tutor.models.schemas import HealthResponse
 from tutor.routers import chat, grade, hint
 
@@ -16,7 +17,7 @@ from tutor.routers import chat, grade, hint
 async def lifespan(app: FastAPI) -> AsyncIterator[None]:
     """Manage application lifecycle: startup and shutdown."""
     yield
-    await ollama_client.close()
+    await inference_backend.close()
 
 
 app = FastAPI(
@@ -35,6 +36,9 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
+# Quota guard: no-op in local mode, the enforcement seam in hosted mode.
+app.add_middleware(QuotaMiddleware)
+
 # Include routers
 app.include_router(chat.router)
 app.include_router(grade.router)
@@ -43,12 +47,15 @@ app.include_router(hint.router)
 
 @app.get("/health", response_model=HealthResponse)
 async def health() -> HealthResponse:
-    """Health check endpoint. Also verifies Ollama connectivity."""
-    connected = await ollama_client.check_health()
+    """Health check endpoint. Also verifies inference-backend connectivity."""
+    connected = await inference_backend.check_health()
+    model = getattr(inference_backend, "model", settings.ollama_model)
     return HealthResponse(
         status="ok" if connected else "degraded",
         ollama_connected=connected,
-        model=settings.ollama_model,
+        model=model,
+        backend=settings.inference_backend,
+        deployment_mode=settings.deployment_mode,
     )
 
 

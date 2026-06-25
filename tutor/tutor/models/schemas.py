@@ -59,5 +59,7 @@ class HintResponse(BaseModel):
 
 class HealthResponse(BaseModel):
     status: str
-    ollama_connected: bool
+    ollama_connected: bool  # kept for frontend compat: true if the active backend is reachable
     model: str
+    backend: str = "ollama"  # ollama | openai_compat
+    deployment_mode: str = "local"  # local | hosted

@@ -228,6 +228,46 @@ To stop Supabase later: `supabase stop`. To reset its data: `supabase stop --no-
 
 ---
 
+## Rehearsing Hosted Mode Locally (Advanced)
+
+> For maintainers only. This is **not** part of the normal learning experience -- regular learners never touch it. It lets you exercise the full **hosted course** behaviour (account gating, free-tier quotas, the tests-only grading fallback, the spend circuit-breaker) entirely on your machine, **before** deploying anywhere and **without any cloud cost**.
+
+By default the platform runs in `local` mode: no accounts required, no metering. Setting `TUTOR_DEPLOYMENT_MODE=hosted` turns on the auth gate and quota enforcement so you can preview exactly what a hosted deployment does.
+
+> **Inference stays local and free.** Hosting mode does **not** change where the LLM runs -- the tutor keeps using your local Ollama unless you *also* set `TUTOR_INFERENCE_BACKEND=openai_compat`. Nothing leaves your machine.
+
+### Steps
+
+1. **Enable sign-in first** (see the section above). Hosted mode requires authenticated accounts -- if sign-in isn't configured, the AI tutor, grading, and hints will all return **401**. Run `supabase start` and copy its keys into `.env`.
+
+2. **Flip on hosted mode** in `.env`. To see the limits trip quickly, set small caps:
+   ```
+   TUTOR_DEPLOYMENT_MODE=hosted
+   TUTOR_FREE_TUTOR_MSGS_PER_DAY=3
+   TUTOR_FREE_RUBRIC_GRADINGS_PER_DAY=2
+   # TUTOR_GLOBAL_DAILY_METERED_CAP=5   # uncomment to test the global kill-switch
+   ```
+
+3. **Restart the tutor and web app** so they pick up the new env:
+   ```bash
+   bash scripts/start.sh
+   ```
+
+4. **Walk the hosted flow** at http://localhost:3000:
+   - **Signed out** -> open the AI tutor / submit an exercise -> you should see *"Sign in to use the AI tutor, grading, and hints."*
+   - **Sign in** -> the tutor, hints, and grading work normally.
+   - **Exceed the chat cap** (4th message with the limit above) -> *"You've hit today's free limit…"* (HTTP 429).
+   - **Exhaust the rubric quota** (3rd graded submission) -> the exercise is still graded on **tests only**, with a note that AI feedback is the daily limit. Tests-only grading is never blocked.
+   - **Global cap** (if set) -> once total usage across all accounts hits it, every metered call returns *"…reached today's global capacity"* (HTTP 503).
+
+5. **Return to normal** by setting `TUTOR_DEPLOYMENT_MODE=local` (or removing it) and restarting. The change is fully reversible and touches no data.
+
+> **Two caveats.** (a) Local GoTrue auto-confirms sign-ups, so this rehearsal does **not** exercise the real email-verification step a hosted deployment uses. (b) The quota counters are in-memory per tutor process, which is correct for this single-instance rehearsal; a multi-instance cloud deployment needs a shared store for an exact global cap.
+
+To rehearse against a **real** serverless LLM provider (a few cents of tokens), additionally set `TUTOR_INFERENCE_BACKEND=openai_compat` with `TUTOR_INFERENCE_BASE_URL` / `TUTOR_INFERENCE_API_KEY` / `TUTOR_INFERENCE_MODEL` (see `.env.example`).
+
+---
+
 ## Environment Configuration
 
 The setup script creates a `.env` file with sensible defaults. You only need to edit it if you want to change ports or add Supabase keys.
@@ -239,6 +279,7 @@ The setup script creates a `.env` file with sensible defaults. You only need to 
 | `TUTOR_HOST` | `0.0.0.0` | Tutor |
 | `TUTOR_PORT` | `8000` | Tutor |
 | `TUTOR_CORS_ORIGINS` | `["http://localhost:3000"]` | Tutor |
+| `TUTOR_DEPLOYMENT_MODE` | `local` | Tutor (set `hosted` only to rehearse the hosted course -- see above) |
 | `NEXT_PUBLIC_TUTOR_URL` | `http://localhost:8000` | Web |
 | `NEXT_PUBLIC_SUPABASE_URL` | `http://localhost:54321` | Web |
 | `SUPABASE_URL` | `http://localhost:54321` | Tutor, Web |

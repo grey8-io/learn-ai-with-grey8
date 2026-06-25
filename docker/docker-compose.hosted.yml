@@ -1,0 +1,32 @@
+# =============================================================================
+# Hosted-mode override — local end-to-end test of the hosted course path
+# =============================================================================
+# This runs the SAME images as docker-compose.yml but flips the tutor into
+# hosted mode with the OpenAI-compatible inference backend. It exists so you can
+# validate the hosted path (DEPLOYMENT_MODE=hosted, openai_compat adapter, quota
+# seam) entirely locally before deploying to GCP Cloud Run — where the only
+# difference is the inference base URL/key and where Supabase lives.
+#
+# Default below points the adapter at Ollama's OWN /v1 route, so the hosted
+# code path is exercised for FREE against the local model — no provider key.
+#
+# Usage (free, against local Ollama):
+#   docker compose -f docker/docker-compose.yml -f docker/docker-compose.hosted.yml up
+#
+# To test the REAL provider instead, set these in .env and they override below:
+#   TUTOR_INFERENCE_BASE_URL=https://api.deepinfra.com/v1/openai
+#   TUTOR_INFERENCE_API_KEY=<your key>
+#   TUTOR_INFERENCE_MODEL=meta-llama/Llama-3.2-3B-Instruct
+# =============================================================================
+
+services:
+  tutor:
+    environment:
+      TUTOR_DEPLOYMENT_MODE: hosted
+      TUTOR_INFERENCE_BACKEND: openai_compat
+      # Default: Ollama's OpenAI-compatible endpoint (free local E2E).
+      # .env values, if set, take precedence over these defaults.
+      TUTOR_INFERENCE_BASE_URL: ${TUTOR_INFERENCE_BASE_URL:-http://ollama:11434/v1}
+      TUTOR_INFERENCE_API_KEY: ${TUTOR_INFERENCE_API_KEY:-ollama}
+      TUTOR_INFERENCE_MODEL: ${TUTOR_INFERENCE_MODEL:-llama3.2:3b}
+      TUTOR_INFERENCE_CONTEXT_LENGTH: ${TUTOR_INFERENCE_CONTEXT_LENGTH:-2048}

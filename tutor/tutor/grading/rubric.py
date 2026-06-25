@@ -2,7 +2,7 @@
 
 import re
 
-from tutor.engine.ollama_client import OllamaClient
+from tutor.engine.inference import InferenceBackend
 from tutor.engine.prompts import GRADING_RUBRIC_PROMPT
 
 
@@ -18,7 +18,7 @@ async def score_with_rubric(
     code: str,
     rubric: str,
     exercise_id: str,
-    client: OllamaClient,
+    client: InferenceBackend,
     test_summary: str = "",
 ) -> RubricResult:
     """Send student code + rubric to the LLM and parse the score/feedback.
@@ -27,7 +27,7 @@ async def score_with_rubric(
         code: The student's code.
         rubric: The grading rubric text.
         exercise_id: The exercise identifier.
-        client: An OllamaClient instance.
+        client: An inference backend (Ollama or OpenAI-compatible).
         test_summary: Human-readable summary of test results.
 
     Returns:

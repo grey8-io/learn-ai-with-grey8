@@ -1,18 +1,20 @@
 """Grading router: run tests and LLM rubric scoring."""
 
-from fastapi import APIRouter
+from fastapi import APIRouter, Request
 
+from tutor.config import settings
 from tutor.engine.context import get_tests_dir, load_exercise_metadata
-from tutor.engine.ollama_client import ollama_client
+from tutor.engine.inference import inference_backend
 from tutor.grading.rubric import score_with_rubric
 from tutor.grading.runner import run_tests
 from tutor.models.schemas import GradeRequest, GradeResponse
+from tutor.quota.service import KIND_RUBRIC, quota_service
 
 router = APIRouter(tags=["grade"])
 
 
 @router.post("/grade", response_model=GradeResponse)
-async def grade(req: GradeRequest) -> GradeResponse:
+async def grade(req: GradeRequest, request: Request) -> GradeResponse:
     """Grade student code using tests (60%) and LLM rubric (40%)."""
     test_score = 0
     test_items = []
@@ -63,23 +65,43 @@ async def grade(req: GradeRequest) -> GradeResponse:
     rubric_score = 0
     feedback = ""
 
-    if rubric_text:
+    # Hosted free tier: the LLM rubric is the metered perk — tests-only grading
+    # stays free. When a free account is over its daily rubric limit, fall back
+    # to tests-only scoring instead of erroring. Local mode skips this entirely.
+    rubric_metered_out = False
+    if rubric_text and settings.deployment_mode == "hosted":
+        account_id = getattr(request.state, "account_id", None)
+        tier = getattr(request.state, "account_tier", "free")
+        if account_id:
+            decision = quota_service.consume(account_id, KIND_RUBRIC, tier=tier)
+            rubric_metered_out = not decision.allowed
+
+    if rubric_text and not rubric_metered_out:
         rubric_result = await score_with_rubric(
             code=req.code,
             rubric=rubric_text,
             exercise_id=req.exercise_id,
-            client=ollama_client,
+            client=inference_backend,
             test_summary=test_summary,
         )
         rubric_score = rubric_result.score
         feedback = rubric_result.feedback
+    elif rubric_metered_out:
+        feedback = (
+            "Your code was graded against the tests above. AI rubric feedback is "
+            "today's free-tier limit — it resets tomorrow, or upgrade for "
+            "unlimited AI feedback."
+        )
     else:
         # No rubric: use LLM for general feedback only
         rubric_score = test_score  # mirror test score when no rubric
         feedback = "No rubric defined for this exercise."
 
-    # Combined score: 60% tests + 40% rubric (if both available)
-    if tests_ran and rubric_text:
+    # Combined score: 60% tests + 40% rubric when both available. When the
+    # rubric was metered out, the submission is scored on tests alone.
+    if rubric_metered_out:
+        combined = test_score
+    elif tests_ran and rubric_text:
         combined = int(test_score * 0.6 + rubric_score * 0.4)
     elif tests_ran:
         combined = test_score

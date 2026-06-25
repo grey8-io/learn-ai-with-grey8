@@ -3,7 +3,7 @@
 from fastapi import APIRouter
 
 from tutor.engine.context import load_exercise_metadata
-from tutor.engine.ollama_client import ollama_client
+from tutor.engine.inference import inference_backend
 from tutor.engine.prompts import HINT_PROMPTS
 from tutor.models.schemas import HintRequest, HintResponse
 
@@ -40,7 +40,7 @@ async def hint(req: HintRequest) -> HintResponse:
     )
 
     try:
-        response = await ollama_client.generate(
+        response = await inference_backend.generate(
             prompt=prompt,
             system=system,
             stream=False,

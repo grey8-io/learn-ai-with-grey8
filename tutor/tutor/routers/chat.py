@@ -7,7 +7,7 @@ from fastapi.responses import StreamingResponse
 
 from tutor.config import get_effective_num_ctx
 from tutor.engine.context import build_context
-from tutor.engine.ollama_client import ollama_client
+from tutor.engine.inference import inference_backend
 from tutor.models.schemas import ChatRequest
 
 router = APIRouter(tags=["chat"])
@@ -27,7 +27,7 @@ async def chat(req: ChatRequest) -> StreamingResponse:
     # Ollama only allocates num_ctx (hw-profile/env). Budgeting off 131072
     # injects the full curriculum index + unbounded history and forces a
     # maximal CPU prefill every request (multi-minute responses on CPU).
-    native_ctx = await ollama_client.get_context_length()
+    native_ctx = await inference_backend.get_context_length()
     effective_ctx = min(native_ctx, get_effective_num_ctx())
 
     # Build tiered context
@@ -45,7 +45,7 @@ async def chat(req: ChatRequest) -> StreamingResponse:
 
     async def event_stream():
         try:
-            stream = await ollama_client.chat(
+            stream = await inference_backend.chat(
                 messages=messages,
                 system=system_prompt,
                 stream=True,

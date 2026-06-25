@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useRef, useEffect, useCallback } from "react";
-import { sendChatMessage, type StudentProfilePayload } from "@/lib/api";
+import { sendChatMessage, TutorApiError, type StudentProfilePayload } from "@/lib/api";
 import { useProgress } from "@/components/ProgressProvider";
 import { useGamification } from "@/components/GamificationProvider";
 
@@ -132,13 +132,19 @@ export default function ChatPanel({ open, onClose, lessonId }: ChatPanelProps) {
           }
         }
       }
-    } catch {
+    } catch (err) {
+      // Show the tutor's specific message only for the new auth/quota states
+      // (401/429); keep the original friendly note for connection errors so
+      // existing local behaviour is unchanged.
+      const friendly =
+        err instanceof TutorApiError && (err.status === 401 || err.status === 429)
+          ? err.message
+          : "I'm sorry, I'm having trouble connecting right now. Please try again in a moment.";
       setMessages((prev) => {
         const updated = [...prev];
         updated[updated.length - 1] = {
           role: "assistant",
-          content:
-            "I'm sorry, I'm having trouble connecting right now. Please try again in a moment.",
+          content: friendly,
         };
         return updated;
       });

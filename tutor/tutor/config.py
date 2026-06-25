@@ -10,6 +10,30 @@ _ENV_FILE = _PROJECT_ROOT / ".env"
 
 
 class Settings(BaseSettings):
+    # --- Deployment + inference backend selection ---
+    # deployment_mode: "local" (default, no metering — the privacy/no-paywall
+    # path) or "hosted" (GCP Cloud Run; enables the quota seam). The same code
+    # ships to both; only env vars differ.
+    deployment_mode: str = "local"          # local | hosted
+    # inference_backend: "ollama" (local-first default) or "openai_compat"
+    # (any OpenAI-compatible /chat/completions provider — DeepInfra/Together/
+    # Groq for the hosted course, or Ollama's own /v1 route for a free E2E test).
+    inference_backend: str = "ollama"       # ollama | openai_compat
+    inference_base_url: str = ""            # e.g. https://api.deepinfra.com/v1/openai
+    inference_api_key: str = ""
+    inference_model: str = "meta-llama/Llama-3.2-3B-Instruct"
+    inference_context_length: int = 8192    # used by get_context_length() for openai_compat
+    inference_max_tokens: int = 512         # output cap (mirrors ollama_num_predict)
+
+    # --- Hosted quota limits (enforced ONLY when deployment_mode == "hosted") ---
+    # Generous free-tier daily caps per account; the LLM rubric is the metered
+    # grading perk (tests-only grading stays free). global_daily_metered_cap is
+    # the spend circuit-breaker across all accounts (0 = disabled).
+    free_tutor_msgs_per_day: int = 20
+    free_hints_per_day: int = 60
+    free_rubric_gradings_per_day: int = 15
+    global_daily_metered_cap: int = 0
+
     ollama_host: str = "http://localhost:11434"
     ollama_model: str = "llama3.2:3b"
     ollama_num_ctx: int = 0      # 0 = auto-detect from .ollama_hw_profile or use model default

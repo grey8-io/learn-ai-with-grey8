@@ -1,5 +1,30 @@
 const API_BASE = process.env.NEXT_PUBLIC_API_URL || "";
 
+/**
+ * Error from a tutor-backed endpoint that carries the backend's HTTP status and
+ * user-facing message (e.g. 401 "Sign in…", 429 daily limit, 503 capacity).
+ * UI can check `instanceof TutorApiError` to show the message verbatim.
+ */
+export class TutorApiError extends Error {
+  status: number;
+  constructor(message: string, status: number) {
+    super(message);
+    this.name = "TutorApiError";
+    this.status = status;
+  }
+}
+
+/** Pull the backend's `{ error }` message from a failed response, else fallback. */
+async function tutorErrorMessage(res: Response, fallback: string): Promise<string> {
+  try {
+    const data = await res.json();
+    if (data && typeof data.error === "string" && data.error) return data.error;
+  } catch {
+    /* response body was not JSON */
+  }
+  return fallback;
+}
+
 /* ------------------------------------------------------------------ */
 /*  Manifest                                                          */
 /* ------------------------------------------------------------------ */
@@ -164,7 +189,10 @@ export async function submitCode(exerciseId: string, code: string) {
     body: JSON.stringify({ exercise_id: exerciseId, code }),
   });
   if (!res.ok) {
-    throw new Error(`Grading failed: ${res.status}`);
+    throw new TutorApiError(
+      await tutorErrorMessage(res, `Grading failed: ${res.status}`),
+      res.status
+    );
   }
   return res.json();
 }
@@ -192,7 +220,10 @@ export async function getHint(
     }),
   });
   if (!res.ok) {
-    throw new Error(`Hint request failed: ${res.status}`);
+    throw new TutorApiError(
+      await tutorErrorMessage(res, `Hint request failed: ${res.status}`),
+      res.status
+    );
   }
   return res.json();
 }
@@ -236,7 +267,10 @@ export async function sendChatMessage(
   });
 
   if (!res.ok) {
-    throw new Error(`Chat request failed: ${res.status}`);
+    throw new TutorApiError(
+      await tutorErrorMessage(res, `Chat request failed: ${res.status}`),
+      res.status
+    );
   }
 
   if (!res.body) {
