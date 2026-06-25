@@ -631,3 +631,18 @@ The platform is designed to run on machines with as little as 4 GB RAM. Hardware
 ### Override Priority
 
 `TUTOR_OLLAMA_NUM_CTX` env var > `.ollama_hw_profile` values > Ollama model defaults
+
+## Where I fit in Grey8
+
+> Canonical system map: **`grey8-io/grey8-meta`** (`SYSTEM-MAP.md`) — source of truth for how
+> every Grey8 repo relates. This block is only *this repo's* edges.
+
+- **What this is:** Open-source AI bootcamp (curriculum, Socratic tutor, cohorts). The demand
+  side of the talent loop. AGPL-3.0.
+- **Depends on:** nothing (standalone).
+- **Feeds / depended on by:** `grey8-talent` reuses this repo's **curriculum** (via
+  `TALENT_CURRICULUM_DIR`) and shares its Supabase. The loop is
+  **learn-ai-with-grey8 → grey8-talent (certify) → grey8-breezy (place)**.
+- **Lane:** open-source the *content* (visibility + funnel). Monetization — certification and
+  placement — lives **downstream**, not here. Don't add billing/paywalls.
+- **Layer:** sub-business (talent loop, demand side).
