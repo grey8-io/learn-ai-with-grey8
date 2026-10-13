@@ -396,4 +396,5 @@ Google's [TurboQuant](https://research.google/blog/turboquant-redefining-ai-effi
 | AI tutor is very slow (<3 tok/s) | Low RAM or slow CPU | Switch to `llama3.2:1b` (see Hardware Guide above). Close other apps. Ensure SSD is used |
 | High RAM usage / swapping | Model + context too large for RAM | Lower `TUTOR_OLLAMA_NUM_CTX` in `.env` (try 1024). Or switch to 1B model |
 | `npm install` fails | Node version too old | Upgrade to Node.js 20+: `nvm install 20 && nvm use 20` |
+| "trying to use tailwindcss directly as a PostCSS plugin" (or any Turbopack error) | `platform/web` dependencies were upgraded past the pinned versions (Next 14 + Tailwind 3), usually by `npm audit fix --force` or `npm install <pkg>@latest` | Restore the pinned versions: `cd platform/web && git checkout package.json package-lock.json && rm -rf node_modules .next && npm ci`, then restart. Don't run `npm audit fix --force` here - it jumps major versions |
 | `python` not found | Python not in PATH | Reinstall Python and check "Add to PATH", or use `python3` instead |
