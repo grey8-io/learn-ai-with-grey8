@@ -389,6 +389,7 @@ Google's [TurboQuant](https://research.google/blog/turboquant-redefining-ai-effi
 | "Model not found" | Model not pulled | Run `ollama pull llama3.2:3b` |
 | Port conflicts | Another app on 3000, 8000, or 11434 | Stop the conflicting app, or change ports in `.env` |
 | Windows: "bash not found" | Not using Git Bash or WSL | Open **Git Bash** (comes with Git for Windows) instead of cmd.exe or PowerShell |
+| WSL: web errors show Windows paths (`C:\...` / `D:\...`) | WSL is running the **Windows** `node`/`npm` (inherited via PATH), or `node_modules` was installed from Windows and reused in WSL | Install Node 20 inside WSL (`nvm install 20`), confirm `which node` prints a `/home/...` path (not `/mnt/c/...`), then in `platform/web` run `rm -rf node_modules .next && npm ci`. Use one environment only - don't mix Windows and WSL installs on the same checkout. Best performance: clone into the WSL filesystem (`~/`), not `/mnt/c` or `/mnt/d` |
 | Docker won't start | Docker Desktop not running | Start Docker Desktop, wait for it to initialize, then retry |
 | "Sign-in is not enabled" notice on /auth/login | Supabase not configured (this is by design) | See [Enabling Sign-In](#enabling-sign-in-optional) above. Anonymous local progress works without sign-in. |
 | Supabase auth errors after enabling | Wrong anon key in `.env` | Re-run `supabase status` to print the current anon key, then update `.env` and restart `scripts/start.sh` |
