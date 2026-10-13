@@ -273,9 +273,12 @@ WEB_PID=$!
 echo "$WEB_PID" >> "$PID_FILE"
 cd "$PROJECT_ROOT"
 
-for i in {1..30}; do
+# First start compiles the app, which can take a minute or more on low-end machines
+WEB_OK=0
+for i in {1..90}; do
     if curl -sf -o /dev/null http://localhost:3000 2>/dev/null; then
         info "Web UI started"
+        WEB_OK=1
         break
     fi
     # Check if the process crashed
@@ -286,9 +289,12 @@ for i in {1..30}; do
         echo ""
         break
     fi
-    if [[ $i -eq 30 ]]; then
-        warn "Web UI is taking longer than expected to start."
-        echo "      Check logs: cat .logs/web.log"
+    if [[ $i -eq 90 ]]; then
+        warn "Web UI did not respond yet (it may still be compiling). Last 20 lines of log:"
+        echo ""
+        tail -20 "$LOG_DIR/web.log" 2>/dev/null
+        echo ""
+        echo "      Full log: cat .logs/web.log"
     fi
     sleep 1
 done
@@ -298,7 +304,12 @@ done
 # ---------------------------------------------------------------------------
 echo ""
 echo "============================================="
-echo -e "  ${GREEN}${BOLD}All services are running!${NC}"
+if [[ $WEB_OK -eq 1 ]]; then
+    echo -e "  ${GREEN}${BOLD}All services are running!${NC}"
+else
+    echo -e "  ${YELLOW}${BOLD}Services started - Web UI not confirmed yet${NC}"
+    echo "  (open the URL below; if it shows an error, check .logs/web.log)"
+fi
 echo "============================================="
 echo ""
 echo "  Open in your browser:"
